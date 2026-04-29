@@ -119,7 +119,7 @@ No narration. Music starts low. Let the countdown speak for itself.
 ### 0:05 — 0:13/0:15  ·  HERO + AUTO-DEMO  (A2)
 
 **Footage:** scroll from top of hermes-story.art. Hero with auto-demo
-clapboard rendering 3 noir frames.
+clapboard rendering 6 noir frames.
 
 **RU:**
 > «Я строю Hermes-скилл, который превращает прозу в раскадровку.»

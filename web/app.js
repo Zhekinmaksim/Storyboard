@@ -68,7 +68,7 @@ setTimeout(() => {
 async function loadHeroDemo() {
   if (!heroDemoBoard) return;
   try {
-    const resp = await fetch('/assets/hero-demo.svg', { cache: 'force-cache' });
+    const resp = await fetch('/assets/hero-demo.svg?v=2', { cache: 'force-cache' });
     if (!resp.ok) return;
     const svgText = await resp.text();
 
@@ -76,6 +76,24 @@ async function loadHeroDemo() {
     // To make the hero demo loop, we wait ~10s, fade out, fade in fresh.
     const cycleStage = (label) => {
       if (heroDemoStage) heroDemoStage.textContent = label;
+    };
+
+    const stageTimings = [
+      [100, 'PARSING…'],
+      [1200, 'RENDERING SHOT 1A'],
+      [2500, 'RENDERING SHOT 1B'],
+      [3800, 'RENDERING SHOT 1C'],
+      [5200, 'RENDERING SHOT 1D'],
+      [6600, 'RENDERING SHOT 1E'],
+      [8000, 'RENDERING SHOT 1F'],
+      [9600, 'KIMI K2.5 REVIEW'],
+      [11200, 'READY'],
+    ];
+
+    const scheduleStages = () => {
+      stageTimings.forEach(([delay, label]) => {
+        setTimeout(() => cycleStage(label), delay);
+      });
     };
 
     const insert = () => {
@@ -91,26 +109,16 @@ async function loadHeroDemo() {
 
     // Stage labels mimic the live pipeline so users associate the demo
     // with what happens when they hit Generate.
-    setTimeout(() => cycleStage('PARSING…'), 100);
-    setTimeout(() => cycleStage('RENDERING SHOT 1A'), 1200);
-    setTimeout(() => cycleStage('RENDERING SHOT 1B'), 3200);
-    setTimeout(() => cycleStage('RENDERING SHOT 1C'), 5200);
-    setTimeout(() => cycleStage('KIMI K2.5 REVIEW'), 7200);
-    setTimeout(() => cycleStage('READY'), 9000);
+    scheduleStages();
 
-    // Loop every 12 seconds
+    // Loop after all six shots and the review stage have appeared.
     setInterval(() => {
       cycleStage('RESTARTING…');
       setTimeout(() => {
         insert();
-        setTimeout(() => cycleStage('PARSING…'), 100);
-        setTimeout(() => cycleStage('RENDERING SHOT 1A'), 1200);
-        setTimeout(() => cycleStage('RENDERING SHOT 1B'), 3200);
-        setTimeout(() => cycleStage('RENDERING SHOT 1C'), 5200);
-        setTimeout(() => cycleStage('KIMI K2.5 REVIEW'), 7200);
-        setTimeout(() => cycleStage('READY'), 9000);
+        scheduleStages();
       }, 400);
-    }, 12000);
+    }, 14500);
   } catch (err) {
     console.warn('hero demo unavailable:', err);
   }
