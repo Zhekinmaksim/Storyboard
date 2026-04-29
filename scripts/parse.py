@@ -129,7 +129,7 @@ def parse_prose(prose: str, *, use_cache: bool = True) -> Scene:
         raw = kimi_text(user_prompt, system=effective_system, use_cache=use_cache,
                         temperature=0.5, max_tokens=4000)
         return _parse_and_validate(raw)
-    except (ValueError, KeyError) as exc:
+    except (ValueError, KeyError, TypeError) as exc:
         # Retry with feedback
         print(f"[parse] first attempt failed: {exc}; retrying with feedback", file=sys.stderr)
         retry_prompt = (
@@ -141,7 +141,7 @@ def parse_prose(prose: str, *, use_cache: bool = True) -> Scene:
             raw = kimi_text(retry_prompt, system=effective_system, use_cache=False,
                             temperature=0.3, max_tokens=4000)
             return _parse_and_validate(raw)
-        except (ValueError, KeyError) as exc2:
+        except (ValueError, KeyError, TypeError) as exc2:
             raise ParseError(
                 f"Kimi returned invalid Scene JSON after 2 attempts: {exc2}"
             ) from exc2

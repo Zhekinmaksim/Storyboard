@@ -180,12 +180,7 @@ def _shot_from_dict(data: dict[str, Any]) -> Shot:
     )
     eye_line = None
     if data.get("eye_line"):
-        el = data["eye_line"]
-        eye_line = EyeLine(
-            direction=EyeLineDirection(el["direction"]),
-            target_label=el.get("target_label", ""),
-            axis_status=AxisStatus(el.get("axis_status", "ON_AXIS")),
-        )
+        eye_line = _eye_line_from_dict(data["eye_line"])
     annotations = [
         Annotation(
             kind=a["kind"],
@@ -207,6 +202,18 @@ def _shot_from_dict(data: dict[str, Any]) -> Shot:
         figures=figures,
         environment=env,
         annotations=annotations,
+    )
+
+
+def _eye_line_from_dict(data: Any) -> EyeLine:
+    if isinstance(data, str):
+        return EyeLine(direction=EyeLineDirection(data))
+    if not isinstance(data, dict):
+        raise ValueError(f"eye_line must be an object, string, or null; got {type(data).__name__}")
+    return EyeLine(
+        direction=EyeLineDirection(data["direction"]),
+        target_label=data.get("target_label", ""),
+        axis_status=AxisStatus(data.get("axis_status", "ON_AXIS")),
     )
 
 

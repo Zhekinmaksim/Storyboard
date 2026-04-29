@@ -80,6 +80,20 @@ def test_scene_rejects_unknown_shot_type():
         })
 
 
+def test_scene_accepts_string_eye_line():
+    scene = Scene.from_dict({
+        "title": "X",
+        "shots": [{
+            "label": "1A",
+            "shot_type": "CLOSE_UP",
+            "description": "looks left",
+            "eye_line": "CAMERA_LEFT",
+        }],
+    })
+    assert scene.shots[0].eye_line is not None
+    assert scene.shots[0].eye_line.direction == EyeLineDirection.CAMERA_LEFT
+
+
 # =================== Render ===================
 
 def _minimal_scene() -> Scene:
