@@ -190,16 +190,18 @@
 
     <div class="try-grid">
       <div class="try-input">
-        <label class="field-label" for="prose">Your scene</label>
-        <div class="prose-wrap">
-          <textarea id="prose" rows="6"
-            placeholder="A detective enters a rain-soaked alley at night. He finds a body. He kneels…"></textarea>
+        <div class="scene-label-row">
+          <label class="field-label" for="prose">Your scene</label>
           <button id="voice-btn" class="voice-btn" type="button"
                   aria-label="Dictate scene with voice"
                   title="Dictate with voice (browser speech recognition)">
-            <span class="voice-icon" aria-hidden="true">🎤</span>
-            <span class="voice-text">VOICE</span>
+            <span class="voice-icon" aria-hidden="true"></span>
+            <span class="voice-text">Voice</span>
           </button>
+        </div>
+        <div class="prose-wrap">
+          <textarea id="prose" rows="6"
+            placeholder="A detective enters a rain-soaked alley at night. He finds a body. He kneels…"></textarea>
         </div>
 
         <div class="try-controls">

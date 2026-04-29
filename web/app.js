@@ -643,7 +643,7 @@ if (pullquote && 'IntersectionObserver' in window) {
     recog.onstart = () => {
       listening = true;
       btn.classList.add('is-listening');
-      btn.querySelector('.voice-text').textContent = 'STOP';
+      btn.querySelector('.voice-text').textContent = 'Stop';
       setStatus('listening…', 'is-running', 'speech recognition');
     };
     recog.onresult = (event) => {
@@ -666,7 +666,7 @@ if (pullquote && 'IntersectionObserver' in window) {
     recog.onend = () => {
       listening = false;
       btn.classList.remove('is-listening');
-      btn.querySelector('.voice-text').textContent = 'VOICE';
+      btn.querySelector('.voice-text').textContent = 'Voice';
       setStatus('ready');
     };
     recog.start();

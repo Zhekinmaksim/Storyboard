@@ -404,6 +404,14 @@ section {
   letter-spacing: 0.15em; text-transform: uppercase;
   margin-bottom: 10px;
 }
+.scene-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+.scene-label-row .field-label { margin-bottom: 0; }
 .try-controls {
   display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
   margin-top: 18px;
@@ -832,24 +840,32 @@ section {
 .prose-wrap { position: relative; }
 .prose-wrap textarea {
   display: block;
-  min-height: 190px;
-  padding-bottom: 72px;
+  min-height: 210px;
+  padding: 22px 26px;
+  font-size: 13px;
+  line-height: 1.72;
+  background: rgba(245, 240, 230, 0.72);
+  border-color: rgba(106, 95, 86, 0.82);
   resize: none;
+  scrollbar-gutter: stable;
+}
+.prose-wrap textarea:focus {
+  border-color: var(--accent);
+  background: rgba(245, 240, 230, 0.9);
+  box-shadow: 0 0 0 3px rgba(138, 58, 44, 0.045);
 }
 .voice-btn {
-  position: absolute;
-  bottom: 14px; right: 16px;
   display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  min-height: 36px;
-  padding: 7px 12px;
-  background: var(--bg);
+  flex: 0 0 auto;
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  min-height: 28px;
+  padding: 6px 10px;
+  background: transparent;
   color: var(--fg-dim);
-  border: 1px solid var(--fg-dim);
+  border: 1px solid rgba(106, 95, 86, 0.62);
   cursor: pointer;
   transition: all 0.15s ease;
-  z-index: 2;
 }
 .voice-btn:hover {
   border-color: var(--accent); color: var(--accent); background: var(--bg);
@@ -864,7 +880,13 @@ section {
   50% { box-shadow: 0 0 0 6px rgba(138, 58, 44, 0); }
 }
 .voice-btn.is-unsupported { opacity: 0.4; cursor: not-allowed; }
-.voice-icon { font-size: 13px; line-height: 1; }
+.voice-icon {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.75;
+}
 
 /* =================== Share toggle =================== */
 
