@@ -1135,7 +1135,7 @@ section {
   background: var(--bg-paper);
   border-top: 1px solid var(--fg-dim);
   border-bottom: 1px solid var(--fg-dim);
-  padding: clamp(40px, 5vw, 64px) var(--gutter);
+  padding: clamp(32px, 4vw, 52px) var(--gutter);
 }
 .kimi-roles-inner {
   max-width: 1100px; margin: 0 auto;
@@ -1612,31 +1612,31 @@ section {
 .pullquote {
   background: var(--bg);
   border-bottom: 1px solid var(--fg);
-  padding: clamp(64px, 9vw, 128px) var(--gutter);
+  padding: clamp(40px, 5vw, 72px) var(--gutter);
   position: relative;
   z-index: 2;
   overflow: hidden;
 }
 .pullquote-inner {
-  max-width: 920px;
+  max-width: 1040px;
   margin: 0 auto;
   position: relative;
 }
 .pullquote-mark {
   position: absolute;
-  top: -28px;
+  top: -18px;
   left: 0;
-  width: 72px;
-  height: 84px;
-  opacity: 0.18;
+  width: 54px;
+  height: 64px;
+  opacity: 0.14;
   pointer-events: none;
   display: flex;
-  gap: 12px;
+  gap: 9px;
 }
 .pullquote-mark span {
   display: block;
-  width: 28px;
-  height: 84px;
+  width: 21px;
+  height: 64px;
   background: var(--accent);
   transform: skewX(-16deg);
   transform-origin: top left;
@@ -1644,7 +1644,7 @@ section {
 }
 .pullquote blockquote {
   font-family: var(--serif);
-  font-size: 40px;
+  font-size: 36px;
   font-style: italic;
   font-weight: 400;
   line-height: 1.25;
@@ -1681,7 +1681,7 @@ section {
   display: flex; gap: 16px; align-items: center;
   font-family: var(--mono); font-size: 11px; color: var(--fg-dim);
   letter-spacing: 0.18em; text-transform: uppercase;
-  margin-top: 32px;
+  margin-top: 24px;
 }
 .pullquote-rule {
   width: 48px; height: 1px; background: var(--fg-dim);
