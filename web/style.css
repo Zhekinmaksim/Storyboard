@@ -41,9 +41,18 @@ a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.1; margin: 0; }
-h1 { font-size: clamp(44px, 6.5vw, 88px); letter-spacing: -0.025em; font-weight: 500; }
-h2 { font-size: clamp(28px, 3.5vw, 48px); letter-spacing: -0.015em; }
+h1 { font-size: 68px; letter-spacing: 0; font-weight: 500; }
+h2 { font-size: 44px; letter-spacing: 0; }
 h3 { font-size: 18px; }
+
+@media (max-width: 980px) {
+  h1 { font-size: 58px; }
+  h2 { font-size: 38px; }
+}
+@media (max-width: 640px) {
+  h1 { font-size: 48px; }
+  h2 { font-size: 32px; }
+}
 
 ::selection { background: var(--accent); color: var(--bg); }
 
@@ -172,7 +181,7 @@ textarea.placeholder-fade::placeholder {
 .brand-mark { color: var(--accent); font-size: 26px; line-height: 1; }
 .brand-name {
   font-family: var(--serif); font-size: 26px; font-weight: 500;
-  letter-spacing: -0.015em;
+  letter-spacing: 0;
 }
 .brand-version {
   font-family: var(--mono); font-size: 10px; color: var(--fg-faint);
@@ -232,11 +241,12 @@ textarea.placeholder-fade::placeholder {
   50% { opacity: 0.45; transform: scale(0.85); }
 }
 
-.hero-title { line-height: 1.02; max-width: 13ch; margin-bottom: 0; }
+.hero-title { line-height: 1.04; max-width: 15ch; margin-bottom: 0; }
 .hero-line { display: block; opacity: 0; transform: translateY(12px); }
 .hero-line-accent {
   font-style: italic; color: var(--accent); font-weight: 400;
   margin-top: 4px;
+  line-height: 1.12;
 }
 .hero-line.reveal {
   animation: hero-reveal 0.85s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
@@ -247,17 +257,18 @@ textarea.placeholder-fade::placeholder {
 
 /* The "Hermes" word: stroke-draw underline that grows in sync with text reveal */
 .hero-draw {
-  position: relative; display: inline-block; padding-bottom: 6px;
+  position: relative; display: inline-block; padding-bottom: 0;
   white-space: nowrap;
 }
 .hero-draw::after {
   content: '';
-  position: absolute; left: 0; bottom: -2px;
-  height: 5px; width: 100%;
+  position: absolute; left: 0; bottom: 0.04em;
+  height: 4px; width: 100%;
   background: var(--accent);
   transform-origin: left;
   transform: scaleX(0);
 }
+.hero-nowrap { white-space: nowrap; }
 .hero-draw.draw-active::after {
   animation: hero-underline 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
@@ -324,7 +335,7 @@ textarea.placeholder-fade::placeholder {
   max-width: 480px;
 }
 .stat-num {
-  font-family: var(--serif); font-size: clamp(28px, 3vw, 36px);
+  font-family: var(--serif); font-size: 34px;
   font-weight: 500; line-height: 1;
   color: var(--accent);
 }
@@ -621,36 +632,40 @@ section {
 }
 .learning .section-header,
 .learning .section-lede,
-.learning .learning-figure,
 .learning .rule-block {
-  max-width: var(--container);
+  max-width: 1120px;
 }
 .learning .section-header { padding-top: clamp(56px, 7vw, 96px); }
-.learning > .rule-block { padding-bottom: clamp(56px, 7vw, 96px); }
+.learning > .rule-block {
+  padding-left: 0;
+  padding-right: 0;
+  margin-bottom: 88px !important;
+}
 
 .learning-steps {
-  list-style: none; padding: 0; margin: 0 0 48px;
+  list-style: none; padding: 0; margin: 0 auto 56px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
   counter-reset: lstep;
+  max-width: 1120px;
 }
 .learning-steps li {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 18px;
   align-items: start;
-  padding: 24px 24px 24px 20px;
+  padding: 22px 22px 22px 18px;
   background: var(--bg-paper);
   border: 1px solid var(--fg);
   position: relative;
 }
 .learning-step-num {
   font-family: var(--serif);
-  font-size: 56px; font-weight: 500;
+  font-size: 48px; font-weight: 500;
   line-height: 1;
   color: var(--accent);
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
   align-self: start;
   padding-top: 4px;
 }
@@ -658,7 +673,7 @@ section {
   font-family: var(--serif); font-size: 20px; font-weight: 500;
   color: var(--fg);
   margin: 0 0 8px;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 .learning-step-body p {
   font-size: 15px; color: var(--fg-dim);
@@ -675,7 +690,10 @@ section {
   padding: 1px 6px;
 }
 
-.learning-figure { margin: 0 0 40px; }
+.learning-figure {
+  margin: 0 auto 44px;
+  max-width: 1080px;
+}
 .learning-figure img {
   display: block; width: 100%; height: auto;
   border: 1px solid var(--fg);
@@ -714,6 +732,10 @@ section {
 .json-key { color: var(--accent); }
 .json-str { color: var(--fg); }
 
+@media (max-width: 1080px) {
+  .learning-steps { grid-template-columns: 1fr; }
+}
+
 /* =================== Install section =================== */
 
 .install {
@@ -749,7 +771,7 @@ section {
   font-family: var(--serif);
   font-size: 22px; font-weight: 500;
   color: var(--fg);
-  text-transform: none; letter-spacing: -0.01em;
+  text-transform: none; letter-spacing: 0;
   margin-bottom: 12px;
 }
 .install-text {
@@ -783,7 +805,7 @@ section {
 .footer-inner {
   max-width: var(--container);
   margin: 0 auto;
-  padding: 32px var(--gutter);
+  padding: 32px var(--gutter) 74px;
   display: flex; justify-content: space-between; align-items: center;
   flex-wrap: wrap; gap: 20px;
 }
@@ -808,18 +830,26 @@ section {
 /* =================== Voice button + prose wrap =================== */
 
 .prose-wrap { position: relative; }
+.prose-wrap textarea {
+  display: block;
+  min-height: 190px;
+  padding-bottom: 72px;
+  resize: none;
+}
 .voice-btn {
   position: absolute;
-  bottom: 8px; right: 8px;
+  bottom: 14px; right: 16px;
   display: inline-flex; align-items: center; gap: 6px;
   font-family: var(--mono); font-size: 10px;
   letter-spacing: 0.15em; text-transform: uppercase;
-  padding: 6px 10px;
+  min-height: 36px;
+  padding: 7px 12px;
   background: var(--bg);
   color: var(--fg-dim);
   border: 1px solid var(--fg-dim);
   cursor: pointer;
   transition: all 0.15s ease;
+  z-index: 2;
 }
 .voice-btn:hover {
   border-color: var(--accent); color: var(--accent); background: var(--bg);
@@ -952,7 +982,7 @@ section {
   font-family: var(--serif); font-size: 16px; font-weight: 500;
   line-height: 1.3;
   margin: 0 0 6px;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 .gallery-card-prose {
   font-family: var(--mono); font-size: 11px;
@@ -1137,7 +1167,7 @@ section {
   font-size: 17px;
   color: var(--accent);
   font-weight: 500;
-  letter-spacing: -0.005em;
+  letter-spacing: 0;
 }
 .kr-note {
   font-family: var(--mono);
@@ -1158,7 +1188,7 @@ section {
   font-size: 14px;
   color: var(--fg-dim);
   margin: 24px 0 0;
-  letter-spacing: -0.005em;
+  letter-spacing: 0;
 }
 .kimi-roles-foot a {
   color: var(--accent);
@@ -1175,7 +1205,7 @@ section {
   margin: 22px 0 0;
   font-family: var(--serif);
   font-size: 18px;
-  letter-spacing: -0.005em;
+  letter-spacing: 0;
   color: var(--fg);
   display: flex; flex-wrap: wrap; gap: 16px 28px;
 }
@@ -1230,8 +1260,8 @@ section {
 .why-hermes-eyebrow .eyebrow-mark { background: #d04d3d; }
 .why-hermes-title {
   font-family: var(--serif); font-weight: 500;
-  font-size: clamp(28px, 3.5vw, 44px);
-  line-height: 1.18; letter-spacing: -0.015em;
+  font-size: 40px;
+  line-height: 1.18; letter-spacing: 0;
   color: var(--bg);
   margin: 0 0 40px;
   max-width: 28ch;
@@ -1319,7 +1349,7 @@ section {
   font-style: italic;
   color: rgba(245, 240, 230, 0.72);
   margin: 0;
-  letter-spacing: -0.005em;
+  letter-spacing: 0;
   line-height: 1.5;
 }
 .grounded-foot a {
@@ -1584,14 +1614,20 @@ section {
 }
 .pullquote blockquote {
   font-family: var(--serif);
-  font-size: clamp(28px, 3.5vw, 44px);
+  font-size: 40px;
   font-style: italic;
   font-weight: 400;
   line-height: 1.25;
   color: var(--fg);
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   position: relative;
+}
+
+@media (max-width: 640px) {
+  .stat-num { font-size: 30px; }
+  .why-hermes-title,
+  .pullquote blockquote { font-size: 32px; }
 }
 .pullquote blockquote em {
   color: var(--accent); font-style: italic; font-weight: 500;
