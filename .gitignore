@@ -30,3 +30,4 @@ venv/
 
 # Outputs (default location — relative for ad-hoc tests)
 storyboard-output/
+.vercel
