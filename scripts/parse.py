@@ -19,77 +19,65 @@ from scripts.kimi_client import KimiError, kimi_text
 from scripts.scene import Scene
 
 
-SYSTEM_PROMPT = """You are a senior film director's assistant. Your job is to convert prose
-scene descriptions into structured shot lists for a storyboard.
+SYSTEM_PROMPT = """Convert prose into a compact six-shot storyboard JSON.
 
-Output STRICT, VALID JSON only. No markdown fences, no commentary.
+Return STRICT JSON only. No markdown, no commentary. Exactly 6 shots.
 
-Aim for 4–6 shots per scene, occasionally 7–8 for action sequences.
-
-Use ONLY these canonical shot types:
+Allowed shot_type values:
 WIDE, MEDIUM, CLOSE_UP, ECU, OTS, LOW_ANGLE, HIGH_ANGLE, TWO_SHOT, POV
 
-Use ONLY these poses:
-STANDING, RUNNING, FALLEN, KNEELING, SEATED, WALKING
-
-Use ONLY these facing values:
-FRONT, LEFT, RIGHT, BACK, THREE_QUARTER_LEFT, THREE_QUARTER_RIGHT
-
-Use ONLY these eye-line directions (when present):
+Allowed eye_line direction values:
 CAMERA_LEFT, CAMERA_RIGHT, INTO_CAMERA, OFFSCREEN_UP, OFFSCREEN_DOWN
-
-Use ONLY these axis statuses (when present):
-ON_AXIS, CROSSED_LINE, NEW_AXIS
 
 Schema:
 {
-  "title": "string",
+  "title": "short title",
   "scene_number": "01",
-  "location": "EXT alley · night",
+  "location": "INT/EXT place · time",
   "director": "Zmaxx",
-  "notes": "optional director note",
+  "notes": "one short note",
   "shots": [
     {
       "label": "1A",
       "shot_type": "WIDE",
-      "description": "rain-soaked alley, lone figure",
+      "description": "visual action in this frame",
       "lens": "24mm",
       "movement": "Static",
-      "angle": "High (crane)",
-      "duration": "0:00 – 0:06",
-      "caption": "italic line under frame",
+      "angle": "Eye level",
+      "duration": "0:00 – 0:05",
+      "caption": "short italic caption",
       "eye_line": null,
       "figures": [
         {
           "role": "detective",
           "pose": "STANDING",
           "facing": "FRONT",
-          "position": [0.5, 0.7],
-          "scale": 0.5,
-          "state": "wet"
+          "position": [0.45, 0.70],
+          "scale": 0.8,
+          "state": "optional visual state"
         }
       ],
       "environment": {
         "kind": "EXT",
         "description": "rain-soaked alley",
         "horizon_y": 0.55,
-        "has_rain": true,
-        "has_torchlight": false
+        "has_rain": false,
+        "has_table": false,
+        "has_stairwell": false,
+        "props": []
       },
       "annotations": []
     }
   ]
 }
 
-Constraints:
-- Position coordinates are normalised 0..1 inside the frame (x left→right, y top→bottom).
-- Wide shots: figure scale 0.4–0.6. Medium: 0.9–1.2. Close: 2.0–3.0.
-- For dialogue scenes, ALWAYS specify eye_line for CLOSE_UP and OTS shots.
-- For action scenes, durations are 0:00–0:02 per shot. Dialogue: 0:00–0:05.
-- Lens choice tracks emotional intensity: wider for context, longer for tension.
-- Mark axis_status: NEW_AXIS only on intentional crossings. ON_AXIS by default.
-
-Return ONLY the JSON object. No prose. No backticks."""
+Use labels 1A, 1B, 1C, 1D, 1E, 1F in order.
+Use 1-2 figures per shot when people are visible.
+Use normalized figure positions: x 0.15-0.85, y 0.35-0.82.
+Use scale 0.45-1.15 for wide/medium shots and 1.6-2.4 for close-ups.
+Use concise fields: no long prose.
+Dialogue scenes should include CLOSE_UP or OTS with eye_line.
+Return only the JSON object."""
 
 
 class ParseError(RuntimeError):
@@ -126,8 +114,16 @@ def parse_prose(prose: str, *, use_cache: bool = True) -> Scene:
 
     # First attempt
     try:
-        raw = kimi_text(user_prompt, system=effective_system, use_cache=use_cache,
-                        temperature=0.5, max_tokens=4000, retries=0)
+        raw = kimi_text(
+            user_prompt,
+            system=effective_system,
+            use_cache=use_cache,
+            temperature=0.2,
+            max_tokens=1800,
+            retries=1,
+            response_format={"type": "json_object"},
+            reasoning={"effort": "none", "exclude": True},
+        )
         return _parse_and_validate(raw)
     except KimiError as exc:
         raise ParseError(f"Kimi parse unavailable: {exc}") from exc
@@ -140,8 +136,16 @@ def parse_prose(prose: str, *, use_cache: bool = True) -> Scene:
             f"Return ONLY a valid JSON Scene object matching the schema exactly."
         )
         try:
-            raw = kimi_text(retry_prompt, system=effective_system, use_cache=False,
-                            temperature=0.3, max_tokens=4000, retries=0)
+            raw = kimi_text(
+                retry_prompt,
+                system=effective_system,
+                use_cache=False,
+                temperature=0.1,
+                max_tokens=1800,
+                retries=0,
+                response_format={"type": "json_object"},
+                reasoning={"effort": "none", "exclude": True},
+            )
             return _parse_and_validate(raw)
         except KimiError as exc2:
             raise ParseError(f"Kimi parse unavailable after validation retry: {exc2}") from exc2
@@ -156,6 +160,10 @@ def _parse_and_validate(raw: str) -> Scene:
     cleaned = _strip_codeblock(raw).strip()
     data = json.loads(cleaned)  # raises ValueError on bad JSON
     scene = Scene.from_dict(data)  # raises ValueError on bad enum
+    if len(scene.shots) != 6:
+        raise ValueError(f"Scene must contain exactly 6 shots; got {len(scene.shots)}")
+    for idx, shot in enumerate(scene.shots):
+        shot.label = f"1{chr(ord('A') + idx)}"
     _infer_atmospheric_flags(scene)
     return scene
 

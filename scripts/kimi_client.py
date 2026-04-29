@@ -24,7 +24,7 @@ from typing import Any
 import httpx
 
 OPENROUTER_BASE = "https://openrouter.ai/api/v1/chat/completions"
-KIMI_MODEL = "moonshotai/kimi-k2.5"
+KIMI_MODEL = os.environ.get("STORYBOARD_KIMI_MODEL", "moonshotai/kimi-k2.5:nitro")
 
 CACHE_DIR = Path(os.environ.get("STORYBOARD_CACHE_DIR", str(Path.home() / ".cache" / "storyboard")))
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
@@ -61,9 +61,13 @@ def _cache_put(key: str, response: dict[str, Any]) -> None:
 def kimi_call(
     messages: list[dict[str, Any]],
     *,
+    model: str | None = None,
     multimodal: bool = False,
     temperature: float | None = None,
     max_tokens: int = 4000,
+    response_format: dict[str, Any] | None = None,
+    reasoning: dict[str, Any] | None = None,
+    provider: dict[str, Any] | None = None,
     use_cache: bool = True,
     retries: int = 2,
 ) -> dict[str, Any]:
@@ -84,11 +88,16 @@ def kimi_call(
         temperature = 0.3 if multimodal else 0.7
 
     payload = {
-        "model": KIMI_MODEL,
+        "model": model or KIMI_MODEL,
         "messages": messages,
         "temperature": temperature,
         "max_tokens": max_tokens,
+        "provider": provider or {"sort": "throughput", "allow_fallbacks": True},
     }
+    if response_format is not None:
+        payload["response_format"] = response_format
+    if reasoning is not None:
+        payload["reasoning"] = reasoning
 
     cache_key = _cache_key(payload)
     if use_cache:
@@ -107,7 +116,8 @@ def kimi_call(
     for attempt in range(retries + 1):
         try:
             timeout = float(os.environ.get("STORYBOARD_KIMI_TIMEOUT", "12"))
-            with httpx.Client(timeout=timeout) as client:
+            http_timeout = httpx.Timeout(timeout, connect=5.0, read=timeout, write=5.0, pool=5.0)
+            with httpx.Client(timeout=http_timeout) as client:
                 resp = client.post(OPENROUTER_BASE, headers=headers, json=payload)
                 # 429 / 5xx → retry with backoff
                 if resp.status_code in (429, 500, 502, 503, 504):
@@ -116,6 +126,12 @@ def kimi_call(
                     )
                 resp.raise_for_status()
                 data = resp.json()
+            if not _response_has_text(data):
+                last_exc = KimiError(f"empty response content; got {_short_response(data)}")
+                if attempt < retries:
+                    time.sleep(2 ** attempt)
+                    continue
+                raise last_exc
             if use_cache:
                 _cache_put(cache_key, data)
             return data
@@ -144,6 +160,19 @@ def extract_text(response: dict[str, Any]) -> str:
     if not isinstance(content, str) or not content.strip():
         raise KimiError(f"empty response content; got {response}")
     return content
+
+
+def _response_has_text(response: dict[str, Any]) -> bool:
+    try:
+        content = response["choices"][0]["message"]["content"]
+    except (KeyError, IndexError, TypeError):
+        return False
+    return isinstance(content, str) and bool(content.strip())
+
+
+def _short_response(response: dict[str, Any], limit: int = 500) -> str:
+    text = json.dumps(response, ensure_ascii=False, default=str)
+    return text if len(text) <= limit else text[:limit] + "…"
 
 
 def kimi_text(prompt: str, system: str | None = None, **kwargs: Any) -> str:
