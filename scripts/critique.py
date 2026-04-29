@@ -16,6 +16,7 @@ Design notes:
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from dataclasses import dataclass
@@ -67,6 +68,7 @@ OUTPUT FORMAT — strict JSON only, no markdown:
 }
 
 If the storyboard is correct, return {"revisions": []}.
+Return at most 2 revisions.
 
 DO NOT propose changes to fields not listed in the field enum above.
 DO NOT propose revisions for shot labels that do not appear in the
@@ -118,7 +120,10 @@ def critique_board(scene: Scene, png_bytes: bytes, *, use_cache: bool = True) ->
             system=CRITIQUE_SYSTEM_PROMPT,
             use_cache=use_cache,
             temperature=0.2,
-            max_tokens=2000,
+            max_tokens=700,
+            response_format={"type": "json_object"},
+            reasoning={"effort": "none", "exclude": True},
+            timeout=float(os.environ.get("STORYBOARD_KIMI_VISION_TIMEOUT", "10")),
         )
     except KimiError as exc:
         print(f"[critique] Kimi vision call failed: {exc}", file=sys.stderr)

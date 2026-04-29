@@ -68,6 +68,7 @@ def kimi_call(
     response_format: dict[str, Any] | None = None,
     reasoning: dict[str, Any] | None = None,
     provider: dict[str, Any] | None = None,
+    timeout: float | None = None,
     use_cache: bool = True,
     retries: int = 2,
 ) -> dict[str, Any]:
@@ -96,6 +97,10 @@ def kimi_call(
     }
     if response_format is not None:
         payload["response_format"] = response_format
+    if reasoning is None:
+        effort = os.environ.get("STORYBOARD_KIMI_REASONING_EFFORT", "none").strip()
+        if effort:
+            reasoning = {"effort": effort, "exclude": True}
     if reasoning is not None:
         payload["reasoning"] = reasoning
 
@@ -115,8 +120,17 @@ def kimi_call(
     last_exc: Exception | None = None
     for attempt in range(retries + 1):
         try:
-            timeout = float(os.environ.get("STORYBOARD_KIMI_TIMEOUT", "12"))
-            http_timeout = httpx.Timeout(timeout, connect=5.0, read=timeout, write=5.0, pool=5.0)
+            request_timeout = (
+                timeout if timeout is not None
+                else float(os.environ.get("STORYBOARD_KIMI_TIMEOUT", "12"))
+            )
+            http_timeout = httpx.Timeout(
+                request_timeout,
+                connect=5.0,
+                read=request_timeout,
+                write=5.0,
+                pool=5.0,
+            )
             with httpx.Client(timeout=http_timeout) as client:
                 resp = client.post(OPENROUTER_BASE, headers=headers, json=payload)
                 # 429 / 5xx → retry with backoff

@@ -191,7 +191,7 @@ def _shot_from_dict(data: dict[str, Any]) -> Shot:
     ]
     return Shot(
         label=data["label"],
-        shot_type=ShotType(data["shot_type"]),
+        shot_type=_coerce_shot_type(data["shot_type"]),
         description=data.get("description", ""),
         lens=data.get("lens", "35mm"),
         movement=data.get("movement", "Static"),
@@ -207,13 +207,13 @@ def _shot_from_dict(data: dict[str, Any]) -> Shot:
 
 def _eye_line_from_dict(data: Any) -> EyeLine:
     if isinstance(data, str):
-        return EyeLine(direction=EyeLineDirection(data))
+        return EyeLine(direction=_coerce_eye_line_direction(data))
     if not isinstance(data, dict):
         raise ValueError(f"eye_line must be an object, string, or null; got {type(data).__name__}")
     return EyeLine(
-        direction=EyeLineDirection(data["direction"]),
+        direction=_coerce_eye_line_direction(data["direction"]),
         target_label=data.get("target_label", ""),
-        axis_status=AxisStatus(data.get("axis_status", "ON_AXIS")),
+        axis_status=_coerce_axis_status(data.get("axis_status", "ON_AXIS")),
     )
 
 
@@ -223,12 +223,87 @@ def _figure_from_dict(data: dict[str, Any]) -> Figure:
         pos = tuple(pos)
     return Figure(
         role=data.get("role", "figure"),
-        pose=Pose(data.get("pose", "STANDING")),
-        facing=Facing(data.get("facing", "FRONT")),
+        pose=_coerce_pose(data.get("pose", "STANDING")),
+        facing=_coerce_facing(data.get("facing", "FRONT")),
         position=pos,
         scale=float(data.get("scale", 1.0)),
         state=data.get("state"),
     )
+
+
+def _canon(value: Any) -> str:
+    return str(value).strip().upper().replace("-", "_").replace(" ", "_")
+
+
+def _coerce_shot_type(value: Any) -> ShotType:
+    aliases = {
+        "CLOSEUP": "CLOSE_UP",
+        "CLOSE": "CLOSE_UP",
+        "CLOSE_UP_SHOT": "CLOSE_UP",
+        "EXTREME_CLOSE_UP": "ECU",
+        "OVER_THE_SHOULDER": "OTS",
+        "OVER_SHOULDER": "OTS",
+        "LOW": "LOW_ANGLE",
+        "HIGH": "HIGH_ANGLE",
+        "TWO": "TWO_SHOT",
+    }
+    return ShotType(aliases.get(_canon(value), _canon(value)))
+
+
+def _coerce_pose(value: Any) -> Pose:
+    aliases = {
+        "SITTING": "SEATED",
+        "SIT": "SEATED",
+        "SITS": "SEATED",
+        "SAT": "SEATED",
+        "STAND": "STANDING",
+        "STANDS": "STANDING",
+        "WALK": "WALKING",
+        "WALKS": "WALKING",
+        "RUN": "RUNNING",
+        "RUNS": "RUNNING",
+        "KNEEL": "KNEELING",
+        "KNEELS": "KNEELING",
+        "LYING": "FALLEN",
+        "PRONE": "FALLEN",
+    }
+    return Pose(aliases.get(_canon(value), _canon(value)))
+
+
+def _coerce_facing(value: Any) -> Facing:
+    aliases = {
+        "FORWARD": "FRONT",
+        "FACING_FRONT": "FRONT",
+        "CAMERA": "FRONT",
+        "TOWARD_CAMERA": "FRONT",
+        "TOWARDS_CAMERA": "FRONT",
+        "THREE_QUARTER": "THREE_QUARTER_LEFT",
+        "THREE_QUARTER_L": "THREE_QUARTER_LEFT",
+        "THREE_QUARTER_R": "THREE_QUARTER_RIGHT",
+    }
+    return Facing(aliases.get(_canon(value), _canon(value)))
+
+
+def _coerce_eye_line_direction(value: Any) -> EyeLineDirection:
+    aliases = {
+        "LEFT": "CAMERA_LEFT",
+        "RIGHT": "CAMERA_RIGHT",
+        "UP": "OFFSCREEN_UP",
+        "DOWN": "OFFSCREEN_DOWN",
+        "OFFSCREEN_LEFT": "CAMERA_LEFT",
+        "OFFSCREEN_RIGHT": "CAMERA_RIGHT",
+    }
+    return EyeLineDirection(aliases.get(_canon(value), _canon(value)))
+
+
+def _coerce_axis_status(value: Any) -> AxisStatus:
+    aliases = {
+        "ON": "ON_AXIS",
+        "CROSSED": "CROSSED_LINE",
+        "CROSSING": "CROSSED_LINE",
+        "NEW": "NEW_AXIS",
+    }
+    return AxisStatus(aliases.get(_canon(value), _canon(value)))
 
 
 __all__ = [

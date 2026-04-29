@@ -96,6 +96,29 @@ def test_scene_accepts_string_eye_line():
     assert scene.shots[0].eye_line.direction == EyeLineDirection.CAMERA_LEFT
 
 
+def test_scene_accepts_common_kimi_enum_aliases():
+    scene = Scene.from_dict({
+        "title": "X",
+        "shots": [{
+            "label": "1A",
+            "shot_type": "close up",
+            "description": "sits and looks left",
+            "eye_line": {"direction": "left", "axis_status": "on"},
+            "figures": [{
+                "role": "sibling",
+                "pose": "SITTING",
+                "facing": "toward camera",
+            }],
+        }],
+    })
+    shot = scene.shots[0]
+    assert shot.shot_type == ShotType.CLOSE_UP
+    assert shot.figures[0].pose.value == "SEATED"
+    assert shot.figures[0].facing.value == "FRONT"
+    assert shot.eye_line is not None
+    assert shot.eye_line.direction == EyeLineDirection.CAMERA_LEFT
+
+
 def test_stub_scene_produces_six_shots():
     scene = stub_scene("A detective enters a rain-soaked alley at night. A phone rings.")
     assert len(scene.shots) == 6
