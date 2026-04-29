@@ -1,0 +1,575 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" width="1600" height="1100">
+  <defs>
+    <style>
+      .ink { stroke: #1f1d1a; fill: none; }
+      .ink-fill { fill: #1f1d1a; }
+      .light-fill { fill: #f5f0e6; }
+      .meta { font-family: 'Geist Mono', 'IBM Plex Mono', monospace; fill: #1f1d1a; }
+      .caption { font-family: 'Newsreader', Georgia, serif; fill: #1f1d1a; }
+      .label { font-family: 'Geist Mono', monospace; font-size: 11px; fill: #6a5f56; letter-spacing: 0.1em; }
+      .accent { fill: #8a3a2c; stroke: #8a3a2c; }
+    </style>
+    <pattern id="circuit" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="10" x2="20" y2="10" stroke="#1f1d1a" stroke-width="0.4" opacity="0.4"/>
+      <line x1="10" y1="0" x2="10" y2="20" stroke="#1f1d1a" stroke-width="0.4" opacity="0.4"/>
+      <circle cx="10" cy="10" r="1" fill="#1f1d1a" opacity="0.5"/>
+    </pattern>
+  </defs>
+  
+  <rect width="1600" height="1100" fill="#f5f0e6"/>
+  
+  <g>
+    <text x="60" y="50" class="caption" font-size="26" font-weight="500">Vessel 7 · Final Watch</text>
+    <text x="60" y="74" class="meta" font-size="13" fill="#6a5f56">DIR. S. BELMIROHA · SCENE 12: THE CARGO HOLD · SCI-FI</text>
+    <line x1="60" y1="95" x2="1540" y2="95" stroke="#1f1d1a" stroke-width="1"/>
+  </g>
+  
+  <!-- ===== FRAME 1: Establishing — exterior of derelict ship ===== -->
+  <g transform="translate(60, 130)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">12A · WIDE · DERELICT VESSEL · SPACE</text>
+    
+    <clipPath id="s-clip-1"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#s-clip-1)">
+      <!-- Black space background -->
+      <rect x="0" y="0" width="460" height="193" class="ink-fill"/>
+      
+      <!-- Stars -->
+      <g fill="#f5f0e6">
+        <circle cx="40" cy="30" r="0.6"/>
+        <circle cx="120" cy="20" r="1.2"/>
+        <circle cx="180" cy="50" r="0.8"/>
+        <circle cx="260" cy="15" r="0.6"/>
+        <circle cx="340" cy="35" r="1.4"/>
+        <circle cx="400" cy="22" r="0.8"/>
+        <circle cx="80" cy="80" r="1"/>
+        <circle cx="220" cy="170" r="0.6"/>
+        <circle cx="380" cy="160" r="1"/>
+        <circle cx="60" cy="160" r="0.8"/>
+        <circle cx="430" cy="180" r="0.6"/>
+        <circle cx="20" cy="120" r="1"/>
+        <circle cx="290" cy="100" r="0.5"/>
+      </g>
+      
+      <!-- Distant nebula suggestion -->
+      <ellipse cx="100" cy="70" rx="80" ry="20" fill="#f5f0e6" opacity="0.08"/>
+      
+      <!-- The Vessel - long industrial silhouette -->
+      <g transform="translate(120, 100)">
+        <!-- Main hull -->
+        <path d="M 0 -8 L 30 -15 L 220 -15 L 250 -8 L 250 8 L 220 15 L 30 15 L 0 8 Z" fill="#f5f0e6"/>
+        
+        <!-- Engine cluster aft (left) -->
+        <rect x="-10" y="-12" width="15" height="24" fill="#f5f0e6"/>
+        <rect x="-15" y="-6" width="8" height="12" fill="#f5f0e6"/>
+        
+        <!-- Bridge (right) protrusion -->
+        <path d="M 245 -3 L 270 -3 L 275 0 L 270 3 L 245 3 Z" fill="#f5f0e6"/>
+        
+        <!-- Cargo holds (middle - rectangular protrusions) -->
+        <rect x="60" y="-22" width="40" height="8" fill="#f5f0e6"/>
+        <rect x="115" y="-22" width="40" height="8" fill="#f5f0e6"/>
+        <rect x="60" y="14" width="40" height="6" fill="#f5f0e6"/>
+        
+        <!-- Hull detail lines (paneling) -->
+        <g stroke="#1f1d1a" stroke-width="0.6">
+          <line x1="40" y1="-15" x2="40" y2="15"/>
+          <line x1="80" y1="-22" x2="80" y2="20"/>
+          <line x1="135" y1="-22" x2="135" y2="20"/>
+          <line x1="180" y1="-15" x2="180" y2="15"/>
+          <line x1="210" y1="-15" x2="210" y2="15"/>
+        </g>
+        
+        <!-- DAMAGE — irregular hull breach with red glow -->
+        <path d="M 95 -22 L 100 -25 L 110 -20 L 115 -25 L 120 -18 L 118 -10 L 122 -5 L 115 -3 L 105 -8 L 98 -3 L 95 -10 Z" class="accent" opacity="0.7"/>
+        <path d="M 100 -20 L 110 -10 L 105 -5" stroke="#1f1d1a" stroke-width="0.6" fill="none"/>
+        
+        <!-- Running lights -->
+        <circle cx="240" cy="-12" r="1.5" fill="#f5f0e6"/>
+        <circle cx="240" cy="12" r="1.5" fill="#f5f0e6"/>
+      </g>
+      
+      <!-- Scale indicator - tiny shuttle approaching -->
+      <g transform="translate(380, 130)">
+        <path d="M 0 0 L 8 -2 L 10 0 L 8 2 Z" fill="#f5f0e6"/>
+        <line x1="0" y1="0" x2="-6" y2="0" stroke="#f5f0e6" stroke-width="0.5"/>
+      </g>
+      
+      <!-- Distance/scale annotation -->
+      <g transform="translate(330, 140)">
+        <line x1="0" y1="0" x2="40" y2="-8" stroke="#8a3a2c" stroke-width="0.6" stroke-dasharray="2,2"/>
+        <text x="-2" y="-3" class="meta" font-size="9" fill="#8a3a2c" text-anchor="end">SHUTTLE</text>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">75mm (long lens)</text>
+      <text x="160" y="12" class="label">MOVE</text>
+      <text x="160" y="28" class="meta" font-size="12">Slow drift</text>
+      <text x="280" y="12" class="label">ANGLE</text>
+      <text x="280" y="28" class="meta" font-size="12">Profile</text>
+    </g>
+    
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      Vessel 7 in profile. Dark. Hull breach to port. Shuttle approaches.
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 2: Interior airlock — boarding ===== -->
+  <g transform="translate(570, 130)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">12B · MEDIUM · AIRLOCK CYCLE · INT</text>
+    
+    <clipPath id="s-clip-2"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#s-clip-2)">
+      <rect x="0" y="0" width="460" height="193" class="light-fill"/>
+      
+      <!-- Industrial corridor walls converging -->
+      <path d="M 0 0 L 0 193 L 80 130 L 80 60 Z" class="ink-fill" opacity="0.3"/>
+      <path d="M 460 0 L 460 193 L 380 130 L 380 60 Z" class="ink-fill" opacity="0.3"/>
+      
+      <!-- Floor with grates -->
+      <path d="M 0 193 L 80 130 L 380 130 L 460 193 Z" class="ink-fill" opacity="0.5"/>
+      <g stroke="#f5f0e6" stroke-width="0.5" opacity="0.6">
+        <line x1="100" y1="135" x2="120" y2="190"/>
+        <line x1="170" y1="132" x2="190" y2="190"/>
+        <line x1="240" y1="130" x2="240" y2="190"/>
+        <line x1="310" y1="132" x2="290" y2="190"/>
+        <line x1="380" y1="135" x2="360" y2="190"/>
+      </g>
+      
+      <!-- Airlock door — circular hatch -->
+      <g transform="translate(230, 90)">
+        <!-- Outer ring -->
+        <circle cx="0" cy="0" r="55" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="3"/>
+        <!-- Inner ring -->
+        <circle cx="0" cy="0" r="48" fill="none" stroke="#1f1d1a" stroke-width="1"/>
+        <!-- Hatch wheel -->
+        <g>
+          <circle cx="0" cy="0" r="20" fill="none" stroke="#1f1d1a" stroke-width="1.5"/>
+          <line x1="-20" y1="0" x2="20" y2="0" stroke="#1f1d1a" stroke-width="2"/>
+          <line x1="0" y1="-20" x2="0" y2="20" stroke="#1f1d1a" stroke-width="2"/>
+          <line x1="-14" y1="-14" x2="14" y2="14" stroke="#1f1d1a" stroke-width="1"/>
+          <line x1="-14" y1="14" x2="14" y2="-14" stroke="#1f1d1a" stroke-width="1"/>
+        </g>
+        <!-- Bolts around outer ring -->
+        <g fill="#1f1d1a">
+          <circle cx="0" cy="-50" r="2"/>
+          <circle cx="35" cy="-35" r="2"/>
+          <circle cx="50" cy="0" r="2"/>
+          <circle cx="35" cy="35" r="2"/>
+          <circle cx="0" cy="50" r="2"/>
+          <circle cx="-35" cy="35" r="2"/>
+          <circle cx="-50" cy="0" r="2"/>
+          <circle cx="-35" cy="-35" r="2"/>
+        </g>
+        <!-- Status light - red -->
+        <circle cx="0" cy="-45" r="3" class="accent"/>
+      </g>
+      
+      <!-- Astronaut figure entering frame from bottom -->
+      <g transform="translate(180, 175)">
+        <!-- Helmet -->
+        <ellipse cx="0" cy="-20" rx="14" ry="13" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="2"/>
+        <!-- Visor -->
+        <path d="M -10 -25 Q 0 -30 10 -25 L 8 -18 L -8 -18 Z" class="ink-fill"/>
+        <!-- Suit body -->
+        <path d="M -16 -8 L -20 25 L 20 25 L 16 -8 Z" class="ink-fill"/>
+        <!-- Helmet ring/collar -->
+        <ellipse cx="0" cy="-8" rx="14" ry="3" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="1.5"/>
+        <!-- Backpack life-support visible at top -->
+        <rect x="-10" y="-35" width="20" height="8" fill="#1f1d1a"/>
+        <!-- Suit details -->
+        <line x1="0" y1="-5" x2="0" y2="20" stroke="#f5f0e6" stroke-width="0.5"/>
+        <rect x="-5" y="0" width="10" height="6" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="0.5"/>
+      </g>
+      
+      <!-- Status / HUD text -->
+      <g transform="translate(60, 30)">
+        <rect x="-2" y="-10" width="80" height="14" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="0.5"/>
+        <text x="2" y="0" class="meta" font-size="9">PRESS: 0.2 atm</text>
+      </g>
+      <g transform="translate(370, 30)">
+        <rect x="-2" y="-10" width="60" height="14" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="0.5"/>
+        <text x="2" y="0" class="meta" font-size="9" fill="#8a3a2c">CYCLE...</text>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">28mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Static</text>
+      <text x="220" y="12" class="label">ANGLE</text>
+      <text x="220" y="28" class="meta" font-size="12">Symmetric, deep</text>
+      <text x="370" y="12" class="label">VFX</text>
+      <text x="370" y="28" class="meta" font-size="12">Cycling light</text>
+    </g>
+    
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      Symmetric framing. The hatch is the subject.
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 3: POV - dark corridor reveal ===== -->
+  <g transform="translate(1080, 130)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">12C · POV · CORRIDOR · TORCHLIGHT</text>
+    
+    <clipPath id="s-clip-3"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#s-clip-3)">
+      <!-- Mostly dark interior -->
+      <rect x="0" y="0" width="460" height="193" class="ink-fill"/>
+      
+      <!-- Helmet HUD frame ringing the shot -->
+      <g fill="none" stroke="#f5f0e6" stroke-width="1" opacity="0.4">
+        <path d="M 30 30 L 30 25 L 35 20"/>
+        <path d="M 425 20 L 430 25 L 430 30"/>
+        <path d="M 30 173 L 30 168 L 35 173"/>
+        <path d="M 425 173 L 430 168 L 430 173"/>
+      </g>
+      
+      <!-- HUD telemetry -->
+      <text x="40" y="35" class="meta" font-size="9" fill="#f5f0e6" opacity="0.7">O₂ 87%</text>
+      <text x="395" y="35" class="meta" font-size="9" fill="#f5f0e6" opacity="0.7">14:22:08</text>
+      <text x="40" y="180" class="meta" font-size="9" fill="#f5f0e6" opacity="0.7">RAD 0.3</text>
+      <text x="380" y="180" class="meta" font-size="9" fill="#8a3a2c" opacity="0.9">⚠ LIFE: 2</text>
+      
+      <!-- Torchlight cone illuminating only the center -->
+      <radialGradient id="torch" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#f5f0e6" stop-opacity="0.85"/>
+        <stop offset="40%" stop-color="#f5f0e6" stop-opacity="0.5"/>
+        <stop offset="80%" stop-color="#f5f0e6" stop-opacity="0.1"/>
+        <stop offset="100%" stop-color="#f5f0e6" stop-opacity="0"/>
+      </radialGradient>
+      <ellipse cx="230" cy="100" rx="160" ry="100" fill="url(#torch)"/>
+      
+      <!-- Lit elements in the cone -->
+      
+      <!-- Corridor walls perspective -->
+      <g opacity="0.7">
+        <path d="M 100 60 L 220 80 L 220 120 L 100 145 Z" fill="none" stroke="#1f1d1a" stroke-width="1"/>
+        <path d="M 360 60 L 240 80 L 240 120 L 360 145 Z" fill="none" stroke="#1f1d1a" stroke-width="1"/>
+        <!-- Floor -->
+        <path d="M 100 145 L 220 120 L 240 120 L 360 145 Z" fill="none" stroke="#1f1d1a" stroke-width="1"/>
+        <!-- Ceiling -->
+        <path d="M 100 60 L 220 80 L 240 80 L 360 60 Z" fill="none" stroke="#1f1d1a" stroke-width="1"/>
+        <!-- Wall paneling -->
+        <line x1="160" y1="68" x2="160" y2="135" stroke="#1f1d1a" stroke-width="0.5"/>
+        <line x1="190" y1="74" x2="190" y2="128" stroke="#1f1d1a" stroke-width="0.5"/>
+        <line x1="270" y1="74" x2="270" y2="128" stroke="#1f1d1a" stroke-width="0.5"/>
+        <line x1="300" y1="68" x2="300" y2="135" stroke="#1f1d1a" stroke-width="0.5"/>
+      </g>
+      
+      <!-- Something at the END of corridor - shape suggesting figure -->
+      <g transform="translate(230, 100)">
+        <!-- Tall, narrow, asymmetric mass -->
+        <path d="M -8 -15 Q -12 -10 -10 5 L -6 18 L 8 18 L 12 5 Q 10 -10 5 -15 Z" fill="#1f1d1a" stroke="#f5f0e6" stroke-width="0.5" opacity="0.95"/>
+        <!-- Suggested limbs hanging too low -->
+        <path d="M -10 0 L -18 25" stroke="#f5f0e6" stroke-width="0.6" opacity="0.8"/>
+        <path d="M 10 0 L 18 27" stroke="#f5f0e6" stroke-width="0.6" opacity="0.8"/>
+        <!-- Eye-glints - two red dots -->
+        <circle cx="-3" cy="-8" r="1" class="accent"/>
+        <circle cx="3" cy="-8" r="1" class="accent"/>
+      </g>
+      
+      <!-- Pipes / cables on ceiling, only partially lit -->
+      <g stroke="#1f1d1a" stroke-width="0.6" opacity="0.5">
+        <path d="M 130 65 Q 200 70 230 75"/>
+        <path d="M 230 75 Q 280 70 350 65"/>
+      </g>
+      
+      <!-- Drip - just a tiny detail -->
+      <line x1="200" y1="75" x2="200" y2="85" class="accent" stroke-width="0.5" opacity="0.7"/>
+      <ellipse cx="200" cy="125" rx="3" ry="0.5" class="accent" opacity="0.6"/>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">14mm wide</text>
+      <text x="100" y="12" class="label">MOVE</text>
+      <text x="100" y="28" class="meta" font-size="12">Walking POV</text>
+      <text x="220" y="12" class="label">LIGHT</text>
+      <text x="220" y="28" class="meta" font-size="12" fill="#8a3a2c">Helmet only</text>
+      <text x="340" y="12" class="label">REVEAL</text>
+      <text x="340" y="28" class="meta" font-size="12">END of shot</text>
+    </g>
+    
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      Cone of light reveals it. We see before she does.
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 4: Reaction CU through visor ===== -->
+  <g transform="translate(60, 560)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">12D · CU · REACTION · THROUGH VISOR</text>
+    
+    <clipPath id="s-clip-4"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#s-clip-4)">
+      <rect x="0" y="0" width="460" height="193" class="light-fill"/>
+      
+      <!-- Dark vignette around -->
+      <rect x="0" y="0" width="460" height="193" class="ink-fill" opacity="0.15"/>
+      
+      <!-- Helmet shape filling frame -->
+      <g transform="translate(230, 100)">
+        <!-- Helmet outer shell -->
+        <ellipse cx="0" cy="0" rx="160" ry="100" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="3"/>
+        
+        <!-- Visor area - reflective -->
+        <path d="M -130 -30 Q 0 -75 130 -30 L 130 30 Q 0 75 -130 30 Z" fill="#1f1d1a" opacity="0.85"/>
+        
+        <!-- Reflection - the alien creature reflected on visor -->
+        <g transform="translate(0, 10)">
+          <path d="M -8 -15 Q -12 -10 -10 5 L -6 18 L 8 18 L 12 5 Q 10 -10 5 -15 Z" fill="#f5f0e6" opacity="0.5"/>
+          <circle cx="-3" cy="-8" r="1.5" class="accent"/>
+          <circle cx="3" cy="-8" r="1.5" class="accent"/>
+        </g>
+        
+        <!-- Face faintly visible behind visor - eyes wide -->
+        <g transform="translate(0, -5)" opacity="0.4">
+          <ellipse cx="-25" cy="-5" rx="12" ry="6" fill="#f5f0e6"/>
+          <ellipse cx="25" cy="-5" rx="12" ry="6" fill="#f5f0e6"/>
+          <circle cx="-25" cy="-5" r="3" fill="#1f1d1a"/>
+          <circle cx="25" cy="-5" r="3" fill="#1f1d1a"/>
+          <line x1="-10" y1="20" x2="10" y2="20" stroke="#1f1d1a" stroke-width="2"/>
+        </g>
+        
+        <!-- Helmet glare/highlight -->
+        <ellipse cx="-40" cy="-50" rx="40" ry="20" fill="#f5f0e6" opacity="0.6"/>
+        
+        <!-- HUD elements on visor -->
+        <text x="-100" y="-50" class="meta" font-size="9" fill="#8a3a2c">HEART RATE 142</text>
+        <text x="60" y="-50" class="meta" font-size="9" fill="#8a3a2c">ALERT</text>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">100mm</text>
+      <text x="100" y="12" class="label">MOVE</text>
+      <text x="100" y="28" class="meta" font-size="12">Slight push in</text>
+      <text x="220" y="12" class="label">FOCUS</text>
+      <text x="220" y="28" class="meta" font-size="12">Visor reflection</text>
+      <text x="340" y="12" class="label">DURATION</text>
+      <text x="340" y="28" class="meta" font-size="12">2.5 sec hold</text>
+    </g>
+    
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      Her face faint. The thing reflected, sharp.
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 5: Wide — full creature reveal ===== -->
+  <g transform="translate(570, 560)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">12E · WIDE LOW · CREATURE FULL · INT</text>
+    
+    <clipPath id="s-clip-5"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#s-clip-5)">
+      <rect x="0" y="0" width="460" height="193" class="ink-fill" opacity="0.4"/>
+      
+      <!-- Cargo hold environment - tall scale -->
+      <!-- Ceiling beams -->
+      <g stroke="#1f1d1a" stroke-width="1" opacity="0.7">
+        <line x1="0" y1="20" x2="460" y2="15"/>
+        <line x1="60" y1="0" x2="55" y2="50"/>
+        <line x1="160" y1="0" x2="158" y2="50"/>
+        <line x1="300" y1="0" x2="305" y2="50"/>
+        <line x1="400" y1="0" x2="408" y2="50"/>
+      </g>
+      
+      <!-- Far wall with cargo containers stacked -->
+      <g class="ink-fill" opacity="0.6">
+        <rect x="20" y="80" width="60" height="40"/>
+        <rect x="20" y="40" width="60" height="40"/>
+        <rect x="80" y="100" width="50" height="30"/>
+        <rect x="380" y="80" width="60" height="40"/>
+      </g>
+      <g stroke="#f5f0e6" stroke-width="0.4">
+        <line x1="50" y1="40" x2="50" y2="120"/>
+        <line x1="20" y1="80" x2="80" y2="80"/>
+        <line x1="380" y1="100" x2="440" y2="100"/>
+      </g>
+      
+      <!-- Floor -->
+      <rect x="0" y="160" width="460" height="33" class="ink-fill" opacity="0.3"/>
+      <g stroke="#1f1d1a" stroke-width="0.4" opacity="0.5">
+        <line x1="0" y1="170" x2="460" y2="170"/>
+        <line x1="0" y1="180" x2="460" y2="180"/>
+        <line x1="100" y1="160" x2="105" y2="193"/>
+        <line x1="220" y1="160" x2="225" y2="193"/>
+        <line x1="340" y1="160" x2="345" y2="193"/>
+      </g>
+      
+      <!-- THE CREATURE - full reveal, tall, asymmetric -->
+      <g transform="translate(230, 165)">
+        <!-- Main body — elongated, segmented -->
+        <path d="M -25 0 
+                 Q -30 -20 -28 -45 
+                 Q -22 -75 -15 -100 
+                 Q -8 -120 0 -130
+                 Q 8 -120 12 -100 
+                 Q 18 -75 22 -45 
+                 Q 25 -20 20 0 Z" class="ink-fill"/>
+        
+        <!-- Asymmetric appendages - left side longer -->
+        <path d="M -25 -30 Q -50 -35 -65 -20 Q -55 -10 -45 -15 Q -35 -22 -25 -25 Z" class="ink-fill"/>
+        <path d="M -28 -60 Q -55 -65 -70 -45 Q -60 -38 -50 -45 Q -38 -52 -28 -55 Z" class="ink-fill"/>
+        
+        <!-- Right side - shorter, articulated -->
+        <path d="M 22 -40 Q 35 -45 40 -35 Q 35 -28 28 -32 Z" class="ink-fill"/>
+        <path d="M 25 -70 Q 38 -75 42 -68 Q 36 -62 28 -65 Z" class="ink-fill"/>
+        
+        <!-- Head — narrow, pointed -->
+        <path d="M -8 -130 Q -3 -150 3 -150 Q 8 -148 8 -130 L 0 -125 Z" class="ink-fill"/>
+        
+        <!-- Eyes - red, glowing -->
+        <circle cx="-3" cy="-138" r="1.5" class="accent"/>
+        <circle cx="3" cy="-138" r="1.5" class="accent"/>
+        
+        <!-- Body texture - hatching -->
+        <g stroke="#f5f0e6" stroke-width="0.4" opacity="0.6">
+          <line x1="-15" y1="-50" x2="-12" y2="-55"/>
+          <line x1="-12" y1="-30" x2="-9" y2="-35"/>
+          <line x1="10" y1="-50" x2="13" y2="-55"/>
+          <line x1="8" y1="-80" x2="11" y2="-85"/>
+          <line x1="-10" y1="-100" x2="-7" y2="-105"/>
+          <!-- Segment lines -->
+          <path d="M -22 -40 Q 0 -45 18 -40" fill="none"/>
+          <path d="M -25 -70 Q 0 -75 22 -70" fill="none"/>
+          <path d="M -22 -100 Q 0 -105 18 -100" fill="none"/>
+        </g>
+      </g>
+      
+      <!-- Astronaut, foreground bottom-right - small for scale -->
+      <g transform="translate(380, 175)">
+        <ellipse cx="0" cy="-12" rx="8" ry="7" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="1"/>
+        <path d="M -6 -25 Q 0 -28 6 -25 L 5 -19 L -5 -19 Z" class="ink-fill"/>
+        <path d="M -9 -5 L -11 12 L 11 12 L 9 -5 Z" class="ink-fill"/>
+      </g>
+      
+      <!-- Scale comparison line -->
+      <g transform="translate(440, 35)">
+        <line x1="0" y1="0" x2="0" y2="140" stroke="#8a3a2c" stroke-width="0.6"/>
+        <line x1="-3" y1="0" x2="3" y2="0" stroke="#8a3a2c" stroke-width="0.8"/>
+        <line x1="-3" y1="140" x2="3" y2="140" stroke="#8a3a2c" stroke-width="0.8"/>
+        <text x="-10" y="75" class="meta" font-size="9" fill="#8a3a2c" text-anchor="end" transform="rotate(-90 -10 75)">≈ 4.2 m</text>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">35mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Tilt up (reveal)</text>
+      <text x="220" y="12" class="label">ANGLE</text>
+      <text x="220" y="28" class="meta" font-size="12">Low — make it tall</text>
+      <text x="370" y="12" class="label">VFX</text>
+      <text x="370" y="28" class="meta" font-size="12">Practical</text>
+    </g>
+    
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      Tilt up. Full height. She is small in the frame. So is the human story.
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 6: Standoff — locked frame ===== -->
+  <g transform="translate(1080, 560)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">12F · LOCKED · STANDOFF · CHOICE</text>
+    
+    <clipPath id="s-clip-6"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#s-clip-6)">
+      <rect x="0" y="0" width="460" height="193" class="ink-fill" opacity="0.3"/>
+      
+      <!-- Cargo hold simplified -->
+      <rect x="0" y="160" width="460" height="33" class="ink-fill" opacity="0.5"/>
+      <g stroke="#1f1d1a" stroke-width="0.4" opacity="0.4">
+        <line x1="0" y1="170" x2="460" y2="170"/>
+        <line x1="0" y1="180" x2="460" y2="180"/>
+      </g>
+      
+      <!-- Astronaut LEFT, lower thirds, weapon raised -->
+      <g transform="translate(120, 130)">
+        <!-- Body -->
+        <ellipse cx="0" cy="-12" rx="11" ry="10" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="1.5"/>
+        <path d="M -8 -20 Q 0 -25 8 -20 L 7 -14 L -7 -14 Z" class="ink-fill"/>
+        <path d="M -12 0 L -14 25 L 14 25 L 12 0 Z" class="ink-fill"/>
+        <!-- Arm extended forward with weapon -->
+        <path d="M 12 -2 L 30 -5 L 28 2 L 12 5 Z" class="ink-fill"/>
+        <!-- Weapon -->
+        <rect x="28" y="-7" width="20" height="6" class="ink-fill"/>
+        <rect x="44" y="-9" width="6" height="10" class="ink-fill"/>
+        <!-- Targeting laser -->
+        <line x1="50" y1="-4" x2="290" y2="50" class="accent" stroke-dasharray="2,2" opacity="0.8"/>
+      </g>
+      
+      <!-- Creature RIGHT, dominant in frame -->
+      <g transform="translate(330, 160)">
+        <path d="M -20 0 
+                 Q -25 -20 -22 -45 
+                 Q -15 -75 -10 -100 
+                 Q -3 -115 5 -110
+                 Q 12 -100 15 -75 
+                 Q 18 -45 13 -20 
+                 Q 12 -5 8 0 Z" class="ink-fill"/>
+        <!-- Head -->
+        <path d="M -3 -110 Q 2 -125 6 -120 L 4 -108 Z" class="ink-fill"/>
+        <!-- Eyes -->
+        <circle cx="0" cy="-115" r="1.5" class="accent"/>
+        <circle cx="4" cy="-115" r="1.5" class="accent"/>
+        <!-- Limbs -->
+        <path d="M -20 -50 Q -45 -55 -55 -40 Q -45 -32 -38 -40 Z" class="ink-fill"/>
+        <path d="M 13 -60 Q 30 -65 32 -55 Q 25 -50 18 -55 Z" class="ink-fill"/>
+        <!-- Slight motion lines - it's still, but breathing -->
+        <g class="motion" stroke-width="0.4" opacity="0.4">
+          <path d="M -25 -75 Q -32 -73 -32 -78" fill="none"/>
+          <path d="M 18 -75 Q 25 -73 25 -78" fill="none"/>
+        </g>
+      </g>
+      
+      <!-- Negative space between them - the heart of the shot -->
+      <line x1="50" y1="190" x2="50" y2="50" stroke="#8a3a2c" stroke-width="0.4" stroke-dasharray="1,1" opacity="0"/>
+      
+      <!-- Tension marker — silence indicator -->
+      <g transform="translate(230, 30)">
+        <rect x="-30" y="-8" width="60" height="14" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="0.5"/>
+        <text x="0" y="3" class="meta" font-size="9" text-anchor="middle">SILENCE</text>
+      </g>
+      
+      <!-- Frame composition note -->
+      <g transform="translate(15, 180)">
+        <text x="0" y="0" class="meta" font-size="9" fill="#8a3a2c">RULE OF THIRDS · OFFSET</text>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">50mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">LOCKED OFF</text>
+      <text x="220" y="12" class="label">DURATION</text>
+      <text x="220" y="28" class="meta" font-size="12">8 sec sustain</text>
+      <text x="360" y="12" class="label">SOUND</text>
+      <text x="360" y="28" class="meta" font-size="12">Breath only</text>
+    </g>
+    
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      No music. No movement. Whatever happens next, it's earned.
+    </text>
+  </g>
+  
+  <!-- Footer -->
+  <g transform="translate(60, 1050)">
+    <line x1="0" y1="-15" x2="1480" y2="-15" stroke="#1f1d1a" stroke-width="1"/>
+    <text x="0" y="8" class="meta" font-size="11" fill="#6a5f56">
+      SCENE 12 · 6 SHOTS · ESTABLISHING → INT REVEAL → POV → REACTION → FULL → STANDOFF · BUILDS DREAD VIA WITHHOLDING
+    </text>
+    <text x="1480" y="8" class="meta" font-size="11" fill="#6a5f56" text-anchor="end">
+      storyboard · sci-fi scene draft
+    </text>
+  </g>
+</svg>

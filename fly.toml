@@ -1,0 +1,51 @@
+# fly.toml — storyboard API
+#
+# Deploy with:
+#   flyctl launch --no-deploy   (first time, picks org + region)
+#   flyctl secrets set OPENROUTER_API_KEY=sk-or-...
+#   flyctl deploy
+#
+# DNS:
+#   1. flyctl ips list                            (note v4 + v6)
+#   2. CNAME api.hermes-story.art → <app>.fly.dev
+#   3. flyctl certs add api.hermes-story.art
+
+app = "storyboard-api"
+primary_region = "ams"  # close to most EU/MENA users; pick lhr/fra/iad as you like
+
+[build]
+
+[env]
+  PORT = "8080"
+  STORYBOARD_MAX_JOBS = "30"
+  STORYBOARD_JOB_TTL = "1800"
+  STORYBOARD_ALLOWED_ORIGINS = "https://hermes-story.art,https://www.hermes-story.art"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0      # scale to zero when idle (free)
+  processes = ["app"]
+
+  # SSE-friendly: long timeouts, no buffering
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 25
+    hard_limit = 50
+
+# Health check
+[[http_service.checks]]
+  grace_period = "10s"
+  interval = "30s"
+  method = "GET"
+  path = "/api/health"
+  timeout = "5s"
+
+# 256MB shared CPU is plenty — pipeline is I/O bound on Kimi calls.
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1

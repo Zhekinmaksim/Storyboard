@@ -1,0 +1,448 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" width="1600" height="1100">
+  <defs>
+    <style>
+      .ink { stroke: #1f1d1a; fill: none; }
+      .ink-fill { fill: #1f1d1a; }
+      .light-fill { fill: #f5f0e6; }
+      .meta { font-family: 'Geist Mono', 'IBM Plex Mono', monospace; fill: #1f1d1a; }
+      .caption { font-family: 'Newsreader', Georgia, serif; fill: #1f1d1a; }
+      .label { font-family: 'Geist Mono', monospace; font-size: 11px; fill: #6a5f56; letter-spacing: 0.1em; }
+      .dialog { font-family: 'Newsreader', Georgia, serif; font-size: 12px; fill: #1f1d1a; font-style: italic; }
+      .accent { fill: #8a3a2c; stroke: #8a3a2c; }
+    </style>
+  </defs>
+  
+  <rect width="1600" height="1100" fill="#f5f0e6"/>
+  
+  <!-- Header -->
+  <g>
+    <text x="60" y="50" class="caption" font-size="26" font-weight="500">The Rain Investigation</text>
+    <text x="60" y="74" class="meta" font-size="13" fill="#6a5f56">DIR. S. BELMIROHA · SCENE 07: THE INTERVIEW · DIALOGUE</text>
+    <line x1="60" y1="95" x2="1540" y2="95" stroke="#1f1d1a" stroke-width="1"/>
+  </g>
+  
+  <!-- ===== FRAME 1: Establishing two-shot ===== -->
+  <g transform="translate(60, 130)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">7A · TWO-SHOT · INT INTERVIEW ROOM · NIGHT</text>
+    
+    <clipPath id="d-clip-1"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#d-clip-1)">
+      <rect x="0" y="0" width="460" height="193" class="light-fill"/>
+      
+      <!-- Wall with lines suggesting paneling / institutional look -->
+      <g stroke="#1f1d1a" stroke-width="0.5" opacity="0.3">
+        <line x1="0" y1="40" x2="460" y2="40"/>
+        <line x1="0" y1="60" x2="460" y2="60"/>
+      </g>
+      
+      <!-- Hanging light bulb -->
+      <line x1="230" y1="0" x2="230" y2="30" stroke="#1f1d1a" stroke-width="1"/>
+      <circle cx="230" cy="38" r="10" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="1.5"/>
+      <!-- light spread - subtle -->
+      <ellipse cx="230" cy="100" rx="180" ry="60" fill="none" stroke="#1f1d1a" stroke-width="0.5" opacity="0.3" stroke-dasharray="2,2"/>
+      
+      <!-- Table - centered, takes bottom half -->
+      <rect x="80" y="140" width="300" height="10" class="ink-fill"/>
+      <!-- Table legs -->
+      <rect x="90" y="150" width="8" height="43" class="ink-fill"/>
+      <rect x="362" y="150" width="8" height="43" class="ink-fill"/>
+      
+      <!-- LEFT: Detective, back to camera angle (3/4) -->
+      <g transform="translate(150, 110)">
+        <!-- Coat back -->
+        <path d="M -30 30 L -35 -10 L -25 -25 L 15 -25 L 25 -10 L 25 30 Z" class="ink-fill"/>
+        <!-- Head (3/4 back) -->
+        <circle cx="0" cy="-35" r="13" class="ink-fill"/>
+        <!-- Hat -->
+        <ellipse cx="0" cy="-44" rx="16" ry="5" class="ink-fill"/>
+        <rect x="-12" y="-55" width="24" height="12" class="ink-fill"/>
+      </g>
+      
+      <!-- RIGHT: Suspect, facing camera (3/4) -->
+      <g transform="translate(310, 110)">
+        <!-- Body -->
+        <path d="M -20 30 L -25 -10 L -15 -25 L 15 -25 L 25 -10 L 20 30 Z" class="ink-fill" opacity="0.85"/>
+        <!-- Head turned slightly right - front-ish -->
+        <ellipse cx="0" cy="-35" rx="12" ry="14" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="2"/>
+        <!-- Eyes -->
+        <ellipse cx="-5" cy="-38" rx="2" ry="1" class="ink-fill"/>
+        <ellipse cx="5" cy="-38" rx="2" ry="1" class="ink-fill"/>
+        <!-- Mouth - tight line -->
+        <line x1="-3" y1="-28" x2="3" y2="-28" stroke="#1f1d1a" stroke-width="1.5"/>
+        <!-- Hair / shadow on top -->
+        <path d="M -10 -45 Q 0 -52 10 -45 L 10 -42 L -10 -42 Z" class="ink-fill"/>
+      </g>
+      
+      <!-- Eye-line arrow between them -->
+      <line x1="165" y1="73" x2="295" y2="75" stroke="#8a3a2c" stroke-width="1" stroke-dasharray="2,2" opacity="0.7"/>
+      <polygon points="295,75 287,72 287,78" class="accent"/>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">35mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Static</text>
+      <text x="220" y="12" class="label">ANGLE</text>
+      <text x="220" y="28" class="meta" font-size="12">Eye level</text>
+      <text x="340" y="12" class="label">AXIS</text>
+      <text x="340" y="28" class="meta" font-size="12">180° line SET</text>
+    </g>
+    
+    <text x="0" y="268" class="caption" font-size="13" font-style="italic" opacity="0.7">
+      DET: "You know why you're here."
+    </text>
+    <text x="0" y="286" class="caption" font-size="13" font-style="italic" opacity="0.7">
+      SUSPECT: (silence)
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 2: Detective CU - asking ===== -->
+  <g transform="translate(570, 130)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">7B · CLOSE UP · DETECTIVE · PRESSING</text>
+    
+    <clipPath id="d-clip-2"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#d-clip-2)">
+      <rect x="0" y="0" width="460" height="193" class="light-fill"/>
+      
+      <!-- Shadow background suggesting depth -->
+      <g stroke="#1f1d1a" stroke-width="0.4" opacity="0.4">
+        <line x1="0" y1="30" x2="460" y2="30"/>
+        <line x1="0" y1="55" x2="460" y2="55"/>
+        <line x1="0" y1="80" x2="460" y2="80"/>
+        <line x1="0" y1="110" x2="460" y2="110"/>
+        <line x1="0" y1="140" x2="460" y2="140"/>
+      </g>
+      
+      <!-- Detective face in 3/4 - looking screen right -->
+      <g transform="translate(230, 110)">
+        <!-- Face shape -->
+        <path d="M -45 -50 Q -60 -20 -55 15 Q -50 50 -15 65 Q 10 65 10 -60 Q -20 -70 -45 -50 Z" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="2"/>
+        <!-- Shadow half - lit from screen left -->
+        <path d="M -10 -60 Q 10 -60 10 65 Q 5 65 0 60 L 0 -55 Z" class="ink-fill" opacity="0.5"/>
+        <!-- Hat brim heavy shadow on top -->
+        <path d="M -60 -55 L 15 -55 L 10 -45 L -55 -45 Z" class="ink-fill"/>
+        <!-- Hat top -->
+        <path d="M -45 -55 L -45 -80 L 15 -80 L 15 -55 Z" class="ink-fill"/>
+        <!-- Eyes - looking SCREEN RIGHT (towards suspect) -->
+        <g transform="translate(-25, -25)">
+          <ellipse cx="0" cy="0" rx="9" ry="3.5" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="1.5"/>
+          <!-- pupil off-center, looking right -->
+          <circle cx="3" cy="0" r="2.5" class="ink-fill"/>
+        </g>
+        <!-- Brow furrow -->
+        <line x1="-35" y1="-38" x2="-20" y2="-33" stroke="#1f1d1a" stroke-width="1.5"/>
+        <!-- Mouth - speaking, slightly open -->
+        <g transform="translate(-30, 20)">
+          <path d="M -5 0 Q 0 3 5 0 L 3 -2 L -3 -2 Z" class="ink-fill"/>
+        </g>
+        <!-- Jaw line in shadow -->
+        <path d="M -40 30 Q -25 50 -5 55" stroke="#1f1d1a" stroke-width="1" fill="none"/>
+      </g>
+      
+      <!-- Eye-line indicator: arrow pointing screen right (to where suspect would be) -->
+      <g transform="translate(440, 85)">
+        <line x1="-20" y1="0" x2="10" y2="0" stroke="#8a3a2c" stroke-width="1" stroke-dasharray="2,2"/>
+        <polygon points="10,0 2,-3 2,3" class="accent"/>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">85mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Static</text>
+      <text x="220" y="12" class="label">EYE LINE</text>
+      <text x="220" y="28" class="meta" font-size="12" fill="#8a3a2c">→ camera right</text>
+      <text x="360" y="12" class="label">SIZE</text>
+      <text x="360" y="28" class="meta" font-size="12">CU shoulders up</text>
+    </g>
+    
+    <text x="0" y="268" class="caption" font-size="13" font-style="italic">
+      DET: "Third body this month. Same knot."
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 3: Suspect CU - reacting ===== -->
+  <g transform="translate(1080, 130)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">7C · CLOSE UP · SUSPECT · REACTION</text>
+    
+    <clipPath id="d-clip-3"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#d-clip-3)">
+      <rect x="0" y="0" width="460" height="193" class="light-fill"/>
+      
+      <!-- Plainer, brighter background - interrogation room -->
+      <g stroke="#1f1d1a" stroke-width="0.4" opacity="0.25">
+        <line x1="0" y1="40" x2="460" y2="40"/>
+        <line x1="0" y1="80" x2="460" y2="80"/>
+        <line x1="0" y1="120" x2="460" y2="120"/>
+      </g>
+      
+      <!-- Suspect face - 3/4 the OTHER way (reverse) -->
+      <g transform="translate(230, 110)">
+        <!-- Face - facing screen left -->
+        <path d="M 45 -50 Q 60 -20 55 15 Q 50 50 15 65 Q -10 65 -10 -60 Q 20 -70 45 -50 Z" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="2"/>
+        <!-- Shadow on face - lit from screen right now -->
+        <path d="M 10 -60 Q -10 -60 -10 65 Q -5 65 0 60 L 0 -55 Z" class="ink-fill" opacity="0.4"/>
+        <!-- Hair -->
+        <path d="M -10 -70 Q 20 -78 45 -60 L 50 -55 L 10 -55 L -10 -60 Z" class="ink-fill"/>
+        <!-- Eyes - WIDE, looking SCREEN LEFT (back at detective) -->
+        <g transform="translate(25, -25)">
+          <ellipse cx="0" cy="0" rx="10" ry="5" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="1.5"/>
+          <circle cx="-2" cy="0" r="3" class="ink-fill"/>
+          <!-- Eyebrow raised - tension -->
+          <path d="M -8 -9 Q 0 -12 8 -8" stroke="#1f1d1a" stroke-width="1.5" fill="none"/>
+        </g>
+        <!-- Mouth - slightly open, startled -->
+        <ellipse cx="30" cy="25" rx="4" ry="3" class="ink-fill"/>
+        <!-- Sweat drop - accent -->
+        <circle cx="52" cy="-20" r="1.5" class="accent"/>
+        <path d="M 52 -19 Q 53 -10 51 -5" class="accent" stroke-width="1" fill="none"/>
+      </g>
+      
+      <!-- Eye-line indicator: arrow pointing screen LEFT (back to detective) -->
+      <g transform="translate(20, 85)">
+        <line x1="0" y1="0" x2="30" y2="0" stroke="#8a3a2c" stroke-width="1" stroke-dasharray="2,2"/>
+        <polygon points="0,0 8,-3 8,3" class="accent"/>
+      </g>
+      
+      <!-- Axis compliance note -->
+      <g transform="translate(15, 15)">
+        <rect x="-2" y="-11" width="110" height="18" fill="#f5f0e6" stroke="#8a3a2c" stroke-width="1"/>
+        <text x="4" y="3" class="meta" font-size="10" fill="#8a3a2c">180° LINE OK</text>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">85mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Static (slight push)</text>
+      <text x="220" y="12" class="label">EYE LINE</text>
+      <text x="220" y="28" class="meta" font-size="12" fill="#8a3a2c">← camera left</text>
+      <text x="360" y="12" class="label">SIZE</text>
+      <text x="360" y="28" class="meta" font-size="12">CU match 7B</text>
+    </g>
+    
+    <text x="0" y="268" class="caption" font-size="13" font-style="italic">
+      SUSPECT: "I don't know what you're talking about."
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 4: Detective ECU — evidence reveal ===== -->
+  <g transform="translate(60, 560)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">7D · ECU · HANDS · EVIDENCE</text>
+    
+    <clipPath id="d-clip-4"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#d-clip-4)">
+      <rect x="0" y="0" width="460" height="193" class="light-fill"/>
+      
+      <!-- Table surface -->
+      <rect x="0" y="0" width="460" height="193" fill="#f5f0e6"/>
+      <!-- Wood grain -->
+      <g stroke="#1f1d1a" stroke-width="0.4" opacity="0.25">
+        <line x1="0" y1="40" x2="460" y2="42"/>
+        <line x1="0" y1="80" x2="460" y2="81"/>
+        <line x1="0" y1="120" x2="460" y2="122"/>
+        <line x1="0" y1="160" x2="460" y2="161"/>
+      </g>
+      
+      <!-- Detective's hand placing photo -->
+      <g transform="translate(100, 80)">
+        <!-- Hand/sleeve coming from left -->
+        <path d="M -100 0 L -100 60 L 30 65 L 50 45 L 45 30 L 35 20 L 20 15 L -5 20 L -100 20 Z" class="ink-fill"/>
+        <!-- Fingers on photo -->
+        <path d="M 20 15 Q 30 20 35 30 Q 40 40 30 45 L 20 50 Z" fill="#1f1d1a"/>
+      </g>
+      
+      <!-- Photo/document on table -->
+      <g transform="translate(230, 100)">
+        <rect x="-70" y="-50" width="140" height="85" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="2"/>
+        <!-- Photo content - crime scene stick fig -->
+        <g transform="translate(0, -5)">
+          <ellipse cx="0" cy="0" rx="35" ry="8" class="ink-fill"/>
+          <ellipse cx="-15" cy="8" rx="8" ry="2" class="accent" opacity="0.7"/>
+        </g>
+        <!-- Photo label -->
+        <text x="-65" y="30" class="meta" font-size="8" fill="#6a5f56">CASE 4471 · BODY 3</text>
+      </g>
+      
+      <!-- Second photo partially visible (previous cases) -->
+      <g transform="translate(360, 130)" opacity="0.6">
+        <rect x="-60" y="-30" width="120" height="70" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="1.5"/>
+        <ellipse cx="-10" cy="0" rx="30" ry="6" class="ink-fill"/>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">100mm macro</text>
+      <text x="120" y="12" class="label">MOVE</text>
+      <text x="120" y="28" class="meta" font-size="12">Static, table-level</text>
+      <text x="260" y="12" class="label">ANGLE</text>
+      <text x="260" y="28" class="meta" font-size="12">High, ¾ down</text>
+    </g>
+    
+    <text x="0" y="268" class="caption" font-size="13" font-style="italic">
+      DET (O.S.): "Then explain this."
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 5: Suspect reaction - medium shot, body lang shift ===== -->
+  <g transform="translate(570, 560)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">7E · MEDIUM · SUSPECT · CRACKING</text>
+    
+    <clipPath id="d-clip-5"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#d-clip-5)">
+      <rect x="0" y="0" width="460" height="193" class="light-fill"/>
+      
+      <!-- Background wall -->
+      <g stroke="#1f1d1a" stroke-width="0.3" opacity="0.3">
+        <line x1="0" y1="50" x2="460" y2="50"/>
+        <line x1="0" y1="90" x2="460" y2="90"/>
+      </g>
+      
+      <!-- Table edge at bottom -->
+      <rect x="0" y="160" width="460" height="33" class="ink-fill"/>
+      
+      <!-- Photo visible on edge of table -->
+      <rect x="200" y="155" width="100" height="8" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="1.5"/>
+      
+      <!-- Suspect - body language collapsed, shoulders in -->
+      <g transform="translate(230, 120)">
+        <!-- Body - hunched -->
+        <path d="M -30 35 L -38 -15 L -25 -35 L 25 -35 L 38 -15 L 30 35 Z" class="ink-fill"/>
+        <!-- Head - tilted down -->
+        <ellipse cx="0" cy="-50" rx="13" ry="15" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="2"/>
+        <!-- Hair -->
+        <path d="M -13 -60 Q 0 -68 13 -60 L 13 -55 L -13 -55 Z" class="ink-fill"/>
+        <!-- Eyes - closed / looking down -->
+        <line x1="-6" y1="-50" x2="-2" y2="-48" stroke="#1f1d1a" stroke-width="1.5"/>
+        <line x1="2" y1="-48" x2="6" y2="-50" stroke="#1f1d1a" stroke-width="1.5"/>
+        <!-- Mouth - turned down -->
+        <path d="M -4 -38 Q 0 -35 4 -38" stroke="#1f1d1a" stroke-width="1.5" fill="none"/>
+        <!-- Arms on table - hands hidden / clutched -->
+        <path d="M -38 -10 L -50 25 L -45 35 L -25 20 Z" class="ink-fill"/>
+        <path d="M 38 -10 L 50 25 L 45 35 L 25 20 Z" class="ink-fill"/>
+      </g>
+      
+      <!-- Hand reaching for photo -->
+      <g transform="translate(250, 155)">
+        <ellipse cx="0" cy="0" rx="8" ry="4" class="ink-fill"/>
+      </g>
+      
+      <!-- Subtle accent - single tear -->
+      <circle cx="220" cy="78" r="1" class="accent"/>
+      
+      <!-- Focus indicator on hands -->
+      <g transform="translate(230, 153)">
+        <circle cx="0" cy="0" r="30" fill="none" stroke="#8a3a2c" stroke-width="0.8" stroke-dasharray="2,2" opacity="0.7"/>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">50mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Slight push in</text>
+      <text x="220" y="12" class="label">BEAT</text>
+      <text x="220" y="28" class="meta" font-size="12">3 sec silence</text>
+      <text x="340" y="12" class="label">BODY LANG</text>
+      <text x="340" y="28" class="meta" font-size="12">Collapse posture</text>
+    </g>
+    
+    <text x="0" y="268" class="caption" font-size="13" font-style="italic">
+      SUSPECT: (reaches for photo, doesn't touch it)
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 6: Return to two-shot - tables turned ===== -->
+  <g transform="translate(1080, 560)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">7F · TWO-SHOT · MATCH 7A · CONFESSION</text>
+    
+    <clipPath id="d-clip-6"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#d-clip-6)">
+      <rect x="0" y="0" width="460" height="193" class="light-fill"/>
+      
+      <g stroke="#1f1d1a" stroke-width="0.5" opacity="0.3">
+        <line x1="0" y1="40" x2="460" y2="40"/>
+        <line x1="0" y1="60" x2="460" y2="60"/>
+      </g>
+      
+      <!-- Same hanging bulb, swaying slightly -->
+      <line x1="235" y1="0" x2="230" y2="30" stroke="#1f1d1a" stroke-width="1"/>
+      <circle cx="228" cy="38" r="10" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="1.5"/>
+      
+      <!-- Table -->
+      <rect x="80" y="140" width="300" height="10" class="ink-fill"/>
+      <rect x="90" y="150" width="8" height="43" class="ink-fill"/>
+      <rect x="362" y="150" width="8" height="43" class="ink-fill"/>
+      
+      <!-- Papers/photos now scattered on table between them -->
+      <rect x="180" y="136" width="35" height="6" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="1"/>
+      <rect x="225" y="134" width="30" height="5" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="1"/>
+      <rect x="265" y="137" width="40" height="6" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="1"/>
+      
+      <!-- LEFT: Detective - straighter now, leaned back -->
+      <g transform="translate(150, 110)">
+        <path d="M -28 30 L -32 -10 L -22 -25 L 18 -25 L 22 -10 L 22 30 Z" class="ink-fill"/>
+        <circle cx="0" cy="-35" r="13" class="ink-fill"/>
+        <ellipse cx="0" cy="-44" rx="16" ry="5" class="ink-fill"/>
+        <rect x="-12" y="-55" width="24" height="12" class="ink-fill"/>
+      </g>
+      
+      <!-- RIGHT: Suspect - head in hands -->
+      <g transform="translate(310, 115)">
+        <path d="M -22 30 L -28 -15 L -18 -20 L 18 -20 L 28 -15 L 22 30 Z" class="ink-fill" opacity="0.85"/>
+        <!-- Head down, hands up to hide face -->
+        <ellipse cx="0" cy="-30" rx="12" ry="13" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="2"/>
+        <!-- Arms up -->
+        <path d="M -25 -15 L -15 -25 L -12 -15 L -20 -5 Z" class="ink-fill"/>
+        <path d="M 25 -15 L 15 -25 L 12 -15 L 20 -5 Z" class="ink-fill"/>
+        <!-- Hands covering face -->
+        <ellipse cx="-8" cy="-30" rx="5" ry="8" class="ink-fill"/>
+        <ellipse cx="8" cy="-30" rx="5" ry="8" class="ink-fill"/>
+      </g>
+      
+      <!-- Eye-line now broken - no arrow -->
+      
+      <!-- Match marker -->
+      <g transform="translate(15, 15)">
+        <rect x="-2" y="-11" width="130" height="18" fill="#f5f0e6" stroke="#8a3a2c" stroke-width="1"/>
+        <text x="4" y="3" class="meta" font-size="10" fill="#8a3a2c">MATCH SHOT 7A</text>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">35mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Static, slow pull</text>
+      <text x="220" y="12" class="label">ANGLE</text>
+      <text x="220" y="28" class="meta" font-size="12">Match 7A</text>
+      <text x="340" y="12" class="label">MOOD</text>
+      <text x="340" y="28" class="meta" font-size="12">Resolution</text>
+    </g>
+    
+    <text x="0" y="268" class="caption" font-size="13" font-style="italic">
+      SUSPECT: "It wasn't supposed to be three."
+    </text>
+  </g>
+  
+  <!-- Footer -->
+  <g transform="translate(60, 1050)">
+    <line x1="0" y1="-15" x2="1480" y2="-15" stroke="#1f1d1a" stroke-width="1"/>
+    <text x="0" y="8" class="meta" font-size="11" fill="#6a5f56">
+      SCENE 07 · 2-SHOT → CU A → CU B → INSERT → MS → 2-SHOT · 180° LINE RESPECTED · EYE LINES VERIFIED
+    </text>
+    <text x="1480" y="8" class="meta" font-size="11" fill="#6a5f56" text-anchor="end">
+      storyboard · dialogue scene draft
+    </text>
+  </g>
+</svg>

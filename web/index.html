@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>storyboard · drawn live · a Hermes Agent skill</title>
+<meta name="description" content="A Hermes Agent skill. Type a scene; Hermes parses it with Kimi K2.5 and draws a six-frame film storyboard live in your browser.">
+<meta property="og:title" content="storyboard — drawn live by Hermes Agent">
+<meta property="og:description" content="Prose to Dry Ink film storyboards. Live drawing. Kimi K2.5 review. Director memory across scenes.">
+<meta property="og:image" content="https://hermes-story.art/assets/cold-vs-directed.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hermes-story.art">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<!-- Cinematic intro: black bars sweep in/out on first paint -->
+<div class="cinema-bars" id="cinema-bars" aria-hidden="true">
+  <div class="bar bar-top"></div>
+  <div class="bar bar-bottom"></div>
+</div>
+
+<!-- Subtle paper grain overlay (SVG noise, 4% opacity) -->
+<div class="paper-grain" aria-hidden="true"></div>
+
+<!-- Real-time API status pill, bottom-right -->
+<div class="api-pill" id="api-pill" aria-live="polite">
+  <span class="api-pill-dot" id="api-pill-dot"></span>
+  <span class="api-pill-status" id="api-pill-status">api</span>
+  <span class="api-pill-meta" id="api-pill-meta">checking…</span>
+</div>
+
+<!-- Cursor-following frame info card (shown on board hover) -->
+<div class="frame-tip" id="frame-tip" aria-hidden="true">
+  <div class="frame-tip-label" id="frame-tip-label">FRAME 1A</div>
+  <div class="frame-tip-meta" id="frame-tip-meta">click to direct this frame</div>
+</div>
+
+<!-- =================== Brand strip =================== -->
+<div class="brand-strip">
+  <div class="brand-strip-inner">
+    <span class="brand-tag">▣ STORYBOARD</span>
+    <span class="brand-divider">·</span>
+    <span class="brand-tag">A HERMES AGENT SKILL</span>
+    <span class="brand-divider">·</span>
+    <span class="brand-tag">POWERED BY KIMI&nbsp;K2.5</span>
+    <span class="brand-divider brand-divider--push"></span>
+    <span class="brand-tag brand-live">LIVE</span>
+  </div>
+</div>
+
+<header class="site-header">
+  <a class="brand" href="/">
+    <span class="brand-mark">▣</span>
+    <span class="brand-name">storyboard</span>
+    <span class="brand-version">v0.1</span>
+  </a>
+  <nav class="site-nav">
+    <a href="#try">Try it</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#learning">Learning loop</a>
+    <a href="#install">As Hermes skill</a>
+    <a href="https://github.com/Zhekinmaksim/storyboard" class="nav-github">
+      <span>GitHub</span><span class="nav-arrow">↗</span>
+    </a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- =================== HERO with auto-demo =================== -->
+  <section class="hero">
+    <div class="hero-text">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-mark"></span>
+        <span class="eyebrow-text">Hermes &middot; Creative skill</span>
+      </div>
+      <h1 class="hero-title">
+        <span class="hero-line" id="hero-line-1">Type a scene.</span>
+        <span class="hero-line hero-line-accent" id="hero-line-2">
+          Watch <span class="hero-draw" data-text="Hermes"><span>Hermes</span></span> draw it.
+        </span>
+      </h1>
+      <p class="hero-lede">
+        Prose becomes a six-frame film storyboard, stroke by stroke,
+        in your browser. <strong>Kimi&nbsp;K2.5</strong> reviews
+        the board for film grammar, and Hermes
+        <em>learns how you direct</em> &mdash; so the next scene
+        already follows your rules.
+      </p>
+      <div class="hero-cta">
+        <a href="#try" class="cta-button">
+          <span class="cta-arrow">▶</span>
+          <span class="cta-text">Generate a storyboard</span>
+        </a>
+        <a href="#install" class="cta-secondary">
+          <span class="cta-secondary-icon">▤</span>
+          <span>Run it locally as a Hermes skill</span>
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">6</div>
+          <div class="stat-label">frames per scene</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">~9s</div>
+          <div class="stat-label">end-to-end render</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">3</div>
+          <div class="stat-label">Kimi K2.5 roles</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-demo">
+      <div class="clapboard">
+        <!-- Top diagonal-stripe slate -->
+        <div class="clapboard-slate">
+          <div class="clapboard-stripes" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="clapboard-info">
+            <div class="clap-row clap-row-1">
+              <span class="clap-cell"><span class="clap-k">PROD</span><span class="clap-v">storyboard</span></span>
+              <span class="clap-cell"><span class="clap-k">DIR</span><span class="clap-v">Hermes</span></span>
+              <span class="clap-cell"><span class="clap-k">DP</span><span class="clap-v">Kimi K2.5</span></span>
+            </div>
+            <div class="clap-row clap-row-2">
+              <span class="clap-cell"><span class="clap-k">SCENE</span><span class="clap-v">01</span></span>
+              <span class="clap-cell"><span class="clap-k">TAKE</span><span class="clap-v">01</span></span>
+              <span class="clap-cell"><span class="clap-k">ROLL</span><span class="clap-v">A</span></span>
+              <span class="clap-cell clap-stage"><span class="clap-k">STAGE</span><span class="clap-v" id="hero-demo-stage">PARSING…</span></span>
+            </div>
+          </div>
+        </div>
+        <!-- Board itself -->
+        <div class="hero-demo-board" id="hero-demo-board">
+          <!-- Auto-demo SVG injected by app.js on load -->
+        </div>
+        <!-- Foot strip -->
+        <div class="hero-demo-foot">
+          <span class="foot-dot"></span>
+          <span>auto-demo · scroll down to make your own</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== Marquee ticker =================== -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>KIMI K2.5</span><span class="marq-dot">●</span>
+      <span>MULTIMODAL CRITIC</span><span class="marq-dot">●</span>
+      <span>DRY INK PALETTE</span><span class="marq-dot">●</span>
+      <span>DIRECTOR MEMORY</span><span class="marq-dot">●</span>
+      <span>CHARACTER BIBLE</span><span class="marq-dot">●</span>
+      <span>180° AXIS CHECK</span><span class="marq-dot">●</span>
+      <span>EYE-LINE CONTINUITY</span><span class="marq-dot">●</span>
+      <span>STROKE-DRAW SVG</span><span class="marq-dot">●</span>
+      <span>PRODUCTION PACKET</span><span class="marq-dot">●</span>
+      <span>HERMES AGENT NATIVE</span><span class="marq-dot">●</span>
+      <!-- duplicated for seamless loop -->
+      <span>KIMI K2.5</span><span class="marq-dot">●</span>
+      <span>MULTIMODAL CRITIC</span><span class="marq-dot">●</span>
+      <span>DRY INK PALETTE</span><span class="marq-dot">●</span>
+      <span>DIRECTOR MEMORY</span><span class="marq-dot">●</span>
+      <span>CHARACTER BIBLE</span><span class="marq-dot">●</span>
+      <span>180° AXIS CHECK</span><span class="marq-dot">●</span>
+      <span>EYE-LINE CONTINUITY</span><span class="marq-dot">●</span>
+      <span>STROKE-DRAW SVG</span><span class="marq-dot">●</span>
+      <span>PRODUCTION PACKET</span><span class="marq-dot">●</span>
+      <span>HERMES AGENT NATIVE</span><span class="marq-dot">●</span>
+    </div>
+  </div>
+
+  <!-- =================== TRY IT =================== -->
+  <section class="try" id="try">
+    <div class="section-header">
+      <div class="section-label">02 / Try it</div>
+      <h2>Generate your own scene</h2>
+      <p class="section-sub">Live API · free for the first scene · runs locally if API is asleep.</p>
+    </div>
+
+    <div class="try-grid">
+      <div class="try-input">
+        <label class="field-label" for="prose">Your scene</label>
+        <div class="prose-wrap">
+          <textarea id="prose" rows="6"
+            placeholder="A detective enters a rain-soaked alley at night. He finds a body. He kneels…"></textarea>
+          <button id="voice-btn" class="voice-btn" type="button"
+                  aria-label="Dictate scene with voice"
+                  title="Dictate with voice (browser speech recognition)">
+            <span class="voice-icon" aria-hidden="true">🎤</span>
+            <span class="voice-text">VOICE</span>
+          </button>
+        </div>
+
+        <div class="try-controls">
+          <button id="generate-btn" class="primary">
+            <span class="btn-arrow">▶</span> Generate storyboard
+          </button>
+        </div>
+
+        <label class="share-toggle">
+          <input type="checkbox" id="share-input">
+          <span class="share-mark" aria-hidden="true"></span>
+          <span class="share-text">Share to public gallery (anonymous)</span>
+        </label>
+
+        <div class="demo-section">
+          <div class="demo-section-label">Or pick a preset:</div>
+          <div class="demo-buttons" id="demo-buttons"></div>
+        </div>
+
+        <p class="try-foot">
+          Up to 2000 characters. <strong>Kimi&nbsp;K2.5</strong> parses,
+          enriches, critiques, and extracts memory. The local SVG
+          renderer draws.
+        </p>
+      </div>
+
+      <div class="try-output">
+        <div class="status-bar" id="status">
+          <span class="status-dot" id="status-dot"></span>
+          <span id="status-text">ready</span>
+          <span class="status-spacer"></span>
+          <span class="status-meta" id="status-meta">hermes-agent · idle</span>
+        </div>
+
+        <div class="board-wrap">
+          <div class="board-empty" id="board-empty">
+            <div class="board-empty-mark">▣</div>
+            <p>Your storyboard will appear here.</p>
+            <p class="board-empty-tip">
+              ~10 seconds end-to-end · six frames stagger in
+            </p>
+          </div>
+          <div class="board" id="board" hidden></div>
+        </div>
+
+        <div class="critique-panel" id="critique-panel" hidden>
+          <h3><span class="panel-mark">◆</span> Kimi K2.5 review</h3>
+          <ul class="revisions" id="revisions"></ul>
+        </div>
+
+        <div class="memory-panel" id="memory-panel" hidden>
+          <h3><span class="panel-mark">★</span> Hermes saved a director rule</h3>
+          <p class="memory-rule" id="memory-rule"></p>
+          <p class="memory-tags" id="memory-tags"></p>
+        </div>
+
+        <div class="revise-panel" id="revise-panel" hidden>
+          <h3><span class="panel-mark">✎</span> Direct one frame</h3>
+          <p class="revise-help">
+            Click any frame above to select it, then describe the change.
+            Hermes re-renders only that frame and learns your preference.
+          </p>
+          <div class="revise-row">
+            <span class="revise-target" id="revise-target">no frame selected</span>
+            <input id="revise-note" type="text" maxlength="500"
+              placeholder='e.g. "more Hitchcock — low angle, harder shadow"'>
+            <button id="revise-btn" class="secondary" disabled>Revise frame</button>
+          </div>
+        </div>
+
+        <div class="refine-panel" id="refine-panel" hidden>
+          <h3><span class="panel-mark">◐</span> Compose with Hermes</h3>
+          <p class="refine-help">
+            Or refine the whole scene in plain language. Hermes will
+            re-render all six frames with your direction.
+          </p>
+          <div class="refine-row">
+            <input id="refine-input" type="text" maxlength="500"
+              placeholder='e.g. "make it more Tarkovsky", "darker", "add a flashback feel"'>
+            <button id="refine-btn" class="secondary">Compose</button>
+          </div>
+        </div>
+
+        <div class="download-panel" id="download-panel" hidden>
+          <div class="download-row">
+            <a id="download-link" class="download-link" download>
+              ↓ Bundle (.zip)
+            </a>
+            <a id="download-gif" class="download-link download-gif" download>
+              ↓ Animated GIF
+            </a>
+            <button id="share-btn" class="download-link share-btn" type="button">
+              ↗ Share link
+            </button>
+          </div>
+          <p class="download-help">
+            SVG, PNG, scene JSON, character bible, production packet —
+            shotlist, camera notes, dialogue, continuity. The GIF
+            replays the board fill-in for X/Discord posts.
+          </p>
+        </div>
+
+        <div class="inspect-panel" id="inspect-panel" hidden>
+          <div class="inspect-tabs" role="tablist" aria-label="Inspect agent artifacts">
+            <button class="inspect-tab is-active" data-art="scene" type="button">
+              <span class="inspect-tab-icon">▣</span> Scene JSON
+            </button>
+            <button class="inspect-tab" data-art="critique" type="button">
+              <span class="inspect-tab-icon">◆</span> Critique
+            </button>
+            <button class="inspect-tab" data-art="memory" type="button">
+              <span class="inspect-tab-icon">★</span> Memory
+            </button>
+            <button class="inspect-tab" data-art="bible" type="button">
+              <span class="inspect-tab-icon">⌥</span> Bible
+            </button>
+            <button class="inspect-tab" data-art="shotlist" type="button">
+              <span class="inspect-tab-icon">▤</span> Shotlist
+            </button>
+            <button class="inspect-tab" data-art="trace" type="button">
+              <span class="inspect-tab-icon">⇢</span> Trace
+            </button>
+          </div>
+          <pre class="inspect-body" id="inspect-body"><code>// click a tab to inspect the underlying agent artifact</code></pre>
+          <p class="inspect-foot">
+            Every artifact you see is also written to disk by the
+            Hermes skill — these are the same files you'd find in
+            <code>~/.hermes/skills/creative/storyboard/</code> after a run.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== Pull quote =================== -->
+  <section class="pullquote" aria-hidden="false">
+    <div class="pullquote-inner">
+      <div class="pullquote-mark">"</div>
+      <blockquote>
+        Storyboards are the bridge between writing and seeing.
+        Hermes makes that bridge <em>live</em>.
+      </blockquote>
+      <div class="pullquote-attr">
+        <span class="pullquote-rule"></span>
+        <span>storyboard manifesto · v0.1</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== KIMI ROLES — Kimi Track proof =================== -->
+  <section class="kimi-roles" aria-label="Kimi K2.5 roles in this skill">
+    <div class="kimi-roles-inner">
+      <div class="kimi-roles-label">
+        <span class="kr-mark"></span>
+        <span>Kimi&nbsp;K2.5 &middot; three roles in one skill</span>
+      </div>
+      <ol class="kimi-roles-list">
+        <li>
+          <span class="kr-num">01</span>
+          <span class="kr-stage">parse prose</span>
+          <span class="kr-arrow">&rarr;</span>
+          <span class="kr-out">Scene JSON</span>
+          <span class="kr-note">six shots, lens/movement/eye-line, strict enum schema</span>
+        </li>
+        <li>
+          <span class="kr-num">02</span>
+          <span class="kr-stage">critique rendered PNG</span>
+          <span class="kr-arrow">&rarr;</span>
+          <span class="kr-out">patch list</span>
+          <span class="kr-note">multimodal vision, seven whitelisted fields, old_value matched</span>
+        </li>
+        <li>
+          <span class="kr-num">03</span>
+          <span class="kr-stage">extract director memory</span>
+          <span class="kr-arrow">&rarr;</span>
+          <span class="kr-out">reusable rule</span>
+          <span class="kr-note">style-only, plot-leak filter, persisted to <code>director_memory.json</code></span>
+        </li>
+      </ol>
+      <p class="kimi-roles-foot">
+        Every role is its own callable skill. Provider-agnostic via OpenRouter.
+        Kimi is not a label here &mdash; it is load-bearing in parse,
+        critique, and memory extraction.
+        <a href="#why-hermes">How it stays grounded &rarr;</a>
+      </p>
+      <p class="kimi-roles-slogan">
+        <em>Kimi reasons.</em>
+        <em>Renderer draws.</em>
+        <em>Hermes remembers.</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- =================== WHY HERMES — short, builder-aimed =================== -->
+  <section class="why-hermes" id="why-hermes" aria-label="Why Hermes Agent">
+    <div class="why-hermes-inner">
+      <div class="why-hermes-eyebrow">
+        <span class="eyebrow-mark"></span>
+        <span>Why Hermes &middot; not just a web app</span>
+      </div>
+      <h2 class="why-hermes-title">
+        Storyboard is a <em>reusable, inspectable</em> creative
+        workflow &mdash; not a one-shot toy.
+      </h2>
+      <ul class="why-hermes-list">
+        <li>
+          <span class="why-num">01</span>
+          <span class="why-body">
+            <strong>Kimi&nbsp;K2.5 in three roles</strong> &mdash;
+            scene parser, multimodal critic, memory extractor.
+            Each role is its own reusable skill, callable from any
+            Hermes workflow.
+          </span>
+        </li>
+        <li>
+          <span class="why-num">02</span>
+          <span class="why-body">
+            <strong>Persistent artifacts on disk</strong>
+            &mdash; <code>director_memory.json</code>,
+            <code>character_bible.json</code> &mdash; survive between
+            sessions and ship as plain JSON. No black box.
+          </span>
+        </li>
+        <li>
+          <span class="why-num">03</span>
+          <span class="why-body">
+            <strong>Future scenes inherit your direction</strong>.
+            One revision in scene&nbsp;1 changes how scene&nbsp;2 renders.
+            That's the Hermes self-improving pattern, applied to film
+            grammar.
+          </span>
+        </li>
+        <li>
+          <span class="why-num">04</span>
+          <span class="why-body">
+            <strong>Installable as a Hermes skill</strong>.
+            <code>git clone</code> into
+            <code>~/.hermes/skills/creative/storyboard</code> and
+            describe a scene to Hermes &mdash; the skill loads
+            automatically from chat, with your own API key, on your
+            own machine.
+          </span>
+        </li>
+      </ul>
+
+      <div class="grounded">
+        <div class="grounded-label">
+          <span class="grounded-mark"></span>
+          <span>Grounded by design</span>
+        </div>
+        <ul class="grounded-list">
+          <li><span class="g-check">✓</span> Strict Scene JSON schema with enums</li>
+          <li><span class="g-check">✓</span> Whitelisted SVG grammar &mdash; no <code>script</code>, no <code>href</code></li>
+          <li><span class="g-check">✓</span> Patch-only critique &mdash; one of seven allowed fields</li>
+          <li><span class="g-check">✓</span> Shot labels cross-checked &mdash; no hallucinated frames</li>
+          <li><span class="g-check">✓</span> Director memory cannot add plot facts</li>
+          <li><span class="g-check">✓</span> Every inferred detail tagged by source</li>
+        </ul>
+        <p class="grounded-foot">
+          Kimi proposes. Storyboard verifies. Hermes remembers only
+          what is safe to reuse. <a href="https://github.com/Zhekinmaksim/storyboard#hallucination-control">See README &rarr;</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== EXPORTS thin band =================== -->
+  <section class="exports" aria-label="What gets exported">
+    <div class="exports-inner">
+      <div class="exports-label">Exports</div>
+      <ul class="exports-list">
+        <li><span class="ex-mark">▣</span><span>Editable SVG</span></li>
+        <li><span class="ex-mark">▣</span><span>PNG render</span></li>
+        <li><span class="ex-mark">▣</span><span>Animated GIF</span></li>
+        <li><span class="ex-mark">▣</span><span>Scene JSON</span></li>
+        <li><span class="ex-mark">▣</span><span>Character bible</span></li>
+        <li><span class="ex-mark">▣</span><span>Director memory</span></li>
+        <li><span class="ex-mark">▣</span><span>Shotlist CSV</span></li>
+        <li><span class="ex-mark">▣</span><span>Camera notes</span></li>
+        <li><span class="ex-mark">▣</span><span>Dialogue sheet</span></li>
+        <li><span class="ex-mark">▣</span><span>Continuity sheet</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Artifact bundle file-tree (single line, very small footprint) -->
+  <section class="bundle-tree" aria-label="What's in the bundle.zip">
+    <div class="bundle-tree-inner">
+      <div class="bundle-tree-label">bundle.zip</div>
+      <pre class="bundle-tree-pre"><code><span class="bt-line"><span class="bt-tee">├── </span>board.svg</span>
+<span class="bt-line"><span class="bt-tee">├── </span>board.png</span>
+<span class="bt-line"><span class="bt-tee">├── </span>board.gif</span>
+<span class="bt-line"><span class="bt-tee">├── </span>scene.json           <span class="bt-comment"># the parsed shot grammar</span></span>
+<span class="bt-line"><span class="bt-tee">├── </span>revisions.json       <span class="bt-comment"># Kimi K2.5 critique</span></span>
+<span class="bt-line"><span class="bt-tee">├── </span>character_bible.json <span class="bt-comment"># silhouette continuity</span></span>
+<span class="bt-line"><span class="bt-tee">├── </span>director_memory.json <span class="bt-comment"># learned direction rules</span></span>
+<span class="bt-line"><span class="bt-tee">└── </span>packet/              <span class="bt-comment"># DP-ready handoff</span></span>
+<span class="bt-line">    <span class="bt-tee">├── </span>shotlist.csv</span>
+<span class="bt-line">    <span class="bt-tee">├── </span>camera_notes.md</span>
+<span class="bt-line">    <span class="bt-tee">├── </span>dialogue.md</span>
+<span class="bt-line">    <span class="bt-tee">└── </span>continuity.md</span></code></pre>
+    </div>
+  </section>
+
+  <!-- =================== GALLERY =================== -->
+  <section class="gallery" id="gallery">
+    <div class="section-header">
+      <div class="section-label">03 / Gallery</div>
+      <h2>Recent generations</h2>
+      <p class="section-sub">Sample boards · refreshed as people share their generations.</p>
+    </div>
+    <div class="gallery-grid" id="gallery-grid">
+      <!-- Populated by JS from /api/gallery -->
+      <div class="gallery-empty">
+        <p>No public boards yet — be the first.</p>
+        <p class="gallery-empty-tip">Tick "Share to public gallery" before you generate.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== LEARNING LOOP =================== -->
+  <section class="learning" id="learning">
+    <div class="section-header">
+      <div class="section-label">04 / Learning loop</div>
+      <h2>Hermes learns how you direct</h2>
+      <p class="section-sub">Director memory is the difference between draws-on-demand and grows-with-you.</p>
+    </div>
+
+    <p class="section-lede">
+      Most AI tools treat each prompt as independent. Storyboard
+      <strong>persists your stylistic choices</strong>: revise one frame
+      with a free-text note, and Hermes extracts a generalised rule via
+      <strong>Kimi K2.5</strong> and applies it to every future scene
+      that matches.
+    </p>
+
+    <ol class="learning-steps">
+      <li>
+        <div class="learning-step-num">1</div>
+        <div class="learning-step-body">
+          <h3>You revise one frame</h3>
+          <p>Click any shot, write a free-text note —
+             <em>"more Hitchcock"</em>, <em>"darker shadow"</em>,
+             <em>"silhouette only"</em>.</p>
+        </div>
+      </li>
+      <li>
+        <div class="learning-step-num">2</div>
+        <div class="learning-step-body">
+          <h3>Hermes saves a rule</h3>
+          <p>Kimi&nbsp;K2.5 generalises the note into a tagged
+             preference. Persisted to <code>director_memory.json</code>
+             — survives sessions.</p>
+        </div>
+      </li>
+      <li>
+        <div class="learning-step-num">3</div>
+        <div class="learning-step-body">
+          <h3>Next scene applies it</h3>
+          <p>Future scenes that match the tags
+             (<em>suspense</em>, <em>stairwell</em>, <em>pursuit</em>…)
+             are rendered with the rule, automatically. No re-prompting.</p>
+        </div>
+      </li>
+    </ol>
+
+    <figure class="learning-figure">
+      <img src="/assets/cold-vs-directed.png"
+           alt="Same prompt, two scenes — cold without memory vs. directed after a Hitchcock revision rule"
+           loading="lazy">
+      <figcaption>
+        Same scene-2 prompt, two outputs.
+        <strong>Top:</strong> no memory active — eye-level angles, plain
+        killer figure.
+        <strong>Bottom:</strong> after a single user revision in scene 1
+        with the note <em>"more Hitchcock — low angle, harder shadow,
+        killer as silhouette"</em>. Four low-angle shots out of six,
+        killer rendered as silhouette with a "THREAT" focus marker,
+        torchlight cones on suspense beats. Detective Mara consistent
+        across both scenes via the character bible.
+      </figcaption>
+    </figure>
+
+    <div class="rule-block">
+      <div class="rule-label">director_memory.json &nbsp;·&nbsp; extracted by Kimi K2.5</div>
+      <pre class="rule-display"><code>{
+  <span class="json-key">"preference"</span>: <span class="json-str">"For suspense, danger, and reveal moments, prefer
+                 low-angle framing with stronger cast shadows. When
+                 showing a threat or unseen antagonist, render them as
+                 a partial silhouette rather than a fully-lit figure."</span>,
+  <span class="json-key">"applies_to"</span>: [<span class="json-str">"suspense"</span>, <span class="json-str">"reveal"</span>, <span class="json-str">"danger"</span>, <span class="json-str">"stairwell"</span>,
+                 <span class="json-str">"killer entrance"</span>, <span class="json-str">"pursuit"</span>],
+  <span class="json-key">"source_revision"</span>: {
+    <span class="json-key">"scene"</span>: <span class="json-str">"01"</span>,
+    <span class="json-key">"frame"</span>: <span class="json-str">"1F"</span>,
+    <span class="json-key">"note"</span>: <span class="json-str">"more Hitchcock — low angle, harder shadow, killer as silhouette"</span>
+  }
+}</code></pre>
+    </div>
+  </section>
+
+  <!-- =================== INSTALL AS HERMES SKILL =================== -->
+  <section class="install" id="install">
+    <div class="section-header">
+      <div class="section-label">05 / As Hermes skill</div>
+      <h2>This site is a showcase</h2>
+      <p class="section-sub">The skill itself runs locally inside Hermes Agent on your machine.</p>
+    </div>
+
+    <p class="install-lede">
+      hermes-story.art is a <strong>witness</strong>, not a service.
+      The real skill is a small Python package plus a SKILL.md manifest
+      that drops into <code>~/.hermes/skills/creative/storyboard</code>
+      and is triggered naturally from Hermes chat &mdash; describe a
+      scene and Hermes loads the skill automatically. Three steps:
+    </p>
+
+    <div class="install-grid">
+      <div class="install-col">
+        <div class="install-step">01</div>
+        <h3>Install the skill</h3>
+        <p class="install-text">
+          One git clone, one env var. The skill lives in the standard
+          Hermes skills directory.
+        </p>
+        <pre class="install-code"><code>git clone \
+  https://github.com/Zhekinmaksim/storyboard \
+  ~/.hermes/skills/creative/storyboard
+
+export OPENROUTER_API_KEY=sk-or-...</code></pre>
+      </div>
+      <div class="install-col">
+        <div class="install-step">02</div>
+        <h3>Trigger from Hermes chat</h3>
+        <p class="install-text">
+          Hermes auto-loads the skill at startup. Use it via natural
+          chat — no command memorisation.
+        </p>
+        <pre class="install-code"><code><span class="prompt-you">you</span> draft a storyboard for a noir
+    alley discovery scene
+
+<span class="prompt-hermes">hermes</span> [activates /storyboard]
+       [streams six frames live]
+       [Kimi K2.5 reviews]
+       [exports production packet]</code></pre>
+      </div>
+      <div class="install-col">
+        <div class="install-step">03</div>
+        <h3>Or run standalone</h3>
+        <p class="install-text">
+          Pure CLI works too. Same pipeline, viewer at
+          <code>localhost:7777</code>.
+        </p>
+        <pre class="install-code"><code>storyboard full --stream \
+  "A detective enters…"
+
+storyboard memory --show
+storyboard packet scene.json</code></pre>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-mark">▣</span>
+      <span class="footer-name">storyboard</span>
+      <span class="footer-tag">v0.1.0 · MIT · 2026</span>
+    </div>
+    <div class="footer-meta">
+      <span>Built by <a href="https://github.com/Zhekinmaksim">Zmaxx</a></span>
+      <span>·</span>
+      <span>On <a href="https://hermes-agent.nousresearch.com">Hermes Agent</a></span>
+      <span>·</span>
+      <span>Powered by <a href="https://openrouter.ai/moonshotai/kimi-k2.5">Kimi&nbsp;K2.5</a></span>
+      <span>·</span>
+      <a href="https://github.com/Zhekinmaksim/storyboard" class="footer-repo">github.com/Zhekinmaksim/storyboard ↗</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/app.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+shot,type,description,lens,movement,angle,duration,location,figures,caption,eye_line,axis
+1A,WIDE,EXT ALLEY · NIGHT,24mm,Static,High (crane),0:00 – 0:06,rain-soaked alley,"detective (STANDING, FRONT)",The alley swallows him. Four days of rain.,,
+1B,MEDIUM,DETECTIVE ENTERS · NIGHT,50mm,Push in (slow),Eye level,0:06 – 0:12,EXT alley · night,"detective (WALKING, FRONT)",He walks towards camera. Dispatch in his ear.,,
+1C,LOW_ANGLE,THE BODY · NIGHT,35mm,"Static, tilt up","Low, from body",0:12 – 0:18,EXT alley · night,"victim (FALLEN, FRONT)",The body. His shoes enter frame. He pauses.,,
+1D,OTS,DETECTIVE'S POV · NIGHT,85mm,"Rack focus OTS, downward",Eye level,0:18 – 0:24,EXT alley · night,"victim (FALLEN, FRONT)",Rack focus: his coat → the knot at the wrist.,,
+1E,CLOSE_UP,RECOGNITION · NIGHT,100mm,Push in (slow),"Profile, eye level",0:24 – 0:32,EXT alley · night,"detective (STANDING, THREE_QUARTER_LEFT)",Recognition lands. He knows this knot.,OFFSCREEN_DOWN,ON_AXIS
+1F,MEDIUM,PHONE CALL · NIGHT,85mm,Dolly out (crane lift),Slight high,0:32 – 0:42,EXT alley · night,"detective (STANDING, THREE_QUARTER_RIGHT)","""Marlowe. Third one this month.""",,

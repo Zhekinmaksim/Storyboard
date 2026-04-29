@@ -1,0 +1,16 @@
+{
+  "entries": {
+    "detective": {
+      "role": "detective",
+      "display_name": "Detective Mara",
+      "silhouette": "schematic figure, dripping coat outline, tight stance",
+      "first_seen_scene": "01"
+    },
+    "victim": {
+      "role": "victim",
+      "display_name": "The Body",
+      "silhouette": "fallen figure, knot at wrist",
+      "first_seen_scene": "01"
+    }
+  }
+}

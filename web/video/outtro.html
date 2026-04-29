@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>storyboard · outtro</title>
+<style>
+  /*
+    OUTTRO — combined install + outro card.
+    Two acts in one file so they share a continuous render and you only
+    reload once.
+
+    Timeline (total ~13.5s):
+      0.0 - 0.4    fade-in scene 1 frame
+      0.4 - 1.0    eyebrow + headline appear
+      1.0 - 1.6    terminal box pops in
+      1.6 - 5.6    three commands type out (≥1.3s per line, slow enough to read)
+      5.6 - 6.2    blinking cursor + caption
+      6.2 - 7.2    HOLD complete install card (let viewers absorb)
+      7.2 - 7.6    cross-fade to outro
+      7.6 - 8.0    eyebrow appears
+      8.0 - 9.5    slogan line 1 fades up (slow)
+      9.5 - 11.0   slogan line 2 fades up (slow)
+      11.0 - 11.4  trinity slogan
+      11.4 - 12.2  URLs appear
+      12.2 - 12.6  bottom credit
+      12.6 - 13.5  hold for editor cut
+  */
+
+  :root {
+    --bg: #f5f0e6;
+    --bg-deep: #ede5d4;
+    --bg-paper: #f8f3e9;
+    --fg: #1f1d1a;
+    --fg-dim: #6a5f56;
+    --fg-faint: #b3a899;
+    --accent: #8a3a2c;
+    --term-bg: #1f1d1a;
+    --term-fg: #f5f0e6;
+    --term-dim: #b3a899;
+    --term-prompt: #d04d3d;
+    --term-comment: #8c7e72;
+    --term-string: #c8a87c;
+    --serif: 'Newsreader', 'Source Serif Pro', Georgia, serif;
+    --mono: 'Geist Mono', 'IBM Plex Mono', Menlo, monospace;
+  }
+  html, body { margin: 0; padding: 0; height: 100vh; overflow: hidden; }
+  body {
+    background: var(--bg); color: var(--fg);
+    font-family: var(--serif);
+    width: 100vw; height: 100vh;
+    position: relative;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='280' height='280'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0.12 0 0 0 0 0.11 0 0 0 0 0.10 0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-blend-mode: multiply;
+  }
+
+  /* ─────────────── ACT 1 — INSTALL ─────────────── */
+
+  .act-install {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 32px;
+    padding: 60px 0;
+    box-sizing: border-box;
+    opacity: 0;
+    animation:
+      install-fade-in 0.5s 0.0s ease-out forwards,
+      install-fade-out 0.5s 7.2s ease-in forwards;
+  }
+  @keyframes install-fade-in  { to { opacity: 1; } }
+  @keyframes install-fade-out { to { opacity: 0; } }
+
+  .install-eyebrow {
+    font-family: var(--mono); font-size: 16px;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent);
+    display: inline-flex; align-items: center; gap: 12px;
+    opacity: 0;
+    animation: fade-up 0.5s 0.5s ease-out forwards;
+  }
+  .install-eyebrow .dot {
+    width: 7px; height: 7px; background: var(--accent); display: inline-block;
+  }
+
+  .install-head {
+    font-family: var(--serif); font-weight: 500;
+    font-size: 56px; line-height: 1.05; letter-spacing: -0.02em;
+    color: var(--fg); margin: 0; text-align: center;
+    opacity: 0;
+    animation: fade-up 0.55s 0.7s ease-out forwards;
+  }
+  .install-head em {
+    color: var(--accent); font-style: italic; font-weight: 500;
+  }
+
+  .terminal {
+    width: min(1100px, 86vw);
+    background: var(--term-bg);
+    border-radius: 8px;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.18);
+    overflow: hidden;
+    opacity: 0;
+    animation: term-pop 0.6s 1.0s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  }
+  @keyframes term-pop {
+    from { opacity: 0; transform: translateY(14px) scale(0.985); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .term-bar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 14px 18px;
+    background: rgba(245, 240, 230, 0.04);
+    border-bottom: 1px solid rgba(245, 240, 230, 0.08);
+  }
+  .term-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: rgba(245, 240, 230, 0.16);
+  }
+  .term-title {
+    font-family: var(--mono); font-size: 13px;
+    letter-spacing: 0.06em;
+    color: var(--term-dim);
+    margin-left: 16px;
+  }
+
+  .term-body {
+    padding: 32px 36px 36px;
+    font-family: var(--mono);
+    font-size: 22px;
+    line-height: 2.0;
+    color: var(--term-fg);
+    min-height: 240px;
+  }
+
+  .term-line {
+    display: block; white-space: pre;
+    opacity: 0;
+  }
+  .term-line .pp { color: var(--term-prompt); }
+  .term-line .st { color: var(--term-string); }
+  .term-line .kw { color: #d8c194; }
+
+  /* SLOW typing cadence — each command holds for ~1.3s before the next.
+     Generous so viewers actually have time to read. */
+  .l1 { animation: line-in 0.45s 1.6s ease-out forwards; }
+  .l2 { animation: line-in 0.45s 3.0s ease-out forwards; }
+  .l3 { animation: line-in 0.45s 4.4s ease-out forwards; }
+  @keyframes line-in {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Blinking cursor at end of line 3 */
+  .cursor {
+    display: inline-block;
+    width: 11px; height: 22px;
+    background: var(--term-fg);
+    vertical-align: middle;
+    margin-left: 4px;
+    opacity: 0;
+    animation:
+      cursor-show 0.01s 4.8s linear forwards,
+      blink 0.6s 4.8s steps(2) infinite;
+  }
+  @keyframes cursor-show { to { opacity: 1; } }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .install-caption {
+    font-family: var(--serif); font-style: italic; font-weight: 500;
+    font-size: 28px; letter-spacing: -0.005em;
+    color: var(--fg); text-align: center; margin: 0;
+    opacity: 0;
+    animation: fade-up 0.55s 5.7s ease-out forwards;
+  }
+  .install-caption b {
+    color: var(--accent); font-weight: 500; font-style: italic;
+  }
+
+  /* ─────────────── ACT 2 — OUTRO ─────────────── */
+
+  .act-outro {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 32px;
+    padding: 60px 100px 110px;
+    box-sizing: border-box;
+    opacity: 0;
+    animation: outro-fade-in 0.55s 7.55s ease-out forwards;
+  }
+  @keyframes outro-fade-in { to { opacity: 1; } }
+
+  .outro-eyebrow {
+    font-family: var(--mono); font-size: 14px;
+    letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--accent);
+    display: inline-flex; align-items: center; gap: 12px;
+    opacity: 0;
+    animation: fade-up 0.5s 7.7s ease-out forwards;
+  }
+  .outro-eyebrow .dot {
+    width: 7px; height: 7px; background: var(--accent); display: inline-block;
+  }
+
+  /* Slogan — compact size that comfortably fits on one line each */
+  .slogan {
+    font-family: var(--serif); font-weight: 500;
+    font-style: italic;
+    font-size: 64px;
+    line-height: 1.2;
+    letter-spacing: -0.018em;
+    text-align: center;
+    margin: 0;
+    max-width: 1500px;
+  }
+  .slogan .line { display: block; }
+
+  /* Each slogan line fades up SLOWLY — 1.5s per line, separated. */
+  .slogan .doesnt {
+    color: var(--fg);
+    opacity: 0;
+    animation: slogan-in 1.0s 8.0s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  }
+  .slogan .learns {
+    color: var(--accent);
+    opacity: 0;
+    animation: slogan-in 1.0s 9.5s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  }
+  @keyframes slogan-in {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Hairline rule */
+  .o-rule {
+    height: 1px; background: var(--fg-dim);
+    width: 0;
+    margin: 8px 0;
+    animation: rule-draw 0.8s 10.6s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  }
+  @keyframes rule-draw { to { width: 220px; } }
+
+  .trinity {
+    display: flex; gap: 38px; flex-wrap: wrap; justify-content: center;
+    font-family: var(--serif); font-style: italic; font-weight: 500;
+    font-size: 24px;
+    margin: 0;
+    opacity: 0;
+    animation: fade-up 0.55s 11.0s ease-out forwards;
+  }
+  .trinity .t1 { color: var(--accent); }
+  .trinity .t2 { color: var(--fg); }
+  .trinity .t3 { color: var(--fg-dim); }
+
+  .urls {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    margin-top: 4px;
+    opacity: 0;
+    animation: fade-up 0.55s 11.4s ease-out forwards;
+  }
+  .url {
+    font-family: var(--mono); font-size: 22px;
+    letter-spacing: 0.04em;
+    color: var(--fg);
+    display: inline-flex; align-items: baseline; gap: 16px;
+  }
+  .url .label {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--fg-faint);
+    min-width: 44px; text-align: right;
+  }
+  .url .v .accent { color: var(--accent); }
+
+  /* Bottom credit row */
+  .credit {
+    position: absolute; bottom: 38px; left: 0; right: 0;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 80px;
+    font-family: var(--mono); font-size: 12px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--fg-dim);
+    opacity: 0;
+    animation: fade-up 0.55s 12.2s ease-out forwards;
+  }
+  .credit b { color: var(--fg); font-weight: 500; }
+  .credit .accent { color: var(--accent); }
+
+  /* Shared keyframe */
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ═══════════ ACT 1 — INSTALL ═══════════ -->
+  <div class="act-install">
+    <div class="install-eyebrow"><span class="dot"></span>Run as a Hermes skill</div>
+    <h1 class="install-head">Three commands, then it's <em>your</em> skill.</h1>
+
+    <div class="terminal">
+      <div class="term-bar">
+        <div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div>
+        <div class="term-title">~ $&nbsp; install storyboard</div>
+      </div>
+      <div class="term-body">
+        <span class="term-line l1"><span class="pp">$</span> git clone <span class="st">git@github.com:Zhekinmaksim/storyboard.git</span></span>
+        <span class="term-line l2"><span class="pp">$</span> cp -r storyboard <span class="kw">~/.hermes/skills/creative/storyboard</span></span>
+        <span class="term-line l3"><span class="pp">$</span> hermes chat <span class="st">"draft a storyboard for…"</span><span class="cursor"></span></span>
+      </div>
+    </div>
+
+    <p class="install-caption">Not SaaS-only. <b>Runs as a local Hermes skill.</b></p>
+  </div>
+
+  <!-- ═══════════ ACT 2 — OUTRO ═══════════ -->
+  <div class="act-outro">
+    <div class="outro-eyebrow"><span class="dot"></span>Hermes Agent &middot; creative skill</div>
+
+    <h1 class="slogan">
+      <span class="line doesnt">Hermes doesn't just draw the scene.</span>
+      <span class="line learns">It learns how you direct the next one.</span>
+    </h1>
+
+    <div class="o-rule"></div>
+
+    <p class="trinity">
+      <span class="t1">Kimi reasons.</span>
+      <span class="t2">Renderer draws.</span>
+      <span class="t3">Hermes remembers.</span>
+    </p>
+
+    <div class="urls">
+      <div class="url">
+        <span class="label">site</span>
+        <span class="v">www.<span class="accent">hermes-story.art</span></span>
+      </div>
+      <div class="url">
+        <span class="label">repo</span>
+        <span class="v">github.com/<span class="accent">Zhekinmaksim/storyboard</span></span>
+      </div>
+    </div>
+
+    <div class="credit">
+      <span>DIR. <b>ZMAXX</b></span>
+      <span>Powered by Kimi&nbsp;K2.5 &middot; <span class="accent">three roles, one skill</span></span>
+      <span>SCENE 01 &middot; FIN</span>
+    </div>
+  </div>
+
+</body>
+</html>

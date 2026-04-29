@@ -1,0 +1,43 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install librsvg (for SVG → PNG)
+        run: sudo apt-get update && sudo apt-get install -y librsvg2-bin
+
+      - name: Install package + dev dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e '.[dev]'
+
+      - name: Lint with ruff
+        run: ruff check scripts tests
+
+      - name: Run smoke tests
+        run: pytest tests/test_smoke.py -v
+
+      - name: Render shipped noir example (sanity)
+        run: |
+          python -m scripts.storyboard render examples/noir-scene.json -o /tmp/noir.svg
+          test -s /tmp/noir.svg
+          rsvg-convert -w 1400 -o /tmp/noir.png /tmp/noir.svg
+          test -s /tmp/noir.png

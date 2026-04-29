@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>storyboard · intro</title>
+<style>
+  :root {
+    --bg: #f5f0e6;
+    --bg-deep: #ede5d4;
+    --fg: #1f1d1a;
+    --fg-dim: #6a5f56;
+    --fg-faint: #b3a899;
+    --accent: #8a3a2c;
+    --serif: 'Newsreader', 'Source Serif Pro', Georgia, serif;
+    --mono: 'Geist Mono', 'IBM Plex Mono', Menlo, monospace;
+  }
+  html, body { margin: 0; padding: 0; height: 100vh; overflow: hidden; }
+  body {
+    background: var(--bg); color: var(--fg);
+    font-family: var(--serif);
+    width: 100vw; height: 100vh;
+    position: relative;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='280' height='280'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0.12 0 0 0 0 0.11 0 0 0 0 0.10 0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-blend-mode: multiply;
+  }
+
+  /* ─────── COUNTDOWN LEADER (0.0 - 2.4s) ─────── */
+  /* Three numbered cards, each on screen 0.8s. Big mono numerals
+     centered with a circular SVG sweep ring — film academy leader style. */
+  .leader {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .leader-num {
+    position: absolute;
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: 280px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--fg);
+    opacity: 0;
+  }
+  .leader-num .accent { color: var(--accent); }
+  .num-3 { animation: num-tick 0.8s 0.0s steps(1, end) forwards; }
+  .num-2 { animation: num-tick 0.8s 0.8s steps(1, end) forwards; }
+  .num-1 { animation: num-tick 0.8s 1.6s steps(1, end) forwards; }
+  @keyframes num-tick {
+    0%   { opacity: 0; }
+    8%   { opacity: 1; }
+    92%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* Sweep ring — SVG circle that strokes around each numeral while it shows */
+  .leader-ring {
+    position: absolute;
+    width: 480px; height: 480px;
+    transform: rotate(-90deg);
+    opacity: 0;
+  }
+  .leader-ring circle {
+    fill: none;
+    stroke: var(--fg);
+    stroke-width: 1.5;
+    stroke-dasharray: 1450;
+    stroke-dashoffset: 1450;
+  }
+  .ring-3 {
+    animation: ring-show 0.8s 0.0s linear forwards;
+  }
+  .ring-3 circle { animation: ring-sweep 0.8s 0.0s linear forwards; }
+  .ring-2 {
+    animation: ring-show 0.8s 0.8s linear forwards;
+  }
+  .ring-2 circle { animation: ring-sweep 0.8s 0.8s linear forwards; }
+  .ring-1 {
+    animation: ring-show 0.8s 1.6s linear forwards;
+  }
+  .ring-1 circle { animation: ring-sweep 0.8s 1.6s linear forwards; }
+  @keyframes ring-show {
+    0%, 95%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  @keyframes ring-sweep {
+    from { stroke-dashoffset: 1450; }
+    to   { stroke-dashoffset: 0; }
+  }
+
+  /* Top-left + bottom-right slate marks during countdown */
+  .leader-mark {
+    position: absolute;
+    font-family: var(--mono);
+    font-size: 16px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+    opacity: 0;
+    animation: mark-show 2.4s 0.0s linear forwards;
+  }
+  .leader-mark.tl { top: 60px; left: 80px; }
+  .leader-mark.br { bottom: 60px; right: 80px; }
+  @keyframes mark-show {
+    0%, 95%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* Crosshair — small + sign in centre during countdown */
+  .leader-cross {
+    position: absolute;
+    width: 40px; height: 40px;
+    opacity: 0;
+    animation: mark-show 2.4s 0.0s linear forwards;
+  }
+  .leader-cross::before, .leader-cross::after {
+    content: ""; position: absolute;
+    background: var(--fg);
+  }
+  .leader-cross::before { left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-50%); }
+  .leader-cross::after  { top: 50%; left: 0; right: 0; height: 1px; transform: translateY(-50%); }
+
+  /* ─────── CUT TO BLACK FLASH (2.4 - 2.5s) ─────── */
+  /* Film leader convention: a frame of black before the title */
+  .flash {
+    position: absolute; inset: 0;
+    background: var(--fg);
+    opacity: 0;
+    animation: flash-once 0.18s 2.4s ease-out forwards;
+  }
+  @keyframes flash-once {
+    0%   { opacity: 0; }
+    50%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* ─────── TITLE STAGE (2.6 - 4.6s) ─────── */
+  .stage {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 18px; padding: 0 80px;
+    opacity: 0;
+    animation: stage-in 0.5s 2.55s ease-out forwards;
+  }
+  @keyframes stage-in { to { opacity: 1; } }
+
+  /* Eyebrow chip */
+  .chip {
+    font-family: var(--mono); font-size: 15px;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent);
+    padding: 8px 16px;
+    border: 1.5px solid var(--accent);
+    display: inline-flex; align-items: center; gap: 12px;
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fade-up 0.45s 2.6s ease-out forwards;
+  }
+  .chip-dot { width: 7px; height: 7px; background: var(--accent); display: inline-block; }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Title — smaller, two lines, characters wipe in */
+  .title {
+    font-family: var(--serif); font-weight: 500;
+    font-size: 110px; line-height: 1.04;
+    letter-spacing: -0.02em;
+    text-align: center;
+    margin: 0;
+  }
+  .title .l1 {
+    display: block; color: var(--fg);
+    opacity: 0;
+    animation: title-wipe 0.7s 2.95s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  }
+  .title .l2 {
+    display: block; color: var(--accent); font-style: italic;
+    opacity: 0;
+    animation: title-wipe 0.7s 3.45s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  }
+  @keyframes title-wipe {
+    from { opacity: 0; transform: translateY(20px); filter: blur(8px); }
+    to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+
+  /* Hairline rule */
+  .rule {
+    height: 1px; background: var(--fg-dim);
+    width: 0;
+    margin-top: 14px;
+    animation: rule-draw 0.6s 4.0s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  }
+  @keyframes rule-draw { to { width: 200px; } }
+
+  /* Slate row at bottom */
+  .slate {
+    display: flex; gap: 44px; margin-top: 16px;
+    font-family: var(--mono); font-size: 14px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--fg-dim);
+    opacity: 0;
+    animation: fade-up 0.5s 4.3s ease-out forwards;
+  }
+  .slate b {
+    font-weight: 500; color: var(--fg);
+    margin-left: 8px;
+  }
+
+  /* Final fade so the next clip cuts cleanly */
+  body::after {
+    content: ""; position: absolute; inset: 0;
+    background: var(--bg);
+    opacity: 0; pointer-events: none; z-index: 50;
+    animation: fade-out 0.4s 4.85s ease-in forwards;
+  }
+  @keyframes fade-out { to { opacity: 1; } }
+</style>
+</head>
+<body>
+  <!-- COUNTDOWN: 3 - 2 - 1 with sweep rings -->
+  <div class="leader">
+    <span class="leader-mark tl">PROD &middot; STORYBOARD</span>
+
+    <svg class="leader-ring ring-3" viewBox="0 0 500 500"><circle cx="250" cy="250" r="230"/></svg>
+    <span class="leader-num num-3">3</span>
+
+    <svg class="leader-ring ring-2" viewBox="0 0 500 500"><circle cx="250" cy="250" r="230"/></svg>
+    <span class="leader-num num-2">2</span>
+
+    <svg class="leader-ring ring-1" viewBox="0 0 500 500"><circle cx="250" cy="250" r="230"/></svg>
+    <span class="leader-num num-1"><span class="accent">1</span></span>
+
+    <span class="leader-cross"></span>
+    <span class="leader-mark br">REEL 01 &middot; SCENE 01</span>
+  </div>
+
+  <!-- BLACK FLASH frame -->
+  <div class="flash"></div>
+
+  <!-- TITLE -->
+  <div class="stage">
+    <div class="chip"><span class="chip-dot"></span>Hermes &middot; creative skill</div>
+    <h1 class="title">
+      <span class="l1">Type a scene.</span>
+      <span class="l2">Watch Hermes draw it.</span>
+    </h1>
+    <div class="rule"></div>
+    <div class="slate">
+      <span>DIR <b>Zmaxx</b></span>
+      <span>DP <b>Kimi&nbsp;K2.5</b></span>
+    </div>
+  </div>
+</body>
+</html>

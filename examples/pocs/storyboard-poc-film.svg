@@ -1,0 +1,449 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" width="1600" height="1100">
+  <defs>
+    <style>
+      .ink { stroke: #1f1d1a; fill: none; }
+      .ink-fill { fill: #1f1d1a; }
+      .light-fill { fill: #f5f0e6; }
+      .meta { font-family: 'Geist Mono', 'IBM Plex Mono', monospace; fill: #1f1d1a; }
+      .caption { font-family: 'Newsreader', Georgia, serif; fill: #1f1d1a; }
+      .label { font-family: 'Geist Mono', monospace; font-size: 11px; fill: #6a5f56; letter-spacing: 0.1em; }
+      .accent { fill: #8a3a2c; }
+    </style>
+  </defs>
+  
+  <!-- Page background -->
+  <rect width="1600" height="1100" fill="#f5f0e6"/>
+  
+  <!-- Header -->
+  <g>
+    <text x="60" y="50" class="caption" font-size="26" font-weight="500">The Rain Investigation</text>
+    <text x="60" y="74" class="meta" font-size="13" fill="#6a5f56">DIR. S. BELMIROHA · SCENE 01: RAIN-SOAKED ALLEY · PG 1/1</text>
+    <line x1="60" y1="95" x2="1540" y2="95" stroke="#1f1d1a" stroke-width="1"/>
+  </g>
+  
+  <!-- ===== FRAME 1: Wide establishing, top-down rain ===== -->
+  <g transform="translate(60, 130)">
+    <!-- Frame aspect 2.39:1 (anamorphic, since this is noir) -->
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    
+    <!-- Shot number + meta -->
+    <text x="0" y="-10" class="label">1A · WIDE · EXT ALLEY · NIGHT</text>
+    
+    <g clip-path="url(#clip-1)">
+      <clipPath id="clip-1"><rect width="460" height="193"/></clipPath>
+      
+      <!-- Sky -->
+      <rect x="0" y="0" width="460" height="95" fill="#f5f0e6"/>
+      
+      <!-- Left building mass -->
+      <path d="M 0 110 L 0 30 L 60 30 L 60 15 L 100 15 L 100 40 L 140 40 L 140 110 Z" class="ink-fill"/>
+      
+      <!-- Right building mass -->
+      <path d="M 460 110 L 460 25 L 400 25 L 400 10 L 340 10 L 340 45 L 290 45 L 290 110 Z" class="ink-fill"/>
+      
+      <!-- Alley floor (hatched for wet) -->
+      <g stroke="#1f1d1a" stroke-width="0.6" opacity="0.4">
+        <line x1="0" y1="125" x2="460" y2="125"/>
+        <line x1="0" y1="140" x2="460" y2="140"/>
+        <line x1="0" y1="155" x2="460" y2="155"/>
+        <line x1="0" y1="170" x2="460" y2="170"/>
+        <line x1="0" y1="185" x2="460" y2="185"/>
+      </g>
+      
+      <!-- Rain lines -->
+      <g stroke="#1f1d1a" stroke-width="1" opacity="0.6">
+        <line x1="50" y1="10" x2="46" y2="30"/>
+        <line x1="120" y1="15" x2="116" y2="35"/>
+        <line x1="180" y1="8" x2="176" y2="30"/>
+        <line x1="230" y1="12" x2="226" y2="32"/>
+        <line x1="290" y1="6" x2="286" y2="28"/>
+        <line x1="360" y1="14" x2="356" y2="36"/>
+        <line x1="430" y1="10" x2="426" y2="30"/>
+        <line x1="80" y1="50" x2="76" y2="72"/>
+        <line x1="200" y1="55" x2="196" y2="77"/>
+        <line x1="320" y1="52" x2="316" y2="74"/>
+      </g>
+      
+      <!-- Figure (tiny, lost in frame) - stick figure + coat shape -->
+      <g transform="translate(230, 135)">
+        <circle cx="0" cy="0" r="4" class="ink-fill"/>
+        <path d="M 0 4 L -5 20 L -3 35 L 3 35 L 5 20 Z" class="ink-fill"/>
+      </g>
+      
+      <!-- Camera position indicator (arrow coming from bottom indicating HIGH angle) -->
+      <g transform="translate(230, 193)">
+        <line x1="0" y1="-15" x2="0" y2="-50" stroke="#8a3a2c" stroke-width="1.5" stroke-dasharray="3,3"/>
+        <polygon points="0,-5 -4,-12 4,-12" class="accent"/>
+      </g>
+    </g>
+    
+    <!-- Technical annotations below frame -->
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">24mm</text>
+      
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Static</text>
+      
+      <text x="160" y="12" class="label">ANGLE</text>
+      <text x="160" y="28" class="meta" font-size="12">High (crane)</text>
+      
+      <text x="280" y="12" class="label">DURATION</text>
+      <text x="280" y="28" class="meta" font-size="12">0:00 – 0:06</text>
+    </g>
+    
+    <!-- Director's note -->
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      The alley swallows him. Four days of rain.
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 2: Medium, detective entering frame ===== -->
+  <g transform="translate(570, 130)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">1B · MEDIUM · DETECTIVE ENTERS · NIGHT</text>
+    
+    <g clip-path="url(#clip-2)">
+      <clipPath id="clip-2"><rect width="460" height="193"/></clipPath>
+      
+      <!-- Brick wall background -->
+      <rect x="0" y="0" width="460" height="193" fill="#f5f0e6"/>
+      <g stroke="#1f1d1a" stroke-width="0.5" opacity="0.3">
+        <line x1="0" y1="30" x2="460" y2="30"/>
+        <line x1="0" y1="55" x2="460" y2="55"/>
+        <line x1="0" y1="80" x2="460" y2="80"/>
+        <line x1="0" y1="105" x2="460" y2="105"/>
+        <line x1="0" y1="130" x2="460" y2="130"/>
+        <line x1="60" y1="30" x2="60" y2="55"/>
+        <line x1="180" y1="30" x2="180" y2="55"/>
+        <line x1="300" y1="30" x2="300" y2="55"/>
+        <line x1="420" y1="30" x2="420" y2="55"/>
+        <line x1="120" y1="55" x2="120" y2="80"/>
+        <line x1="240" y1="55" x2="240" y2="80"/>
+        <line x1="360" y1="55" x2="360" y2="80"/>
+      </g>
+      
+      <!-- Ground -->
+      <rect x="0" y="150" width="460" height="43" fill="#f5f0e6"/>
+      <line x1="0" y1="150" x2="460" y2="150" stroke="#1f1d1a" stroke-width="1"/>
+      
+      <!-- Puddle -->
+      <ellipse cx="200" cy="178" rx="80" ry="6" class="ink-fill" opacity="0.8"/>
+      
+      <!-- Detective figure - schematic, medium shot, walking in -->
+      <g transform="translate(340, 80)">
+        <!-- Head+hat block -->
+        <rect x="-10" y="0" width="20" height="6" class="ink-fill"/>
+        <circle cx="0" cy="12" r="10" class="ink-fill"/>
+        <!-- Body trapezoid for coat -->
+        <path d="M -15 22 L -22 70 L 22 70 L 15 22 Z" class="ink-fill"/>
+        <!-- Legs -->
+        <rect x="-10" y="70" width="6" height="25" class="ink-fill"/>
+        <rect x="4" y="70" width="6" height="25" class="ink-fill"/>
+      </g>
+      
+      <!-- Direction of movement arrow -->
+      <g transform="translate(250, 140)">
+        <line x1="0" y1="0" x2="-40" y2="0" stroke="#8a3a2c" stroke-width="1.5"/>
+        <polygon points="-40,0 -32,-4 -32,4" class="accent"/>
+      </g>
+      
+      <!-- Rain -->
+      <g stroke="#1f1d1a" stroke-width="0.8" opacity="0.5">
+        <line x1="50" y1="15" x2="47" y2="35"/>
+        <line x1="150" y1="10" x2="147" y2="30"/>
+        <line x1="280" y1="15" x2="277" y2="35"/>
+        <line x1="100" y1="60" x2="97" y2="80"/>
+        <line x1="400" y1="15" x2="397" y2="35"/>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">50mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Dolly left</text>
+      <text x="160" y="12" class="label">ANGLE</text>
+      <text x="160" y="28" class="meta" font-size="12">Eye level</text>
+      <text x="280" y="12" class="label">DURATION</text>
+      <text x="280" y="28" class="meta" font-size="12">0:06 – 0:12</text>
+    </g>
+    
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      He walks towards camera. Dispatch in his ear.
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 3: Low angle on body ===== -->
+  <g transform="translate(1080, 130)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">1C · LOW ANGLE · THE BODY · NIGHT</text>
+    
+    <g clip-path="url(#clip-3)">
+      <clipPath id="clip-3"><rect width="460" height="193"/></clipPath>
+      
+      <!-- Tilted ground perspective - ground takes most of frame -->
+      <rect x="0" y="70" width="460" height="123" class="light-fill"/>
+      
+      <!-- Wet pavement - heavy texture lines radiating -->
+      <g stroke="#1f1d1a" stroke-width="0.5" opacity="0.4">
+        <line x1="0" y1="90" x2="460" y2="95"/>
+        <line x1="0" y1="110" x2="460" y2="115"/>
+        <line x1="0" y1="135" x2="460" y2="140"/>
+        <line x1="0" y1="165" x2="460" y2="170"/>
+      </g>
+      
+      <!-- Sky (small strip) -->
+      <rect x="0" y="0" width="460" height="70" fill="#f5f0e6"/>
+      <g stroke="#1f1d1a" stroke-width="0.6" opacity="0.5">
+        <line x1="50" y1="10" x2="47" y2="40"/>
+        <line x1="130" y1="15" x2="127" y2="45"/>
+        <line x1="240" y1="8" x2="237" y2="38"/>
+        <line x1="350" y1="12" x2="347" y2="42"/>
+        <line x1="430" y1="18" x2="427" y2="48"/>
+      </g>
+      
+      <!-- Body in middle-ground -->
+      <g transform="translate(220, 135)">
+        <!-- Body outline -->
+        <path d="M -80 0 L -80 10 L -70 18 L -30 20 L 30 20 L 70 18 L 80 10 L 80 0 L 70 -8 L 30 -10 L -30 -10 L -70 -8 Z" class="ink-fill"/>
+        <!-- Blood pool accent -->
+        <ellipse cx="-40" cy="25" rx="20" ry="4" class="accent" opacity="0.9"/>
+        <ellipse cx="-30" cy="30" rx="25" ry="3" class="accent" opacity="0.5"/>
+      </g>
+      
+      <!-- Detective's feet in foreground (we're looking up from ground level near body) -->
+      <g transform="translate(350, 175)">
+        <ellipse cx="0" cy="0" rx="22" ry="8" class="ink-fill"/>
+        <ellipse cx="-35" cy="5" rx="22" ry="8" class="ink-fill"/>
+      </g>
+      
+      <!-- Camera angle indicator - tilted upward -->
+      <g transform="translate(20, 180)">
+        <line x1="0" y1="0" x2="0" y2="-30" stroke="#8a3a2c" stroke-width="1.5" stroke-dasharray="3,3"/>
+        <polygon points="0,-30 -4,-22 4,-22" class="accent"/>
+        <text x="10" y="-12" class="meta" font-size="10" fill="#8a3a2c">TILT UP</text>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">35mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Static, tilt</text>
+      <text x="160" y="12" class="label">ANGLE</text>
+      <text x="160" y="28" class="meta" font-size="12">Low, from body</text>
+      <text x="280" y="12" class="label">DURATION</text>
+      <text x="280" y="28" class="meta" font-size="12">0:12 – 0:18</text>
+    </g>
+    
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      The body. His shoes enter frame. He pauses.
+    </text>
+  </g>
+  
+  <!-- ===== ROW 2 ===== -->
+  
+  <!-- ===== FRAME 4: Over-shoulder POV ===== -->
+  <g transform="translate(60, 560)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">1D · OTS · DETECTIVE'S POV · NIGHT</text>
+    
+    <g clip-path="url(#clip-4)">
+      <clipPath id="clip-4"><rect width="460" height="193"/></clipPath>
+      
+      <!-- Back of detective head+shoulder in foreground left -->
+      <g transform="translate(80, 95)">
+        <path d="M -80 100 L -80 -10 L -40 -40 L -10 -40 L 20 -30 L 30 -10 L 30 100 Z" class="ink-fill"/>
+        <!-- Hat -->
+        <ellipse cx="-15" cy="-40" rx="35" ry="8" class="ink-fill"/>
+        <rect x="-35" y="-60" width="40" height="15" class="ink-fill"/>
+      </g>
+      
+      <!-- Background: body on ground, looking down over shoulder -->
+      <g transform="translate(300, 140)">
+        <path d="M -70 0 L -70 8 L -60 14 L -25 16 L 25 16 L 60 14 L 70 8 L 70 0 L 60 -6 L 25 -8 L -25 -8 L -60 -6 Z" class="ink-fill"/>
+        <ellipse cx="-30" cy="20" rx="15" ry="3" class="accent" opacity="0.8"/>
+      </g>
+      
+      <!-- Rope/knot detail being observed -->
+      <g transform="translate(290, 125)">
+        <circle cx="0" cy="0" r="6" fill="none" stroke="#8a3a2c" stroke-width="1.5"/>
+        <path d="M -3 -3 L 3 3 M -3 3 L 3 -3" stroke="#8a3a2c" stroke-width="1"/>
+        <text x="15" y="3" class="meta" font-size="10" fill="#8a3a2c">KNOT — FOCUS</text>
+      </g>
+      
+      <!-- Rain softened in bg -->
+      <g stroke="#1f1d1a" stroke-width="0.5" opacity="0.3">
+        <line x1="250" y1="20" x2="247" y2="40"/>
+        <line x1="340" y1="25" x2="337" y2="45"/>
+        <line x1="400" y1="15" x2="397" y2="35"/>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">85mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Rack focus</text>
+      <text x="160" y="12" class="label">ANGLE</text>
+      <text x="160" y="28" class="meta" font-size="12">OTS, downward</text>
+      <text x="280" y="12" class="label">DURATION</text>
+      <text x="280" y="28" class="meta" font-size="12">0:18 – 0:24</text>
+    </g>
+    
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      Rack focus: his coat → the knot at the wrist.
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 5: Close up on face ===== -->
+  <g transform="translate(570, 560)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">1E · CLOSE UP · RECOGNITION · NIGHT</text>
+    
+    <g clip-path="url(#clip-5)">
+      <clipPath id="clip-5"><rect width="460" height="193"/></clipPath>
+      
+      <!-- Tight head+shoulders shot -->
+      <rect x="0" y="0" width="460" height="193" class="light-fill"/>
+      
+      <!-- Heavy shadow background -->
+      <g stroke="#1f1d1a" stroke-width="0.8" opacity="0.4">
+        <line x1="0" y1="30" x2="460" y2="30"/>
+        <line x1="0" y1="50" x2="460" y2="50"/>
+        <line x1="0" y1="70" x2="460" y2="70"/>
+        <line x1="0" y1="90" x2="460" y2="90"/>
+        <line x1="0" y1="110" x2="460" y2="110"/>
+        <line x1="0" y1="130" x2="460" y2="130"/>
+        <line x1="0" y1="150" x2="460" y2="150"/>
+      </g>
+      
+      <!-- Face in profile - schematic -->
+      <g transform="translate(230, 100)">
+        <!-- Face outline -->
+        <path d="M -40 -60 Q -55 -30 -50 10 Q -45 45 -15 60 L 40 60 L 40 -60 Z" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="2"/>
+        <!-- Shadow half -->
+        <path d="M 0 -60 Q -5 -30 -10 10 Q -5 45 20 60 L 40 60 L 40 -60 Z" class="ink-fill" opacity="0.6"/>
+        <!-- Hat brim heavy shadow on eyes -->
+        <rect x="-60" y="-75" width="100" height="15" class="ink-fill"/>
+        <rect x="-45" y="-100" width="80" height="25" class="ink-fill"/>
+        <!-- Single eye barely visible, focused -->
+        <g transform="translate(-25, -45)">
+          <ellipse cx="0" cy="0" rx="8" ry="3" fill="#f5f0e6" stroke="#1f1d1a" stroke-width="1.2"/>
+          <circle cx="0" cy="0" r="2" class="ink-fill"/>
+        </g>
+        <!-- Jaw tension -->
+        <path d="M -30 35 Q -15 48 5 50" stroke="#1f1d1a" stroke-width="1.5" fill="none"/>
+      </g>
+      
+      <!-- Focus mark indicator -->
+      <g transform="translate(205, 55)">
+        <circle cx="0" cy="0" r="12" fill="none" stroke="#8a3a2c" stroke-width="1" stroke-dasharray="2,2"/>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">100mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Push in (slow)</text>
+      <text x="160" y="12" class="label">ANGLE</text>
+      <text x="160" y="28" class="meta" font-size="12">Profile, eye level</text>
+      <text x="280" y="12" class="label">DURATION</text>
+      <text x="280" y="28" class="meta" font-size="12">0:24 – 0:32</text>
+    </g>
+    
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      Recognition lands. He knows this knot.
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 6: Pull back, phone to ear ===== -->
+  <g transform="translate(1080, 560)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">1F · MEDIUM WIDE · PHONE CALL · NIGHT</text>
+    
+    <g clip-path="url(#clip-6)">
+      <clipPath id="clip-6"><rect width="460" height="193"/></clipPath>
+      
+      <!-- Pulled back view - detective silhouette against rain, small -->
+      <rect x="0" y="0" width="460" height="193" class="light-fill"/>
+      
+      <!-- Far buildings -->
+      <path d="M 0 120 L 0 80 L 30 80 L 30 65 L 80 65 L 80 85 L 120 85 L 120 120 Z" class="ink-fill"/>
+      <path d="M 460 120 L 460 70 L 420 70 L 420 55 L 370 55 L 370 80 L 320 80 L 320 120 Z" class="ink-fill"/>
+      
+      <!-- Ground -->
+      <rect x="0" y="120" width="460" height="73" class="light-fill"/>
+      <line x1="0" y1="120" x2="460" y2="120" stroke="#1f1d1a" stroke-width="0.8" opacity="0.5"/>
+      
+      <!-- Detective, centered, slightly off-axis, phone up -->
+      <g transform="translate(220, 130)">
+        <!-- coat -->
+        <path d="M -12 60 L -18 0 L -10 -8 L 10 -8 L 18 0 L 12 60 Z" class="ink-fill"/>
+        <!-- head -->
+        <circle cx="0" cy="-18" r="9" class="ink-fill"/>
+        <!-- hat -->
+        <ellipse cx="0" cy="-24" rx="11" ry="3" class="ink-fill"/>
+        <rect x="-7" y="-32" width="14" height="8" class="ink-fill"/>
+        <!-- Arm up, phone -->
+        <path d="M -10 -5 L -18 -25 L -14 -28 L -7 -12 Z" class="ink-fill"/>
+        <rect x="-19" y="-32" width="4" height="8" class="ink-fill"/>
+      </g>
+      
+      <!-- Body in bg, small -->
+      <ellipse cx="120" cy="150" rx="40" ry="8" class="ink-fill" opacity="0.7"/>
+      
+      <!-- Heavy rain -->
+      <g stroke="#1f1d1a" stroke-width="0.8" opacity="0.6">
+        <line x1="40" y1="10" x2="36" y2="30"/>
+        <line x1="100" y1="15" x2="96" y2="35"/>
+        <line x1="170" y1="8" x2="166" y2="28"/>
+        <line x1="280" y1="12" x2="276" y2="32"/>
+        <line x1="350" y1="10" x2="346" y2="30"/>
+        <line x1="420" y1="15" x2="416" y2="35"/>
+        <line x1="70" y1="45" x2="66" y2="65"/>
+        <line x1="200" y1="50" x2="196" y2="70"/>
+        <line x1="310" y1="55" x2="306" y2="75"/>
+        <line x1="400" y1="50" x2="396" y2="70"/>
+        <line x1="30" y1="85" x2="26" y2="105"/>
+        <line x1="150" y1="90" x2="146" y2="110"/>
+        <line x1="380" y1="95" x2="376" y2="115"/>
+      </g>
+      
+      <!-- Push out indicator -->
+      <g transform="translate(400, 160)">
+        <line x1="0" y1="0" x2="20" y2="20" stroke="#8a3a2c" stroke-width="1.5" stroke-dasharray="3,3"/>
+        <polygon points="20,20 10,20 20,10" class="accent"/>
+        <text x="-40" y="18" class="meta" font-size="10" fill="#8a3a2c">PULL OUT</text>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">35mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Dolly out (crane up)</text>
+      <text x="180" y="12" class="label">ANGLE</text>
+      <text x="180" y="28" class="meta" font-size="12">Slight high</text>
+      <text x="280" y="12" class="label">DURATION</text>
+      <text x="280" y="28" class="meta" font-size="12">0:32 – 0:42</text>
+    </g>
+    
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      Phone to ear. "Marlowe. Third one this month."
+    </text>
+  </g>
+  
+  <!-- Footer -->
+  <g transform="translate(60, 1050)">
+    <line x1="0" y1="-15" x2="1480" y2="-15" stroke="#1f1d1a" stroke-width="1"/>
+    <text x="0" y="8" class="meta" font-size="11" fill="#6a5f56">
+      SCENE 01 TOTAL · 0:42 · 6 SHOTS · COVERAGE: ESTABLISHING → MEDIUM → LOW ANGLE → OTS → CU → PULL OUT
+    </text>
+    <text x="1480" y="8" class="meta" font-size="11" fill="#6a5f56" text-anchor="end">
+      generated by storyboard · draft v1
+    </text>
+  </g>
+</svg>

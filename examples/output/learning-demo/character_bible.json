@@ -1,0 +1,16 @@
+{
+  "entries": {
+    "detective": {
+      "role": "detective",
+      "display_name": "Detective Mara",
+      "silhouette": "long coat, narrow shoulders, fedora hat",
+      "first_seen_scene": "01"
+    },
+    "killer": {
+      "role": "killer",
+      "display_name": "The Killer",
+      "silhouette": "silhouette only, broad shoulders, no face",
+      "first_seen_scene": "02"
+    }
+  }
+}

@@ -1,0 +1,304 @@
+{
+  "title": "The Rain Investigation",
+  "scene_number": "01",
+  "location": "EXT alley · night",
+  "director": "Zmaxx",
+  "shots": [
+    {
+      "label": "1A",
+      "shot_type": "WIDE",
+      "description": "EXT ALLEY · NIGHT",
+      "lens": "24mm",
+      "movement": "Static",
+      "angle": "High (crane)",
+      "duration": "0:00 – 0:06",
+      "caption": "The alley swallows him. Four days of rain.",
+      "eye_line": null,
+      "figures": [
+        {
+          "role": "detective",
+          "pose": "STANDING",
+          "facing": "FRONT",
+          "position": [
+            0.5,
+            0.62
+          ],
+          "scale": 0.5,
+          "state": "wet"
+        }
+      ],
+      "environment": {
+        "kind": "EXT",
+        "description": "rain-soaked alley",
+        "horizon_y": 0.55,
+        "has_rain": true,
+        "has_torchlight": false,
+        "has_neon": true,
+        "has_fire_escape": true,
+        "has_puddle": true,
+        "has_shadow_cone": true,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "props": [],
+        "inferred_sources": {}
+      },
+      "annotations": [
+        {
+          "kind": "movement_arrow",
+          "label": "Static",
+          "payload": {}
+        }
+      ]
+    },
+    {
+      "label": "1B",
+      "shot_type": "MEDIUM",
+      "description": "DETECTIVE ENTERS · NIGHT",
+      "lens": "50mm",
+      "movement": "Dolly left",
+      "angle": "Eye level",
+      "duration": "0:06 – 0:12",
+      "caption": "He walks towards camera. Dispatch in his ear.",
+      "eye_line": null,
+      "figures": [
+        {
+          "role": "detective",
+          "pose": "WALKING",
+          "facing": "FRONT",
+          "position": [
+            0.62,
+            0.5
+          ],
+          "scale": 0.9,
+          "state": "wet"
+        }
+      ],
+      "environment": {
+        "kind": "EXT",
+        "description": "",
+        "horizon_y": 0.5,
+        "has_rain": true,
+        "has_torchlight": false,
+        "has_neon": true,
+        "has_fire_escape": true,
+        "has_puddle": true,
+        "has_shadow_cone": true,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "props": [
+          "phone"
+        ],
+        "inferred_sources": {}
+      },
+      "annotations": [
+        {
+          "kind": "movement_arrow",
+          "label": "Dolly left",
+          "payload": {}
+        }
+      ]
+    },
+    {
+      "label": "1C",
+      "shot_type": "LOW_ANGLE",
+      "description": "THE BODY · NIGHT",
+      "lens": "35mm",
+      "movement": "Static, tilt up",
+      "angle": "Low, from body",
+      "duration": "0:12 – 0:18",
+      "caption": "The body. His shoes enter frame. He pauses.",
+      "eye_line": null,
+      "figures": [
+        {
+          "role": "victim",
+          "pose": "FALLEN",
+          "facing": "FRONT",
+          "position": [
+            0.5,
+            0.65
+          ],
+          "scale": 1.0,
+          "state": "fallen"
+        }
+      ],
+      "environment": {
+        "kind": "EXT",
+        "description": "",
+        "horizon_y": 0.6,
+        "has_rain": true,
+        "has_torchlight": false,
+        "has_neon": true,
+        "has_fire_escape": true,
+        "has_puddle": true,
+        "has_shadow_cone": true,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "props": [
+          "body"
+        ],
+        "inferred_sources": {}
+      },
+      "annotations": [
+        {
+          "kind": "movement_arrow",
+          "label": "Tilt up",
+          "payload": {}
+        }
+      ]
+    },
+    {
+      "label": "1D",
+      "shot_type": "OTS",
+      "description": "DETECTIVE'S POV · NIGHT",
+      "lens": "85mm",
+      "movement": "Rack focus OTS, downward",
+      "angle": "Eye level",
+      "duration": "0:18 – 0:24",
+      "caption": "Rack focus: his coat → the knot at the wrist.",
+      "eye_line": null,
+      "figures": [
+        {
+          "role": "victim",
+          "pose": "FALLEN",
+          "facing": "FRONT",
+          "position": [
+            0.5,
+            0.7
+          ],
+          "scale": 0.7,
+          "state": "fallen"
+        }
+      ],
+      "environment": {
+        "kind": "EXT",
+        "description": "",
+        "horizon_y": 0.65,
+        "has_rain": true,
+        "has_torchlight": false,
+        "has_neon": true,
+        "has_fire_escape": true,
+        "has_puddle": true,
+        "has_shadow_cone": true,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "props": [],
+        "inferred_sources": {}
+      },
+      "annotations": [
+        {
+          "kind": "focus_ring",
+          "label": "KNOT — FOCUS",
+          "payload": {
+            "x": 0.65,
+            "y": 0.55
+          }
+        }
+      ]
+    },
+    {
+      "label": "1E",
+      "shot_type": "CLOSE_UP",
+      "description": "RECOGNITION · NIGHT",
+      "lens": "100mm",
+      "movement": "Push in (slow)",
+      "angle": "Profile, eye level",
+      "duration": "0:24 – 0:32",
+      "caption": "Recognition lands. He knows this knot.",
+      "eye_line": {
+        "direction": "OFFSCREEN_DOWN",
+        "target_label": "→ knot",
+        "axis_status": "ON_AXIS"
+      },
+      "figures": [
+        {
+          "role": "detective",
+          "pose": "STANDING",
+          "facing": "THREE_QUARTER_LEFT",
+          "position": [
+            0.5,
+            0.5
+          ],
+          "scale": 1.5,
+          "state": "long coat, narrow shoulders, fedora"
+        }
+      ],
+      "environment": {
+        "kind": "EXT",
+        "description": "",
+        "horizon_y": 0.5,
+        "has_rain": true,
+        "has_torchlight": false,
+        "has_neon": true,
+        "has_fire_escape": true,
+        "has_puddle": true,
+        "has_shadow_cone": true,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "props": [],
+        "inferred_sources": {}
+      },
+      "annotations": [
+        {
+          "kind": "movement_arrow",
+          "label": "Push in",
+          "payload": {}
+        }
+      ]
+    },
+    {
+      "label": "1F",
+      "shot_type": "MEDIUM",
+      "description": "PHONE CALL · NIGHT",
+      "lens": "35mm",
+      "movement": "Dolly out (crane lift)",
+      "angle": "Slight high",
+      "duration": "0:32 – 0:42",
+      "caption": "\"Marlowe. Third one this month.\"",
+      "eye_line": null,
+      "figures": [
+        {
+          "role": "detective",
+          "pose": "STANDING",
+          "facing": "THREE_QUARTER_RIGHT",
+          "position": [
+            0.5,
+            0.5
+          ],
+          "scale": 0.9,
+          "state": "long coat, narrow shoulders, fedora"
+        }
+      ],
+      "environment": {
+        "kind": "EXT",
+        "description": "",
+        "horizon_y": 0.55,
+        "has_rain": true,
+        "has_torchlight": false,
+        "has_neon": true,
+        "has_fire_escape": true,
+        "has_puddle": true,
+        "has_shadow_cone": true,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "props": [
+          "phone"
+        ],
+        "inferred_sources": {}
+      },
+      "annotations": [
+        {
+          "kind": "movement_arrow",
+          "label": "Pull out",
+          "payload": {}
+        }
+      ]
+    }
+  ],
+  "notes": ""
+}

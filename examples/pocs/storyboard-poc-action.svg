@@ -1,0 +1,470 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" width="1600" height="1100">
+  <defs>
+    <style>
+      .ink { stroke: #1f1d1a; fill: none; }
+      .ink-fill { fill: #1f1d1a; }
+      .light-fill { fill: #f5f0e6; }
+      .meta { font-family: 'Geist Mono', 'IBM Plex Mono', monospace; fill: #1f1d1a; }
+      .caption { font-family: 'Newsreader', Georgia, serif; fill: #1f1d1a; }
+      .label { font-family: 'Geist Mono', monospace; font-size: 11px; fill: #6a5f56; letter-spacing: 0.1em; }
+      .accent { fill: #8a3a2c; stroke: #8a3a2c; }
+      .motion { stroke: #1f1d1a; fill: none; }
+    </style>
+  </defs>
+  
+  <rect width="1600" height="1100" fill="#f5f0e6"/>
+  
+  <!-- Header -->
+  <g>
+    <text x="60" y="50" class="caption" font-size="26" font-weight="500">The Rain Investigation</text>
+    <text x="60" y="74" class="meta" font-size="13" fill="#6a5f56">DIR. S. BELMIROHA · SCENE 04: MARKET CHASE · ACTION</text>
+    <line x1="60" y1="95" x2="1540" y2="95" stroke="#1f1d1a" stroke-width="1"/>
+  </g>
+  
+  <!-- ===== FRAME 1: Wide establishing — market interior ===== -->
+  <g transform="translate(60, 130)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">4A · WIDE · MARKET INTERIOR · DAY</text>
+    
+    <clipPath id="a-clip-1"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#a-clip-1)">
+      <!-- Market stalls, rows of them receding -->
+      <g>
+        <!-- Far row -->
+        <rect x="30" y="60" width="50" height="40" class="ink-fill" opacity="0.4"/>
+        <rect x="90" y="60" width="50" height="40" class="ink-fill" opacity="0.4"/>
+        <rect x="150" y="60" width="50" height="40" class="ink-fill" opacity="0.4"/>
+        <rect x="210" y="60" width="50" height="40" class="ink-fill" opacity="0.4"/>
+        <rect x="270" y="60" width="50" height="40" class="ink-fill" opacity="0.4"/>
+        <rect x="330" y="60" width="50" height="40" class="ink-fill" opacity="0.4"/>
+        <rect x="390" y="60" width="50" height="40" class="ink-fill" opacity="0.4"/>
+        
+        <!-- Middle row - bigger -->
+        <rect x="10" y="100" width="70" height="55" class="ink-fill" opacity="0.65"/>
+        <rect x="90" y="100" width="70" height="55" class="ink-fill" opacity="0.65"/>
+        <rect x="170" y="100" width="70" height="55" class="ink-fill" opacity="0.65"/>
+        <rect x="250" y="100" width="70" height="55" class="ink-fill" opacity="0.65"/>
+        <rect x="330" y="100" width="70" height="55" class="ink-fill" opacity="0.65"/>
+        <rect x="410" y="100" width="50" height="55" class="ink-fill" opacity="0.65"/>
+      </g>
+      
+      <!-- Crowd dots -->
+      <g>
+        <circle cx="50" cy="140" r="4" class="ink-fill"/>
+        <circle cx="120" cy="145" r="4" class="ink-fill"/>
+        <circle cx="175" cy="142" r="4" class="ink-fill"/>
+        <circle cx="240" cy="145" r="4" class="ink-fill"/>
+        <circle cx="310" cy="140" r="4" class="ink-fill"/>
+        <circle cx="380" cy="145" r="4" class="ink-fill"/>
+      </g>
+      
+      <!-- Two running figures - target ahead, detective behind -->
+      <!-- Target (small, further away) -->
+      <g transform="translate(270, 155)">
+        <circle cx="0" cy="0" r="4" class="ink-fill"/>
+        <path d="M 0 4 L -5 22 L -8 35 L -2 35 L 0 22 L 2 35 L 8 35 L 5 22 Z" class="ink-fill"/>
+        <!-- motion lines behind -->
+        <g class="motion" stroke-width="1">
+          <line x1="-15" y1="10" x2="-25" y2="10"/>
+          <line x1="-18" y1="18" x2="-30" y2="18"/>
+        </g>
+      </g>
+      
+      <!-- Detective (larger, foreground) -->
+      <g transform="translate(180, 170)">
+        <circle cx="0" cy="0" r="6" class="ink-fill"/>
+        <path d="M 0 6 L -8 28 L -12 45 L -5 45 L -1 28 L 1 28 L 5 45 L 12 45 L 8 28 Z" class="ink-fill"/>
+        <g class="motion" stroke-width="1.2">
+          <line x1="-20" y1="15" x2="-40" y2="15"/>
+          <line x1="-22" y1="25" x2="-45" y2="25"/>
+          <line x1="-20" y1="35" x2="-38" y2="35"/>
+        </g>
+      </g>
+      
+      <!-- Connection line between them - dashed, showing distance -->
+      <line x1="195" y1="175" x2="265" y2="160" stroke="#8a3a2c" stroke-width="1" stroke-dasharray="2,2" opacity="0.6"/>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">28mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Handheld, tracking</text>
+      <text x="220" y="12" class="label">ANGLE</text>
+      <text x="220" y="28" class="meta" font-size="12">Eye level</text>
+      <text x="340" y="12" class="label">DURATION</text>
+      <text x="340" y="28" class="meta" font-size="12">0:00 – 0:02</text>
+    </g>
+    
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      Market crowded. He's 20 meters back. Don't lose him.
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 2: Quick cut — legs running (low, tight) ===== -->
+  <g transform="translate(570, 130)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">4B · CUT · LEGS ONLY · LOW · DAY</text>
+    
+    <clipPath id="a-clip-2"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#a-clip-2)">
+      <!-- Ground - cobblestones suggestion -->
+      <rect x="0" y="120" width="460" height="73" class="light-fill"/>
+      <g stroke="#1f1d1a" stroke-width="0.6" opacity="0.4">
+        <line x1="0" y1="140" x2="460" y2="140"/>
+        <line x1="0" y1="160" x2="460" y2="160"/>
+        <line x1="0" y1="180" x2="460" y2="180"/>
+        <!-- vertical cobblestone cuts -->
+        <line x1="60" y1="120" x2="60" y2="140"/>
+        <line x1="140" y1="140" x2="140" y2="160"/>
+        <line x1="220" y1="120" x2="220" y2="140"/>
+        <line x1="300" y1="140" x2="300" y2="160"/>
+        <line x1="380" y1="120" x2="380" y2="140"/>
+      </g>
+      
+      <!-- Mid-stride legs, action pose -->
+      <g transform="translate(200, 80)">
+        <!-- Pant leg back -->
+        <path d="M -30 0 L -45 45 L -38 50 L -20 15 Z" class="ink-fill"/>
+        <!-- Pant leg front (raised, mid-run) -->
+        <path d="M 20 0 L 35 35 L 55 55 L 50 62 L 15 35 Z" class="ink-fill"/>
+        <!-- Shoes -->
+        <ellipse cx="-40" cy="52" rx="14" ry="5" class="ink-fill"/>
+        <ellipse cx="52" cy="62" rx="14" ry="5" class="ink-fill"/>
+        <!-- Coat bottom -->
+        <path d="M -32 0 L 22 0 L 18 -5 L -28 -5 Z" class="ink-fill"/>
+      </g>
+      
+      <!-- Motion blur behind -->
+      <g class="motion" stroke-width="1.8" opacity="0.7">
+        <line x1="80" y1="80" x2="130" y2="80"/>
+        <line x1="70" y1="100" x2="140" y2="100"/>
+        <line x1="75" y1="120" x2="135" y2="120"/>
+        <line x1="85" y1="140" x2="125" y2="140"/>
+      </g>
+      
+      <!-- Impact / speed indicator - radial lines -->
+      <g class="motion" stroke-width="1" opacity="0.6">
+        <line x1="300" y1="30" x2="330" y2="20"/>
+        <line x1="320" y1="60" x2="360" y2="55"/>
+        <line x1="340" y1="100" x2="380" y2="105"/>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">35mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Low tracking, dolly</text>
+      <text x="220" y="12" class="label">ANGLE</text>
+      <text x="220" y="28" class="meta" font-size="12">Ground level</text>
+      <text x="340" y="12" class="label">DURATION</text>
+      <text x="340" y="28" class="meta" font-size="12">0:02 – 0:03</text>
+    </g>
+    
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      Quick cut. Hard pound on cobblestones.
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 3: Obstacle — crashing through market stall ===== -->
+  <g transform="translate(1080, 130)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">4C · WIDE · STALL CRASH · DAY</text>
+    
+    <clipPath id="a-clip-3"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#a-clip-3)">
+      <rect x="0" y="0" width="460" height="193" class="light-fill"/>
+      
+      <!-- Collapsing stall -->
+      <g transform="translate(250, 100)">
+        <!-- Broken posts, leaning -->
+        <line x1="-40" y1="0" x2="-25" y2="50" stroke="#1f1d1a" stroke-width="3"/>
+        <line x1="40" y1="0" x2="55" y2="50" stroke="#1f1d1a" stroke-width="3"/>
+        <!-- Canopy falling -->
+        <path d="M -60 -30 L 70 -20 L 60 0 L -40 -10 Z" class="ink-fill" transform="rotate(-15)"/>
+        <!-- Debris particles - scattered items -->
+        <circle cx="-30" cy="20" r="4" class="ink-fill"/>
+        <circle cx="20" cy="40" r="5" class="ink-fill"/>
+        <circle cx="60" cy="15" r="3" class="ink-fill"/>
+        <ellipse cx="-10" cy="55" rx="8" ry="3" class="ink-fill"/>
+        <ellipse cx="40" cy="60" rx="10" ry="3" class="ink-fill"/>
+        <rect x="-50" y="30" width="15" height="4" class="ink-fill" transform="rotate(25 -42 32)"/>
+        <rect x="30" y="45" width="15" height="4" class="ink-fill" transform="rotate(-20 37 47)"/>
+      </g>
+      
+      <!-- Target mid-crash, body twisted, in motion -->
+      <g transform="translate(320, 120)">
+        <circle cx="0" cy="0" r="5" class="ink-fill"/>
+        <path d="M -2 5 L -15 20 L -20 40 L 5 35 L 15 15 Z" class="ink-fill"/>
+        <!-- Arms flailing -->
+        <line x1="-2" y1="8" x2="-25" y2="5" stroke="#1f1d1a" stroke-width="3" stroke-linecap="round"/>
+        <line x1="10" y1="10" x2="30" y2="0" stroke="#1f1d1a" stroke-width="3" stroke-linecap="round"/>
+        <!-- Legs mid-air -->
+        <line x1="0" y1="30" x2="-10" y2="55" stroke="#1f1d1a" stroke-width="5" stroke-linecap="round"/>
+        <line x1="5" y1="30" x2="20" y2="50" stroke="#1f1d1a" stroke-width="5" stroke-linecap="round"/>
+      </g>
+      
+      <!-- Motion/impact burst around target -->
+      <g class="motion" stroke-width="1.5">
+        <line x1="290" y1="90" x2="275" y2="75"/>
+        <line x1="310" y1="85" x2="308" y2="65"/>
+        <line x1="340" y1="88" x2="350" y2="70"/>
+        <line x1="355" y1="110" x2="375" y2="105"/>
+        <line x1="295" y1="140" x2="285" y2="160"/>
+        <line x1="340" y1="150" x2="355" y2="170"/>
+      </g>
+      
+      <!-- Detective entering from left -->
+      <g transform="translate(80, 130)">
+        <circle cx="0" cy="0" r="6" class="ink-fill"/>
+        <path d="M 0 6 L -8 28 L -10 45 L -3 45 L -1 28 L 1 28 L 3 45 L 10 45 L 8 28 Z" class="ink-fill"/>
+        <g class="motion" stroke-width="1.2">
+          <line x1="-15" y1="15" x2="-35" y2="15"/>
+          <line x1="-18" y1="28" x2="-40" y2="28"/>
+        </g>
+      </g>
+      
+      <!-- SFX -->
+      <text x="240" y="55" class="caption" font-size="22" font-weight="900" font-style="italic" fill="#1f1d1a" transform="rotate(-8 240 55)">
+        CRASH
+      </text>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">24mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Static, whip pan</text>
+      <text x="220" y="12" class="label">ANGLE</text>
+      <text x="220" y="28" class="meta" font-size="12">Eye level</text>
+      <text x="340" y="12" class="label">DURATION</text>
+      <text x="340" y="28" class="meta" font-size="12">0:03 – 0:04</text>
+    </g>
+    
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      Target collides with fruit stall. Detective closing.
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 4: Over-shoulder tight chase ===== -->
+  <g transform="translate(60, 560)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">4D · OTS · CLOSING GAP · DAY</text>
+    
+    <clipPath id="a-clip-4"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#a-clip-4)">
+      <rect x="0" y="0" width="460" height="193" class="light-fill"/>
+      
+      <!-- Detective's shoulder/back foreground -->
+      <g transform="translate(130, 100)">
+        <path d="M -120 100 L -120 -40 L -60 -70 L -20 -70 L 40 -40 L 40 100 Z" class="ink-fill"/>
+        <!-- Hat -->
+        <rect x="-60" y="-85" width="80" height="15" class="ink-fill"/>
+        <ellipse cx="-20" cy="-85" rx="45" ry="8" class="ink-fill"/>
+      </g>
+      
+      <!-- Target running away, mid-distance, looking back -->
+      <g transform="translate(340, 110)">
+        <circle cx="0" cy="0" r="8" class="ink-fill"/>
+        <path d="M 0 8 L -12 40 L -18 70 L -8 70 L -2 40 L 2 40 L 8 70 L 18 70 L 12 40 Z" class="ink-fill"/>
+        <!-- Arms pumping -->
+        <line x1="-5" y1="12" x2="-25" y2="0" stroke="#1f1d1a" stroke-width="4" stroke-linecap="round"/>
+        <line x1="5" y1="12" x2="20" y2="25" stroke="#1f1d1a" stroke-width="4" stroke-linecap="round"/>
+        <!-- Motion trails behind -->
+        <g class="motion" stroke-width="1.2" opacity="0.6">
+          <line x1="-20" y1="20" x2="-45" y2="20"/>
+          <line x1="-25" y1="40" x2="-55" y2="40"/>
+          <line x1="-20" y1="60" x2="-45" y2="60"/>
+        </g>
+      </g>
+      
+      <!-- Crowd parting -->
+      <g>
+        <circle cx="250" cy="100" r="4" class="ink-fill" opacity="0.5"/>
+        <circle cx="410" cy="95" r="4" class="ink-fill" opacity="0.5"/>
+        <circle cx="280" cy="160" r="4" class="ink-fill" opacity="0.5"/>
+      </g>
+      
+      <!-- Focus indicator on target -->
+      <g transform="translate(340, 115)">
+        <circle cx="0" cy="0" r="40" fill="none" stroke="#8a3a2c" stroke-width="1" stroke-dasharray="3,3"/>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">50mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Steadicam, pushing</text>
+      <text x="220" y="12" class="label">ANGLE</text>
+      <text x="220" y="28" class="meta" font-size="12">OTS tight</text>
+      <text x="340" y="12" class="label">DURATION</text>
+      <text x="340" y="28" class="meta" font-size="12">0:04 – 0:06</text>
+    </g>
+    
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      Gap narrowing. Target looks back — fear flashes.
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 5: The tackle — high angle ===== -->
+  <g transform="translate(570, 560)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">4E · HIGH ANGLE · THE TACKLE · DAY</text>
+    
+    <clipPath id="a-clip-5"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#a-clip-5)">
+      <rect x="0" y="0" width="460" height="193" class="light-fill"/>
+      
+      <!-- Cobblestone ground seen from high angle -->
+      <g stroke="#1f1d1a" stroke-width="0.4" opacity="0.3">
+        <line x1="0" y1="40" x2="460" y2="40"/>
+        <line x1="0" y1="80" x2="460" y2="80"/>
+        <line x1="0" y1="120" x2="460" y2="120"/>
+        <line x1="0" y1="160" x2="460" y2="160"/>
+        <line x1="80" y1="0" x2="80" y2="193"/>
+        <line x1="180" y1="0" x2="180" y2="193"/>
+        <line x1="280" y1="0" x2="280" y2="193"/>
+        <line x1="380" y1="0" x2="380" y2="193"/>
+      </g>
+      
+      <!-- Tackle scene - two bodies midair/falling -->
+      <g transform="translate(240, 100)">
+        <!-- Target horizontal, being tackled -->
+        <g transform="translate(-30, 0)">
+          <ellipse cx="0" cy="0" rx="55" ry="18" class="ink-fill"/>
+          <!-- Head poking out of one end -->
+          <circle cx="50" cy="0" r="10" class="ink-fill"/>
+          <!-- Arms outstretched -->
+          <line x1="20" y1="-12" x2="35" y2="-30" stroke="#1f1d1a" stroke-width="5" stroke-linecap="round"/>
+          <line x1="-20" y1="-15" x2="-40" y2="-35" stroke="#1f1d1a" stroke-width="5" stroke-linecap="round"/>
+        </g>
+        
+        <!-- Detective arriving from top/right -->
+        <g transform="translate(30, -15)">
+          <ellipse cx="0" cy="0" rx="25" ry="40" class="ink-fill" transform="rotate(35)"/>
+          <circle cx="-15" cy="-25" r="9" class="ink-fill"/>
+          <!-- Hat flying off -->
+          <ellipse cx="-30" cy="-50" rx="15" ry="4" class="ink-fill" transform="rotate(-20 -30 -50)"/>
+        </g>
+      </g>
+      
+      <!-- Impact lines radiating from tackle point -->
+      <g class="motion" stroke-width="2">
+        <line x1="240" y1="100" x2="180" y2="50"/>
+        <line x1="240" y1="100" x2="160" y2="100"/>
+        <line x1="240" y1="100" x2="180" y2="150"/>
+        <line x1="240" y1="100" x2="300" y2="50"/>
+        <line x1="240" y1="100" x2="320" y2="100"/>
+        <line x1="240" y1="100" x2="300" y2="150"/>
+      </g>
+      
+      <!-- Debris / scatter -->
+      <circle cx="180" cy="70" r="2" class="ink-fill"/>
+      <circle cx="290" cy="130" r="2" class="ink-fill"/>
+      <rect x="330" y="80" width="6" height="2" class="ink-fill"/>
+      
+      <!-- Camera angle indicator - looking straight down -->
+      <g transform="translate(430, 170)">
+        <circle cx="0" cy="0" r="10" fill="none" stroke="#8a3a2c" stroke-width="1.5"/>
+        <circle cx="0" cy="0" r="2" class="accent"/>
+        <text x="-55" y="4" class="meta" font-size="9" fill="#8a3a2c">TOP DOWN</text>
+      </g>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">21mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Drone, top-down</text>
+      <text x="220" y="12" class="label">ANGLE</text>
+      <text x="220" y="28" class="meta" font-size="12">90° overhead</text>
+      <text x="340" y="12" class="label">DURATION</text>
+      <text x="340" y="28" class="meta" font-size="12">0:06 – 0:07</text>
+    </g>
+    
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      Impact. One frame. Everything stops.
+    </text>
+  </g>
+  
+  <!-- ===== FRAME 6: Ground level — aftermath ===== -->
+  <g transform="translate(1080, 560)">
+    <rect width="460" height="193" fill="none" stroke="#1f1d1a" stroke-width="2.5"/>
+    <text x="0" y="-10" class="label">4F · LOW · PINNED · DAY</text>
+    
+    <clipPath id="a-clip-6"><rect width="460" height="193"/></clipPath>
+    <g clip-path="url(#a-clip-6)">
+      <rect x="0" y="0" width="460" height="193" class="light-fill"/>
+      
+      <!-- Ground horizon -->
+      <rect x="0" y="140" width="460" height="53" class="light-fill"/>
+      <g stroke="#1f1d1a" stroke-width="0.5" opacity="0.4">
+        <line x1="0" y1="150" x2="460" y2="150"/>
+        <line x1="0" y1="165" x2="460" y2="165"/>
+        <line x1="0" y1="180" x2="460" y2="180"/>
+      </g>
+      
+      <!-- Bg crowd silhouettes, distant -->
+      <g opacity="0.4">
+        <circle cx="60" cy="100" r="8" class="ink-fill"/>
+        <rect x="54" y="108" width="12" height="35" class="ink-fill"/>
+        <circle cx="110" cy="95" r="8" class="ink-fill"/>
+        <rect x="104" y="103" width="12" height="40" class="ink-fill"/>
+        <circle cx="380" cy="98" r="8" class="ink-fill"/>
+        <rect x="374" y="106" width="12" height="37" class="ink-fill"/>
+        <circle cx="420" cy="102" r="8" class="ink-fill"/>
+        <rect x="414" y="110" width="12" height="33" class="ink-fill"/>
+      </g>
+      
+      <!-- Target on ground, face down, pinned -->
+      <g transform="translate(240, 150)">
+        <ellipse cx="0" cy="0" rx="80" ry="14" class="ink-fill"/>
+        <!-- head pressed to ground -->
+        <circle cx="-70" cy="-5" r="10" class="ink-fill"/>
+      </g>
+      
+      <!-- Detective kneeling on target -->
+      <g transform="translate(270, 110)">
+        <!-- Detective body (kneeling pose) -->
+        <path d="M -20 40 L -25 -20 L -5 -35 L 15 -35 L 25 -15 L 20 40 Z" class="ink-fill"/>
+        <circle cx="5" cy="-45" r="12" class="ink-fill"/>
+        <!-- Hat -->
+        <ellipse cx="5" cy="-52" rx="18" ry="4" class="ink-fill"/>
+        <rect x="-10" y="-62" width="30" height="10" class="ink-fill"/>
+        <!-- Arm pinning -->
+        <path d="M 20 -5 L 50 20 L 60 18 L 30 -15 Z" class="ink-fill"/>
+      </g>
+      
+      <!-- Small accent - slight red on target's head (impact) -->
+      <ellipse cx="175" cy="148" rx="8" ry="2" class="accent" opacity="0.6"/>
+    </g>
+    
+    <g transform="translate(0, 210)">
+      <text x="0" y="12" class="label">LENS</text>
+      <text x="0" y="28" class="meta" font-size="12">35mm</text>
+      <text x="80" y="12" class="label">MOVE</text>
+      <text x="80" y="28" class="meta" font-size="12">Settle, breathing</text>
+      <text x="220" y="12" class="label">ANGLE</text>
+      <text x="220" y="28" class="meta" font-size="12">Ground level</text>
+      <text x="340" y="12" class="label">DURATION</text>
+      <text x="340" y="28" class="meta" font-size="12">0:07 – 0:10</text>
+    </g>
+    
+    <text x="0" y="270" class="caption" font-size="14" font-style="italic">
+      Pinned. Crowd murmurs return. Breathing slows.
+    </text>
+  </g>
+  
+  <!-- Footer -->
+  <g transform="translate(60, 1050)">
+    <line x1="0" y1="-15" x2="1480" y2="-15" stroke="#1f1d1a" stroke-width="1"/>
+    <text x="0" y="8" class="meta" font-size="11" fill="#6a5f56">
+      SCENE 04 TOTAL · 0:10 · 6 SHOTS · FAST CUTS (0.7–3.0s) · COVERAGE: WIDE → INSERT → CRASH → OTS → IMPACT → RESOLUTION
+    </text>
+    <text x="1480" y="8" class="meta" font-size="11" fill="#6a5f56" text-anchor="end">
+      storyboard · action scene draft
+    </text>
+  </g>
+</svg>

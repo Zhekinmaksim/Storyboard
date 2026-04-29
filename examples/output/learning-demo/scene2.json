@@ -1,0 +1,284 @@
+{
+  "title": "The Stairwell",
+  "scene_number": "02",
+  "location": "INT stairwell · night",
+  "director": "Zmaxx",
+  "shots": [
+    {
+      "label": "2A",
+      "shot_type": "WIDE",
+      "description": "Detective at base of stairs",
+      "lens": "24mm",
+      "movement": "Static",
+      "angle": "Low angle",
+      "duration": "0:00 – 0:05",
+      "caption": "She enters the stairwell. Listens.",
+      "eye_line": null,
+      "figures": [
+        {
+          "role": "detective",
+          "pose": "STANDING",
+          "facing": "FRONT",
+          "position": [
+            0.5,
+            0.55
+          ],
+          "scale": 0.6,
+          "state": "tense"
+        }
+      ],
+      "environment": {
+        "kind": "INT",
+        "description": "narrow stairwell",
+        "horizon_y": 0.45,
+        "has_rain": false,
+        "has_torchlight": true,
+        "has_neon": false,
+        "has_fire_escape": false,
+        "has_puddle": false,
+        "has_shadow_cone": false,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "has_stairwell": true,
+        "props": [],
+        "inferred_sources": {
+          "has_stairwell": "prose:stairwell"
+        }
+      },
+      "annotations": [
+        {
+          "kind": "axis_marker",
+          "label": "A",
+          "payload": {
+            "side": "A"
+          }
+        }
+      ]
+    },
+    {
+      "label": "2B",
+      "shot_type": "LOW_ANGLE",
+      "description": "Stairs spiral up — POV",
+      "lens": "20mm",
+      "movement": "Tilt up",
+      "angle": "Extreme low",
+      "duration": "0:05 – 0:09",
+      "caption": "Three flights above. Footsteps.",
+      "eye_line": null,
+      "figures": [],
+      "environment": {
+        "kind": "INT",
+        "description": "spiral staircase",
+        "horizon_y": 0.7,
+        "has_rain": false,
+        "has_torchlight": true,
+        "has_neon": false,
+        "has_fire_escape": false,
+        "has_puddle": false,
+        "has_shadow_cone": false,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "has_stairwell": true,
+        "props": [],
+        "inferred_sources": {
+          "has_stairwell": "prose:stairs"
+        }
+      },
+      "annotations": [
+        {
+          "kind": "movement_arrow",
+          "label": "Tilt up",
+          "payload": {}
+        }
+      ]
+    },
+    {
+      "label": "2C",
+      "shot_type": "CLOSE_UP",
+      "description": "Detective face — listening",
+      "lens": "85mm",
+      "movement": "Push in (slow)",
+      "angle": "Slight low",
+      "duration": "0:09 – 0:13",
+      "caption": "She knows he's up there.",
+      "eye_line": {
+        "direction": "OFFSCREEN_UP",
+        "target_label": "→ killer above",
+        "axis_status": "ON_AXIS"
+      },
+      "figures": [
+        {
+          "role": "detective",
+          "pose": "STANDING",
+          "facing": "THREE_QUARTER_RIGHT",
+          "position": [
+            0.5,
+            0.5
+          ],
+          "scale": 1.5,
+          "state": "long coat, narrow shoulders, fedora"
+        }
+      ],
+      "environment": {
+        "kind": "INT",
+        "description": "stairwell",
+        "horizon_y": 0.5,
+        "has_rain": false,
+        "has_torchlight": false,
+        "has_neon": false,
+        "has_fire_escape": false,
+        "has_puddle": false,
+        "has_shadow_cone": false,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "has_stairwell": true,
+        "props": [],
+        "inferred_sources": {
+          "has_stairwell": "prose:stairwell"
+        }
+      },
+      "annotations": []
+    },
+    {
+      "label": "2D",
+      "shot_type": "LOW_ANGLE",
+      "description": "Killer silhouette — landing above",
+      "lens": "50mm",
+      "movement": "Static",
+      "angle": "Extreme low, from below",
+      "duration": "0:13 – 0:17",
+      "caption": "A shape. Not a man yet.",
+      "eye_line": null,
+      "figures": [
+        {
+          "role": "killer",
+          "pose": "STANDING",
+          "facing": "FRONT",
+          "position": [
+            0.5,
+            0.45
+          ],
+          "scale": 1.1,
+          "state": "silhouette only"
+        }
+      ],
+      "environment": {
+        "kind": "INT",
+        "description": "landing",
+        "horizon_y": 0.35,
+        "has_rain": false,
+        "has_torchlight": true,
+        "has_neon": false,
+        "has_fire_escape": false,
+        "has_puddle": false,
+        "has_shadow_cone": false,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "has_stairwell": true,
+        "props": [],
+        "inferred_sources": {
+          "has_stairwell": "prose:landing"
+        }
+      },
+      "annotations": [
+        {
+          "kind": "focus_ring",
+          "label": "THREAT",
+          "payload": {
+            "x": 0.5,
+            "y": 0.45
+          }
+        }
+      ]
+    },
+    {
+      "label": "2E",
+      "shot_type": "OTS",
+      "description": "Detective draws weapon",
+      "lens": "50mm",
+      "movement": "Push in",
+      "angle": "Eye level",
+      "duration": "0:17 – 0:20",
+      "caption": "Weapon up. Two flights to go.",
+      "eye_line": null,
+      "figures": [
+        {
+          "role": "detective",
+          "pose": "STANDING",
+          "facing": "BACK",
+          "position": [
+            0.4,
+            0.6
+          ],
+          "scale": 1.0,
+          "state": "long coat, narrow shoulders, fedora"
+        }
+      ],
+      "environment": {
+        "kind": "INT",
+        "description": "stairs",
+        "horizon_y": 0.5,
+        "has_rain": false,
+        "has_torchlight": false,
+        "has_neon": false,
+        "has_fire_escape": false,
+        "has_puddle": false,
+        "has_shadow_cone": false,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "has_stairwell": true,
+        "props": [
+          "weapon"
+        ],
+        "inferred_sources": {
+          "has_stairwell": "prose:stairs"
+        }
+      },
+      "annotations": [
+        {
+          "kind": "movement_arrow",
+          "label": "Push in",
+          "payload": {}
+        }
+      ]
+    },
+    {
+      "label": "2F",
+      "shot_type": "LOW_ANGLE",
+      "description": "Empty landing — he is gone",
+      "lens": "24mm",
+      "movement": "Static",
+      "angle": "Low",
+      "duration": "0:20 – 0:25",
+      "caption": "\"Marlowe. He was just here.\"",
+      "eye_line": null,
+      "figures": [],
+      "environment": {
+        "kind": "INT",
+        "description": "empty landing",
+        "horizon_y": 0.4,
+        "has_rain": false,
+        "has_torchlight": true,
+        "has_neon": false,
+        "has_fire_escape": false,
+        "has_puddle": false,
+        "has_shadow_cone": false,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "has_stairwell": true,
+        "props": [],
+        "inferred_sources": {
+          "has_stairwell": "prose:landing"
+        }
+      },
+      "annotations": []
+    }
+  ],
+  "notes": "Memory-applied: low-angle suspense rule active for this scene."
+}

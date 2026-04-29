@@ -1,0 +1,16 @@
+{
+  "revisions": [
+    {
+      "shot_label": "1B",
+      "field": "movement",
+      "new_value": "Push in (slow)",
+      "reason": "Lens motivation — a slow push as the detective approaches the body raises tension more than a sideways dolly. Pacing rule: dialogue/discovery shots benefit from camera moving toward the subject of attention."
+    },
+    {
+      "shot_label": "1F",
+      "field": "lens",
+      "new_value": "85mm",
+      "reason": "The phone-call beat is intimate — a longer lens isolates the detective against the alley and matches the shot 1E close-up emotional register. 35mm is too contextual for what is now a private moment."
+    }
+  ]
+}

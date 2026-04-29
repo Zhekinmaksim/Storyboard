@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Skill runtime
+.cache/
+.uv-cache/
+*.png
+!examples/pocs/*.png
+!examples/output/**/*.png
+!web/assets/*.png
+!demo/recordings/*.png
+.env
+.env.local
+
+# Outputs (default location — relative for ad-hoc tests)
+storyboard-output/

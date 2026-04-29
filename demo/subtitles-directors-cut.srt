@@ -1,0 +1,77 @@
+1
+00:00:05,000 --> 00:00:14,500
+I'm building a Hermes skill that turns prose into a film storyboard.
+
+2
+00:00:15,500 --> 00:00:24,000
+You write a scene. Kimi K2.5 parses it into six shots
+with lenses, camera moves and eye-line.
+
+3
+00:00:24,500 --> 00:00:34,000
+The local SVG renderer draws the board stroke-by-stroke,
+in the browser.
+
+4
+00:00:35,000 --> 00:00:42,000
+Every frame is metadata plus a rendered primitive.
+Rain, neon, silhouette, focus ring, eye-line marker —
+
+5
+00:00:42,500 --> 00:00:50,000
+all defined by the Scene JSON schema. No diffusion,
+no artifacts. The final board stays editable as vector.
+
+6
+00:00:50,500 --> 00:00:56,500
+I revise one frame — "more Hitchcock, low angle,
+hard shadow, silhouette".
+
+7
+00:00:57,000 --> 00:01:04,000
+Hermes extracts a generalised director rule and saves it.
+The next matching scene is already shot that way.
+
+8
+00:01:04,500 --> 00:01:13,000
+Here's a second scene. Nobody requested the same style —
+but Hermes applies the rule on its own.
+
+9
+00:01:13,500 --> 00:01:21,000
+Low angle. Shadow. Silhouette on the landing.
+Memory persists across scenes.
+
+10
+00:01:22,000 --> 00:01:26,000
+Tags matched. Rule applied. No re-prompting.
+
+11
+00:01:26,500 --> 00:01:33,000
+Every artifact is inspectable. Rule, agent trace,
+deterministic patch validation.
+
+12
+00:01:33,500 --> 00:01:42,000
+Hermes writes these same files to disk when the skill runs locally.
+Scene JSON, critique patches, character bible, director memory.
+
+13
+00:01:42,500 --> 00:01:48,000
+Kimi K2.5 has three roles. Parses the prose.
+Critiques the rendered board.
+
+14
+00:01:48,500 --> 00:01:54,000
+Extracts director memory. And it stays grounded —
+no plot hallucinations reach the final artifact.
+
+15
+00:01:54,500 --> 00:02:06,000
+Not SaaS. It's a local Hermes skill —
+three commands and it's yours.
+
+16
+00:02:06,500 --> 00:02:13,000
+Hermes doesn't just draw the scene.
+It learns how you direct the next one.

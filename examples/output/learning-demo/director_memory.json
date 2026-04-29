@@ -1,0 +1,25 @@
+{
+  "rules": [
+    {
+      "id": "rule_a8f3c1b2",
+      "preference": "For suspense, danger, and reveal moments, prefer low-angle framing with stronger cast shadows. When showing a threat or unseen antagonist, render them as a partial silhouette rather than a fully-lit figure.",
+      "applies_to": [
+        "suspense",
+        "reveal",
+        "danger",
+        "threat",
+        "killer entrance",
+        "antagonist reveal",
+        "stairwell",
+        "cornered",
+        "pursuit"
+      ],
+      "source_revision": {
+        "scene": "01",
+        "frame": "1F",
+        "note": "more Hitchcock — low angle, harder shadow, killer as silhouette"
+      },
+      "created_at": "2026-04-26T13:42:00+00:00"
+    }
+  ]
+}

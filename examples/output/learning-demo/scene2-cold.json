@@ -1,0 +1,247 @@
+{
+  "title": "The Stairwell — cold (no memory)",
+  "scene_number": "02",
+  "location": "INT stairwell · night",
+  "director": "Zmaxx",
+  "shots": [
+    {
+      "label": "2A",
+      "shot_type": "WIDE",
+      "description": "Detective at base of stairs",
+      "lens": "35mm",
+      "movement": "Static",
+      "angle": "Eye level",
+      "duration": "0:00 – 0:05",
+      "caption": "She enters the stairwell.",
+      "eye_line": null,
+      "figures": [
+        {
+          "role": "detective",
+          "pose": "STANDING",
+          "facing": "FRONT",
+          "position": [
+            0.5,
+            0.6
+          ],
+          "scale": 0.6,
+          "state": "long coat, narrow shoulders, fedora"
+        }
+      ],
+      "environment": {
+        "kind": "INT",
+        "description": "",
+        "horizon_y": 0.5,
+        "has_rain": false,
+        "has_torchlight": false,
+        "has_neon": false,
+        "has_fire_escape": false,
+        "has_puddle": false,
+        "has_shadow_cone": false,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "has_stairwell": true,
+        "props": [],
+        "inferred_sources": {
+          "has_stairwell": "prose:stairwell"
+        }
+      },
+      "annotations": []
+    },
+    {
+      "label": "2B",
+      "shot_type": "MEDIUM",
+      "description": "Stairs going up",
+      "lens": "35mm",
+      "movement": "Static",
+      "angle": "Eye level",
+      "duration": "0:05 – 0:10",
+      "caption": "She listens for footsteps.",
+      "eye_line": null,
+      "figures": [],
+      "environment": {
+        "kind": "INT",
+        "description": "",
+        "horizon_y": 0.5,
+        "has_rain": false,
+        "has_torchlight": false,
+        "has_neon": false,
+        "has_fire_escape": false,
+        "has_puddle": false,
+        "has_shadow_cone": false,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "has_stairwell": true,
+        "props": [],
+        "inferred_sources": {
+          "has_stairwell": "prose:stairs"
+        }
+      },
+      "annotations": []
+    },
+    {
+      "label": "2C",
+      "shot_type": "CLOSE_UP",
+      "description": "Detective face",
+      "lens": "50mm",
+      "movement": "Static",
+      "angle": "Eye level",
+      "duration": "0:10 – 0:14",
+      "caption": "She is concerned.",
+      "eye_line": null,
+      "figures": [
+        {
+          "role": "detective",
+          "pose": "STANDING",
+          "facing": "FRONT",
+          "position": [
+            0.5,
+            0.5
+          ],
+          "scale": 1.5,
+          "state": "long coat, narrow shoulders, fedora"
+        }
+      ],
+      "environment": {
+        "kind": "INT",
+        "description": "",
+        "horizon_y": 0.5,
+        "has_rain": false,
+        "has_torchlight": false,
+        "has_neon": false,
+        "has_fire_escape": false,
+        "has_puddle": false,
+        "has_shadow_cone": false,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "has_stairwell": true,
+        "props": [],
+        "inferred_sources": {}
+      },
+      "annotations": []
+    },
+    {
+      "label": "2D",
+      "shot_type": "MEDIUM",
+      "description": "Killer on landing",
+      "lens": "35mm",
+      "movement": "Static",
+      "angle": "Eye level",
+      "duration": "0:14 – 0:18",
+      "caption": "A man stands above.",
+      "eye_line": null,
+      "figures": [
+        {
+          "role": "killer",
+          "pose": "STANDING",
+          "facing": "FRONT",
+          "position": [
+            0.5,
+            0.55
+          ],
+          "scale": 1.0,
+          "state": "silhouette, tall, unseen"
+        }
+      ],
+      "environment": {
+        "kind": "INT",
+        "description": "",
+        "horizon_y": 0.5,
+        "has_rain": false,
+        "has_torchlight": false,
+        "has_neon": false,
+        "has_fire_escape": false,
+        "has_puddle": false,
+        "has_shadow_cone": false,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "has_stairwell": true,
+        "props": [],
+        "inferred_sources": {
+          "has_stairwell": "prose:landing"
+        }
+      },
+      "annotations": []
+    },
+    {
+      "label": "2E",
+      "shot_type": "MEDIUM",
+      "description": "Detective draws weapon",
+      "lens": "35mm",
+      "movement": "Static",
+      "angle": "Eye level",
+      "duration": "0:18 – 0:22",
+      "caption": "She raises her gun.",
+      "eye_line": null,
+      "figures": [
+        {
+          "role": "detective",
+          "pose": "STANDING",
+          "facing": "FRONT",
+          "position": [
+            0.4,
+            0.55
+          ],
+          "scale": 1.0,
+          "state": "long coat, narrow shoulders, fedora"
+        }
+      ],
+      "environment": {
+        "kind": "INT",
+        "description": "",
+        "horizon_y": 0.5,
+        "has_rain": false,
+        "has_torchlight": false,
+        "has_neon": false,
+        "has_fire_escape": false,
+        "has_puddle": false,
+        "has_shadow_cone": false,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "has_stairwell": true,
+        "props": [
+          "weapon"
+        ],
+        "inferred_sources": {}
+      },
+      "annotations": []
+    },
+    {
+      "label": "2F",
+      "shot_type": "WIDE",
+      "description": "Empty landing",
+      "lens": "35mm",
+      "movement": "Static",
+      "angle": "Eye level",
+      "duration": "0:22 – 0:26",
+      "caption": "No one there.",
+      "eye_line": null,
+      "figures": [],
+      "environment": {
+        "kind": "INT",
+        "description": "",
+        "horizon_y": 0.5,
+        "has_rain": false,
+        "has_torchlight": false,
+        "has_neon": false,
+        "has_fire_escape": false,
+        "has_puddle": false,
+        "has_shadow_cone": false,
+        "has_window_grid": false,
+        "has_table": false,
+        "has_door_frame": false,
+        "has_stairwell": true,
+        "props": [],
+        "inferred_sources": {
+          "has_stairwell": "prose:landing"
+        }
+      },
+      "annotations": []
+    }
+  ],
+  "notes": ""
+}

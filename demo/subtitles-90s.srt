@@ -1,0 +1,51 @@
+1
+00:00:05,000 --> 00:00:13,000
+I'm building a Hermes skill that turns prose into a film storyboard.
+
+2
+00:00:13,500 --> 00:00:21,500
+You write a scene. Kimi K2.5 parses it into six shots
+with lenses, camera moves and eye-line.
+
+3
+00:00:22,000 --> 00:00:32,500
+The local SVG renderer draws the board stroke-by-stroke,
+in the browser.
+
+4
+00:00:33,500 --> 00:00:38,000
+I revise one frame — "more Hitchcock, low angle,
+hard shadow, silhouette".
+
+5
+00:00:38,500 --> 00:00:43,000
+Hermes extracts a generalised director rule and saves it.
+The next matching scene is already shot that way.
+
+6
+00:00:43,500 --> 00:00:48,500
+Every artifact is inspectable. Rule, agent trace,
+deterministic patch validation.
+
+7
+00:00:49,000 --> 00:00:53,500
+Not a black box.
+
+8
+00:00:54,500 --> 00:00:59,000
+Kimi K2.5 has three roles. Parses the prose.
+Critiques the rendered board.
+
+9
+00:00:59,500 --> 00:01:02,000
+Extracts director memory.
+
+10
+00:01:02,500 --> 00:01:08,000
+Not SaaS. It's a local Hermes skill —
+three commands and it's yours.
+
+11
+00:01:08,500 --> 00:01:14,000
+Hermes doesn't just draw the scene.
+It learns how you direct the next one.
