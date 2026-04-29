@@ -1602,15 +1602,23 @@ section {
 }
 .pullquote-mark {
   position: absolute;
-  top: -40px;
-  left: -8px;
-  font-family: var(--serif);
-  font-size: 200px;
-  line-height: 1;
-  color: var(--accent);
+  top: -28px;
+  left: 0;
+  width: 72px;
+  height: 84px;
   opacity: 0.18;
-  font-style: italic;
   pointer-events: none;
+  display: flex;
+  gap: 12px;
+}
+.pullquote-mark span {
+  display: block;
+  width: 28px;
+  height: 84px;
+  background: var(--accent);
+  transform: skewX(-16deg);
+  transform-origin: top left;
+  clip-path: polygon(0 0, 100% 0, 58% 100%, 0 100%);
 }
 .pullquote blockquote {
   font-family: var(--serif);
