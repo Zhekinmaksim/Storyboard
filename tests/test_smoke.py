@@ -17,6 +17,8 @@ import pytest
 
 from scripts.critique import ALLOWED_FIELDS, Revision, critique_board
 from scripts.iterate import apply_revisions
+from scripts.kimi_client import KimiError, extract_text
+from scripts.parse import stub_scene
 from scripts.render import render_scene
 from scripts.scene import (
     EyeLine, EyeLineDirection, Facing,
@@ -92,6 +94,17 @@ def test_scene_accepts_string_eye_line():
     })
     assert scene.shots[0].eye_line is not None
     assert scene.shots[0].eye_line.direction == EyeLineDirection.CAMERA_LEFT
+
+
+def test_stub_scene_produces_six_shots():
+    scene = stub_scene("A detective enters a rain-soaked alley at night. A phone rings.")
+    assert len(scene.shots) == 6
+    assert [shot.label for shot in scene.shots] == ["1A", "1B", "1C", "1D", "1E", "1F"]
+
+
+def test_extract_text_rejects_empty_content():
+    with pytest.raises(KimiError):
+        extract_text({"choices": [{"message": {"content": None}}]})
 
 
 # =================== Render ===================

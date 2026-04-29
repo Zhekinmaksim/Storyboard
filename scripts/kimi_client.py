@@ -106,7 +106,8 @@ def kimi_call(
     last_exc: Exception | None = None
     for attempt in range(retries + 1):
         try:
-            with httpx.Client(timeout=120) as client:
+            timeout = float(os.environ.get("STORYBOARD_KIMI_TIMEOUT", "12"))
+            with httpx.Client(timeout=timeout) as client:
                 resp = client.post(OPENROUTER_BASE, headers=headers, json=payload)
                 # 429 / 5xx → retry with backoff
                 if resp.status_code in (429, 500, 502, 503, 504):
@@ -137,9 +138,12 @@ def kimi_call(
 def extract_text(response: dict[str, Any]) -> str:
     """Pull the first message content out of an OpenRouter response."""
     try:
-        return response["choices"][0]["message"]["content"]
+        content = response["choices"][0]["message"]["content"]
     except (KeyError, IndexError, TypeError) as exc:
         raise KimiError(f"unexpected response shape: {exc}; got {response}") from exc
+    if not isinstance(content, str) or not content.strip():
+        raise KimiError(f"empty response content; got {response}")
+    return content
 
 
 def kimi_text(prompt: str, system: str | None = None, **kwargs: Any) -> str:

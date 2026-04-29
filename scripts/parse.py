@@ -15,7 +15,7 @@ import json
 import re
 import sys
 
-from scripts.kimi_client import kimi_text
+from scripts.kimi_client import KimiError, kimi_text
 from scripts.scene import Scene
 
 
@@ -127,8 +127,10 @@ def parse_prose(prose: str, *, use_cache: bool = True) -> Scene:
     # First attempt
     try:
         raw = kimi_text(user_prompt, system=effective_system, use_cache=use_cache,
-                        temperature=0.5, max_tokens=4000)
+                        temperature=0.5, max_tokens=4000, retries=0)
         return _parse_and_validate(raw)
+    except KimiError as exc:
+        raise ParseError(f"Kimi parse unavailable: {exc}") from exc
     except (ValueError, KeyError, TypeError) as exc:
         # Retry with feedback
         print(f"[parse] first attempt failed: {exc}; retrying with feedback", file=sys.stderr)
@@ -139,8 +141,10 @@ def parse_prose(prose: str, *, use_cache: bool = True) -> Scene:
         )
         try:
             raw = kimi_text(retry_prompt, system=effective_system, use_cache=False,
-                            temperature=0.3, max_tokens=4000)
+                            temperature=0.3, max_tokens=4000, retries=0)
             return _parse_and_validate(raw)
+        except KimiError as exc2:
+            raise ParseError(f"Kimi parse unavailable after validation retry: {exc2}") from exc2
         except (ValueError, KeyError, TypeError) as exc2:
             raise ParseError(
                 f"Kimi returned invalid Scene JSON after 2 attempts: {exc2}"
@@ -312,39 +316,81 @@ def _strip_codeblock(s: str) -> str:
 
 
 def stub_scene(prose: str) -> Scene:
-    """Fallback when Kimi cannot produce valid JSON. A single WIDE shot
-    placeholder so the user has something to edit by hand instead of
-    nothing.
+    """Fallback when Kimi cannot produce valid JSON.
+
+    Keep the public demo useful: generate a full six-shot deterministic
+    board from the prose instead of leaving users with an error panel.
     """
+    text = prose.strip()
+    low = text.lower()
+    is_int = any(term in low for term in ("kitchen", "room", "stairwell", "table", "interior"))
+    is_stairwell = "stair" in low or "landing" in low
+    is_kitchen = "kitchen" in low or "table" in low
+    is_rain = any(term in low for term in ("rain", "alley", "night", "detective", "noir"))
+    title = (
+        "Kitchen confrontation" if is_kitchen else
+        "The Stairwell" if is_stairwell else
+        "The Rain Investigation" if is_rain else
+        "Untitled scene"
+    )
+    location = (
+        "INT KITCHEN · DAY" if is_kitchen else
+        "INT STAIRWELL · NIGHT" if is_stairwell else
+        "EXT ALLEY · NIGHT" if is_rain else
+        ("INT · DAY" if is_int else "EXT · DAY")
+    )
+    env = {
+        "kind": "INT" if is_int else "EXT",
+        "description": "kitchen table" if is_kitchen else "dim stairwell" if is_stairwell else "rain-soaked alley" if is_rain else "scene",
+        "horizon_y": 0.55,
+        "has_rain": is_rain,
+        "has_table": is_kitchen,
+        "has_stairwell": is_stairwell,
+        "has_shadow_cone": is_rain or is_stairwell,
+        "has_puddle": is_rain,
+        "props": ["phone"] if "phone" in low else [],
+    }
+    snippets = [s.strip() for s in re.split(r"(?<=[.!?])\s+", text) if s.strip()]
+    while len(snippets) < 6:
+        snippets.append(snippets[-1] if snippets else "The scene holds.")
+    shot_specs = [
+        ("1A", "WIDE", "24mm", "Static", "Eye level", 0.45, 0.62),
+        ("1B", "MEDIUM", "35mm", "Dolly left", "Eye level", 0.85, 0.64),
+        ("1C", "CLOSE_UP", "50mm", "Static", "Eye level", 2.1, 0.52),
+        ("1D", "OTS", "50mm", "Static", "Slight low", 1.0, 0.62),
+        ("1E", "CLOSE_UP", "85mm", "Push in (slow)", "Profile", 2.2, 0.52),
+        ("1F", "WIDE", "35mm", "Pull out", "Slight high", 0.55, 0.66),
+    ]
+    shots = []
+    for idx, (label, shot_type, lens, move, angle, scale, y) in enumerate(shot_specs):
+        shot = {
+            "label": label,
+            "shot_type": shot_type,
+            "description": snippets[idx][:120],
+            "lens": lens,
+            "movement": move,
+            "angle": angle,
+            "duration": f"0:{idx * 5:02d} – 0:{idx * 5 + 5:02d}",
+            "caption": snippets[idx][:120],
+            "eye_line": "CAMERA_LEFT" if shot_type in ("CLOSE_UP", "OTS") else None,
+            "figures": [{
+                "role": "detective" if "detective" in low else "sibling" if is_kitchen else "subject",
+                "pose": "SEATED" if is_kitchen and idx < 3 else "STANDING",
+                "facing": "THREE_QUARTER_LEFT" if idx % 2 else "FRONT",
+                "position": [0.38 + (idx % 3) * 0.12, y],
+                "scale": scale,
+            }],
+            "environment": env,
+            "annotations": [],
+        }
+        shots.append(shot)
     return Scene.from_dict({
-        "title": "Untitled (parse fallback)",
+        "title": title,
         "scene_number": "01",
-        "location": "EXT · DAY",
+        "location": location,
         "director": "Zmaxx",
         "notes": f"Parse fallback. Original prose: {prose[:200]}",
-        "shots": [{
-            "label": "1A",
-            "shot_type": "WIDE",
-            "description": prose[:80],
-            "lens": "35mm",
-            "movement": "Static",
-            "angle": "Eye level",
-            "duration": "0:00 – 0:06",
-            "caption": prose[:120],
-            "figures": [{
-                "role": "subject",
-                "pose": "STANDING",
-                "facing": "FRONT",
-                "position": [0.5, 0.7],
-                "scale": 0.6,
-            }],
-            "environment": {
-                "kind": "EXT",
-                "description": "scene",
-                "horizon_y": 0.55,
-            },
-            "annotations": [],
-        }],
+        "shots": shots,
     })
 
 

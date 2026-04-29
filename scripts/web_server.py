@@ -249,17 +249,19 @@ def run_pipeline(job: Job) -> None:
         except Exception as exc:
             job.push("status", {"stage": "bible_skipped", "message": str(exc)})
 
-        # 3. Enrich (best-effort)
-        try:
-            from scripts.enrich import enrich_scene
-            enriched = enrich_scene(scene, use_cache=True)
-            if enriched:
-                job.push("status", {
-                    "stage": "enriched",
-                    "message": f"Kimi rendered {enriched} custom environment(s).",
-                })
-        except Exception as exc:
-            job.push("status", {"stage": "enrich_skipped", "message": str(exc)})
+        # 3. Enrich (best-effort). Disabled by default on the public API:
+        # the first visible board should not wait on optional extra Kimi calls.
+        if os.environ.get("STORYBOARD_ENABLE_ENRICH") == "1":
+            try:
+                from scripts.enrich import enrich_scene
+                enriched = enrich_scene(scene, use_cache=True)
+                if enriched:
+                    job.push("status", {
+                        "stage": "enriched",
+                        "message": f"Kimi rendered {enriched} custom environment(s).",
+                    })
+            except Exception as exc:
+                job.push("status", {"stage": "enrich_skipped", "message": str(exc)})
 
         # 4. Persist scene + send SVG skeleton
         (out / "scene.json").write_text(scene.to_json(), encoding="utf-8")
