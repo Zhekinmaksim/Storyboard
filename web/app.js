@@ -746,7 +746,7 @@ async function loadGallery() {
     for (const e of entries) {
       const card = document.createElement('a');
       card.className = 'gallery-card';
-      card.href = e.share_url;
+      card.href = e.slug ? `/?board=${encodeURIComponent(e.slug)}` : e.share_url;
       card.target = '_blank';
       card.rel = 'noopener';
 
