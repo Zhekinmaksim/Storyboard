@@ -12,16 +12,9 @@ the **live install in a real terminal** and **director memory loop captured
 in action** (not just a static before/after image). Builders watching on
 Discord care about those most.
 
-Both versions: 16:9, 1920×1080. Same music, same subtitles —
-only the timeline differs.
-
-Three voice tracks possible:
-- **A.** Russian narration + English subtitles (recommended)
-- **B.** English narration + no subtitles
-- **C.** No narration, music + on-screen text only
-
-Below is **track A**. Background music: instrumental, no lyrics, low.
-~25% volume under narration.
+Both versions: 16:9, 1920×1080. No voice-over. Use instrumental music
+plus short English subtitles only. The video must still make sense
+when watched muted.
 
 ---
 
@@ -42,6 +35,7 @@ Below is **track A**. Background music: instrumental, no lyrics, low.
 | A1 | `web/video/intro.html`       | Reload, record from 0s to 5.0s                       | 5s     |
 | A2 | hermes-story.art             | Hero scroll + auto-demo clapboard                    | 10s    |
 | A3 | hermes-story.art (live run)  | Type prose, click generate, watch board fill in      | 35s    |
+| A3b| hermes-story.art (live run)  | Click one frame, add director note, re-render frame  | 12s    |
 | A4 | hermes-story.art             | Cold-vs-directed image, slow scroll across           | 14s    |
 | A5 | hermes-story.art (live)      | **NEW** 2nd scene auto-applies saved memory          | 22s    |
 | A6 | hermes-story.art             | Inspect drawer — Memory tab → Trace tab              | 16s    |
@@ -49,8 +43,9 @@ Below is **track A**. Background music: instrumental, no lyrics, low.
 | A8 | iTerm2 / Warp                | **NEW** Real terminal — three install commands       | 12s    |
 | A9 | `web/video/outtro.html`      | Reload, record from 0s to 13.5s                      | 13.5s  |
 
-The two NEW captures (A5, A8) are what make the director's cut
-worth watching. **Do them.** They take 5 minutes each.
+A3b is the missing product beat: click one frame, write a natural
+language direction, and only that frame changes. A5 then proves the
+same note became reusable director memory.
 
 ---
 
@@ -59,12 +54,13 @@ worth watching. **Do them.** They take 5 minutes each.
 ```
 0:00 ─ INTRO (A1)                  ─ 0:05    5s
 0:05 ─ HERO + AUTO-DEMO (A2)       ─ 0:13    8s
-0:13 ─ MAIN GENERATION (A3 cut)    ─ 0:33   20s
-0:33 ─ COLD-VS-DIRECTED (A4 cut)   ─ 0:43   10s
-0:43 ─ INSPECT DRAWER (A6 cut)     ─ 0:54   11s
-0:54 ─ KIMI ROLES (A7 cut)         ─ 1:02    8s
-1:02 ─ TERMINAL LIVE (A8 cut)      ─ 1:08    6s
-1:08 ─ OUTTRO install+outro (A9)   ─ 1:21   13.5s   ← see note
+0:13 ─ MAIN GENERATION (A3 cut)    ─ 0:32   19s
+0:32 ─ FRAME REVISION (A3b cut)    ─ 0:42   10s
+0:42 ─ COLD-VS-DIRECTED (A4 cut)   ─ 0:50    8s
+0:50 ─ INSPECT DRAWER (A6 cut)     ─ 0:58    8s
+0:58 ─ KIMI ROLES (A7 cut)         ─ 1:05    7s
+1:05 ─ TERMINAL LIVE (A8 cut)      ─ 1:11    6s
+1:11 ─ OUTTRO outro half (A9)      ─ 1:18    7s
 ```
 
 **Note on A9 in 90s cut:** the outtro file is 13.5s long because it
@@ -88,12 +84,13 @@ Pick whichever feels right after editing. Both fit under 90s.
 ```
 0:00 ─ INTRO (A1)                  ─ 0:05    5s
 0:05 ─ HERO + AUTO-DEMO (A2)       ─ 0:15   10s
-0:15 ─ MAIN GENERATION (A3 full)   ─ 0:50   35s
-0:50 ─ COLD-VS-DIRECTED (A4 full)  ─ 1:04   14s
-1:04 ─ MEMORY LOOP LIVE (A5)       ─ 1:26   22s
-1:26 ─ INSPECT DRAWER (A6 full)    ─ 1:42   16s
-1:42 ─ KIMI ROLES (A7 full)        ─ 1:54   12s
-1:54 ─ TERMINAL LIVE (A8 full)     ─ 2:06   12s
+0:15 ─ MAIN GENERATION (A3)        ─ 0:45   30s
+0:45 ─ FRAME REVISION (A3b)        ─ 1:00   15s
+1:00 ─ COLD-VS-DIRECTED (A4)       ─ 1:12   12s
+1:12 ─ MEMORY LOOP LIVE (A5)       ─ 1:32   20s
+1:32 ─ INSPECT DRAWER (A6)         ─ 1:46   14s
+1:46 ─ KIMI ROLES (A7)             ─ 1:56   10s
+1:56 ─ TERMINAL LIVE (A8)          ─ 2:06   10s
 2:06 ─ OUTTRO outro half (A9)      ─ 2:13    7s    ← skip install card
 ```
 
@@ -103,161 +100,134 @@ so cut A9 to its outro half only.
 
 ---
 
-## Beat-by-beat narration
+## Beat-by-beat screen actions + subtitles
 
-### 0:00 — 0:05  ·  INTRO  (A1)
+No narration. Use one English subtitle per beat. Keep each subtitle on
+screen for at least 2.5 seconds.
 
-**Footage:** `intro.html` — film academy leader counts down 3-2-1
-with sweep rings, then black flash, then title fades up.
+### 0:00 - 0:05  ·  INTRO  (A1)
 
-No narration. Music starts low. Let the countdown speak for itself.
+**Footage:** `intro.html` — countdown 3-2-1, black flash, title.
 
-**EN sub (none — visual is self-explanatory).**
-
----
-
-### 0:05 — 0:13/0:15  ·  HERO + AUTO-DEMO  (A2)
-
-**Footage:** scroll from top of hermes-story.art. Hero with auto-demo
-clapboard rendering 6 noir frames.
-
-**RU:**
-> «Я строю Hermes-скилл, который превращает прозу в раскадровку.»
-
-**EN sub:**
-> *I'm building a Hermes skill that turns prose into a film storyboard.*
+**Subtitle:** none.
 
 ---
 
-### 0:13/0:15 — 0:33/0:50  ·  MAIN GENERATION  (A3)
+### 0:05 - 0:13/0:15  ·  HERO + AUTO-DEMO  (A2)
 
-**Footage:** scroll to Try section. Click "The Rain Investigation" demo
-preset. Live drawing — 6 frames stroke-by-stroke. Progress dots
-top-right tick from `○○○○○○` to `●●●●●●`.
+**Action:** Open `https://hermes-story.art`, fullscreen. Hold the hero,
+then show the auto-demo board drawing in the clapboard.
 
-**RU (90s, condensed):**
-> «Вы пишете сцену — Kimi K2.5 разбирает её на шесть кадров с
-> линзами, движениями камеры и линией взгляда. Локальный SVG-рендерер
-> рисует доску штрих за штрихом, прямо в браузере.»
-
-**EN sub:**
-> *You write a scene. Kimi K2.5 parses it into six shots with lenses,
-> camera moves, and eye-line. The local SVG renderer draws the board
-> stroke-by-stroke, in the browser.*
-
-**RU (director's cut, +12s extension after the condensed version):**
-> «Каждый кадр — это рамка с метаданными плюс рисованный примитив.
-> Дождь, неон, силуэт, фокусное кольцо, eye-line маркер — всё
-> определено схемой Scene JSON. Никакой диффузии, никаких артефактов.
-> Финальная доска редактируется как вектор.»
-
-**EN sub (extension):**
-> *Every frame is metadata plus a rendered primitive. Rain, neon,
-> silhouette, focus ring, eye-line marker — all defined by the Scene
-> JSON schema. No diffusion, no artifacts. The final board stays
-> editable as vector.*
+**Subtitle:**
+> Type a scene. Hermes turns it into a six-shot film storyboard.
 
 ---
 
-### 0:33/0:50 — 0:43/1:04  ·  COLD-VS-DIRECTED  (A4) — KEY BEAT
+### 0:13/0:15 - 0:32/0:45  ·  MAIN GENERATION  (A3)
 
-**Footage:** Learning Loop section, focus on `cold-vs-directed.png`.
-BEFORE / AFTER both visible. Slow horizontal pan if your editor
-allows, otherwise hold static.
+**Action:** Scroll to `Generate your own scene`. Click the `Noir alley`
+or `The Rain Investigation` preset. Keep `Share to public gallery`
+checked. Click `Generate Storyboard`. Hold while the board fills in.
 
-**RU:**
-> «Я правлю один кадр заметкой "more Hitchcock — низкий ракурс,
-> резкая тень, силуэт". Hermes извлекает обобщённое правило режиссуры
-> и сохраняет его. Следующая сцена с тем же тегом снята уже
-> в этом ключе. Без повторного промпта.»
+**Subtitle 1:**
+> Kimi K2.5 parses prose into Scene JSON: shots, lenses, movement, timing.
 
-**EN sub:**
-> *I revise one frame — "more Hitchcock, low angle, hard shadow,
-> silhouette". Hermes extracts a generalised director rule and saves
-> it. The next matching scene is already shot that way. No
-> re-prompting.*
+**Subtitle 2:**
+> The local SVG renderer draws every frame stroke by stroke.
 
-> **Strongest beat. Slow down. Let the AFTER panel breathe at least
-> 4 seconds before cutting.**
+**Subtitle 3:**
+> A deterministic quality gate prevents empty or repeated frames.
 
 ---
 
-### 1:04 — 1:26  ·  MEMORY LOOP LIVE  (A5) — DIRECTOR'S CUT ONLY
+### 0:32/0:45 - 0:42/1:00  ·  FRAME REVISION  (A3b)
 
-**Footage:** live, on hermes-story.art. After scene 1 generated and
-revised, scroll to top, paste the **second scene prompt** (e.g.
-"She enters the stairwell. Listens. A shape on the landing above."),
-hit Generate. Watch — *without any user revision* — Hermes apply the
-saved Hitchcock rule from scene 1: low angle, threat halo, silhouette.
+**Action:** After the first board is done, click a strong frame, ideally
+`1F` or the frame marked as `HERO FRAME`. In the director note box,
+type:
 
-Then click `★ MEMORY` tab in the inspect drawer to confirm the rule
-loaded. Text "memory: active" appears in the board footer.
+```text
+more Hitchcock — low angle, harder shadow, killer as silhouette
+```
 
-**RU:**
-> «Вот вторая сцена. Тот же стиль никто не запрашивал — но Hermes
-> сам применяет правило, потому что теги совпали. Низкий ракурс. Тень.
-> Силуэт на лестничной площадке. Память живёт между сценами.»
+Click the apply/revise button. Hold while only that frame re-renders.
+If the inspect drawer opens, briefly show the updated frame and the
+memory/trace feedback.
 
-**EN sub:**
-> *Here's a second scene. Nobody requested the same style — but
-> Hermes applies the rule on its own, because the tags matched.
-> Low angle. Shadow. Silhouette on the landing. Memory persists
-> across scenes.*
+**Subtitle 1:**
+> Click any frame and direct it with plain language.
 
-> **The beat that proves "Hermes learns how you direct."
-> Don't skip it in the director's cut.**
+**Subtitle 2:**
+> Only that frame re-renders. The rest of the board stays stable.
+
+**Subtitle 3:**
+> The note becomes a reusable director-memory rule.
 
 ---
 
-### 0:43/1:26 — 0:54/1:42  ·  INSPECT DRAWER  (A6)
+### 0:42/1:00 - 0:50/1:12  ·  COLD-VS-DIRECTED  (A4)
 
-**Footage:** scroll back to Try output. Click `★ MEMORY` tab — show
-saved rule JSON. Then `→ TRACE` tab — 5 stages, 2 of them Kimi K2.5
-in red, latencies in green.
+**Action:** Scroll to the Learning Loop section. Show the
+`cold-vs-directed.png` image with BEFORE and AFTER visible. Hold the
+AFTER side long enough to read.
 
-**RU (90s, condensed):**
-> «Каждый артефакт инспектируем. Правило, трейс агента, валидация
-> патчей детерминированная. Не чёрный ящик.»
+**Subtitle 1:**
+> Revise one frame once. Hermes saves the director rule.
 
-**EN sub:**
-> *Every artifact is inspectable. Rule, agent trace, deterministic
-> patch validation. Not a black box.*
-
-**RU (director's cut, +5s extension):**
-> «Hermes пишет эти же файлы на диск, когда скилл запущен локально.
-> Scene JSON, critique patches, character bible, director memory.
-> Всё в одной папке.»
-
-**EN sub (extension):**
-> *Hermes writes these same files to disk when the skill runs locally.
-> Scene JSON, critique patches, character bible, director memory.
-> All in one folder.*
+**Subtitle 2:**
+> The next matching scene inherits the style automatically.
 
 ---
 
-### 0:54/1:42 — 1:02/1:54  ·  KIMI ROLES + GROUNDED  (A7)
+### 1:12 - 1:32  ·  MEMORY LOOP LIVE  (A5, director's cut only)
 
-**Footage:** scroll to "Kimi K2.5 — three roles in one skill" band.
-Hold 3s. Then into Why Hermes black section, show "Grounded by
-design" checklist.
+**Action:** Go back to Try section. Clear the textarea and paste:
 
-**RU:**
-> «Kimi K2.5 здесь не лейбл. Она работает в трёх ролях:
-> парсит прозу, критикует доску, извлекает память режиссёра.
-> И всё это grounded — никаких галлюцинаций сюжета не попадёт
-> в финальный артефакт.»
+```text
+She enters the stairwell. Listens. A shape on the landing above.
+```
 
-**EN sub:**
-> *Kimi K2.5 is not a label — it has three roles. Parses the prose.
-> Critiques the rendered board. Extracts director memory. And it
-> stays grounded — no plot hallucinations reach the final artifact.*
+Click `Generate Storyboard`. Let the board render. Then open `★ MEMORY`
+in the inspect drawer and show the saved rule JSON. If visible, hold the
+board footer where `memory: active` appears.
+
+**Subtitle 1:**
+> Nobody asks for Hitchcock again. Hermes applies the saved rule by tag.
+
+**Subtitle 2:**
+> Low angle. Hard shadow. Silhouette reveal. Memory persists across scenes.
 
 ---
 
-### 1:02/1:54 — 1:08/2:06  ·  TERMINAL LIVE  (A8)
+### 0:50/1:32 - 0:58/1:46  ·  INSPECT DRAWER  (A6)
 
-**Footage:** real terminal in iTerm2 / Warp at 1920×1080. Run the same
-three commands you'll show as graphics, but **for real**:
+**Action:** Open `★ MEMORY`, then `→ TRACE`. Show memory JSON, pipeline
+stages, Kimi steps, and local SVG/render/export stages.
+
+**Subtitle 1:**
+> Every artifact is inspectable: memory, trace, patches, JSON.
+
+**Subtitle 2:**
+> Kimi proposes. Storyboard verifies.
+
+---
+
+### 0:58/1:46 - 1:05/1:56  ·  KIMI ROLES + GROUNDED  (A7)
+
+**Action:** Scroll to `Kimi K2.5 — three roles in one skill`. Then scroll
+to `Grounded by design` / hallucination-control section.
+
+**Subtitle 1:**
+> Kimi K2.5 parses, critiques, and extracts director memory.
+
+**Subtitle 2:**
+> Hallucinations do not reach the final artifact.
+
+---
+
+### 1:05/1:56 - 1:11/2:06  ·  TERMINAL LIVE  (A8)
+
+**Action:** Show a real terminal. Type the commands slowly:
 
 ```bash
 git clone git@github.com:Zhekinmaksim/storyboard.git
@@ -265,80 +235,61 @@ cp -r storyboard ~/.hermes/skills/creative/storyboard
 hermes chat "draft a noir storyboard for a detective in the rain"
 ```
 
-Show Hermes loading the skill, response starting to come back.
-Cut before it finishes — 6s for 90s cut, full 12s for director's cut.
+Cut after Hermes starts responding.
 
-> **Pre-record this in a clean iTerm session.** Use a tilde-prompt
-> theme that matches the Dry Ink palette (cream bg, warm ink fg, mono
-> font) so it visually flows from the previous beats.
-
-**RU:**
-> «Это не SaaS. Это локальный Hermes-скилл — три команды, и он у тебя.»
-
-**EN sub:**
-> *Not SaaS. It's a local Hermes skill — three commands and it's yours.*
+**Subtitle:**
+> Runs locally as a Hermes skill. Outputs editable SVG, JSON, memory, and a production packet.
 
 ---
 
-### 1:08/2:06 — 1:14/2:13  ·  OUTTRO  (A9, outro half)
+### 1:11/2:06 - 1:18/2:13  ·  OUTTRO  (A9, outro half)
 
-**Footage:** `outtro.html` recording. **Skip the install half** —
-start your edit at the 7.4s mark of the recording (right after the
-cross-fade from install to outro). You get ~6 seconds of slogan +
-URLs + credit.
+**Action:** Use `outtro.html`, but cut from the outro half around 7.4s,
+after the install card cross-fade. Hold the final URLs for at least two
+seconds.
 
-If you used Option 2 of the 90s cut and kept the full outtro,
-this is the beat where the install card replays as graphic + then
-fades to outro. Either works.
+**Subtitle 1:**
+> Prose in. Cinematic storyboard out.
 
-**RU (final beat, slow, lower volume):**
-> «Hermes не просто рисует сцену. Он учится тому, как вы её снимаете.»
-
-**EN sub:**
-> *Hermes doesn't just draw the scene. It learns how you direct the
-> next one.*
-
-Music fades on the last 1.5s. Hold the final frame (URLs + credit
-visible) for at least 2 seconds before cutting to black.
+**Subtitle 2:**
+> Live: hermes-story.art · Repo: github.com/Zhekinmaksim/storyboard
 
 ---
 
 ## How to assemble in DaVinci Resolve
 
-1. **Import** all 9 clips (A1–A9) into a media bin.
+1. **Import** all clips (A1–A9 plus A3b) into a media bin.
 2. **Two timelines** — "Submission cut" and "Director's cut". Same
    media, different edit.
-3. **For 90s cut:** trim A3 to 20s (keep most visual moments — frames
-   1, 3, 5, 6 typically). Trim A9 to outro half (6s starting at 7.4s).
-4. **For director's cut:** use full A3 (35s), add A5 (22s) between A4
-   and A6, full A8 (12s), trim A9 to outro half.
+3. **For 90s cut:** trim A3 to 19s, A3b to 10s, A4 to 8s, A6 to 8s.
+   Trim A9 to outro half (7s starting around 7.4s).
+4. **For director's cut:** use A3 for ~30s, A3b for 15s, A5 for 20s,
+   A6 for 14s, A8 for 10s, and A9 outro half.
 5. **Subtitles** — single text layer per beat, English only.
    - Style: white text 32–36px, 80% opacity black bar behind
    - Bottom-third placement
    - Each sub on screen ≥2.5s
    - Font: Inter / Helvetica / SF Pro Text
 6. **Audio:**
-   - Track 1: voice-over (record on phone in quiet room → Audacity
-     → light noise reduction → −3dB compression)
-   - Track 2: instrumental music at 15–25% gain, ducked under voice
+   - Track 1: instrumental music, no vocals, 15–25% gain
+   - No voice-over track
 7. **Final encode:**
    - 1920×1080 H.264, 30fps, 8–12 Mbps for both versions
    - Sub 80 MB so it uploads anywhere
-8. **Watch each version muted once.** If you can't tell what the
-   project does without sound, re-cut.
+8. **Watch each version once with subtitles only.** If you can't tell
+   what the project does without narration, re-cut.
 
 ---
 
 ## Recording tips
 
-- **Don't record voice + screen in one take.** Screen first, voice
-  second, sync in the edit.
-- **Read the Russian script out loud once.** Some words
-  (`детерминированная`, `обобщённое`) are tongue-twisters.
-- **Re-record stumbled takes**, don't patch with editing.
-- **The strongest beat is COLD-VS-DIRECTED.** Slow down there.
-  Director's cut adds the live-memory beat immediately after which
-  doubles the impact.
+- **Record clips separately.** Do 2-3 takes of A3 and A3b; choose the
+  cleanest one in edit.
+- **The strongest beats are FRAME REVISION and COLD-VS-DIRECTED.**
+  Slow down there. The viewer needs to see one frame change, then see
+  the same direction become memory.
+- **Keep subtitles short.** One idea per subtitle. If it needs more
+  than two lines, split it into two beats.
 - **Submit the 90s cut. Link the 2:13 cut.** That way both attention
   spans get served.
 

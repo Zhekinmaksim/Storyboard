@@ -315,6 +315,7 @@ function listenForEvents(jobId) {
   es.addEventListener('memory_saved', (e) => {
     const d = JSON.parse(e.data);
     showMemorySaved(d);
+    refreshInspectArtifact('memory');
   });
 
   es.addEventListener('done', () => {
@@ -851,6 +852,17 @@ function showInspectPanel(jobId) {
   if (firstTab) loadInspectArtifact(jobId, firstTab.dataset.art);
 }
 
+function refreshInspectArtifact(artifact) {
+  const panel = document.getElementById('inspect-panel');
+  if (!panel || panel.hidden) return;
+  const jobId = panel.dataset.jobId;
+  if (!jobId) return;
+  const activeTab = panel.querySelector('.inspect-tab.is-active');
+  if (activeTab && activeTab.dataset.art === artifact) {
+    loadInspectArtifact(jobId, artifact);
+  }
+}
+
 function _highlightJSON(s) {
   // very small/safe pretty-printer-style highlighter; runs on already-stringified text
   return s
@@ -870,7 +882,7 @@ async function loadInspectArtifact(jobId, artifact) {
   body.innerHTML = '<code class="ij-comment">// loading…</code>';
   try {
     const url = `${API_BASE}/api/inspect/${jobId}/${artifact}`;
-    const resp = await fetch(url);
+    const resp = await fetch(url, { cache: 'no-store' });
     if (!resp.ok) {
       body.innerHTML = `<code class="ij-comment">// not produced for this job (HTTP ${resp.status})</code>`;
       return;
