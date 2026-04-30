@@ -24,7 +24,7 @@ from typing import Any
 import httpx
 
 OPENROUTER_BASE = "https://openrouter.ai/api/v1/chat/completions"
-KIMI_MODEL = os.environ.get("STORYBOARD_KIMI_MODEL", "moonshotai/kimi-k2.5")
+KIMI_MODEL = os.environ.get("STORYBOARD_KIMI_MODEL", "moonshotai/kimi-k2.5:nitro")
 
 CACHE_DIR = Path(os.environ.get("STORYBOARD_CACHE_DIR", str(Path.home() / ".cache" / "storyboard")))
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
@@ -190,10 +190,7 @@ def _short_response(response: dict[str, Any], limit: int = 500) -> str:
 
 
 def _default_provider(*, response_format: dict[str, Any] | None = None) -> dict[str, Any]:
-    provider: dict[str, Any] = {"sort": "latency", "allow_fallbacks": True}
-    if response_format is not None:
-        provider["require_parameters"] = True
-    return provider
+    return {"sort": "throughput", "allow_fallbacks": True}
 
 
 def kimi_text(prompt: str, system: str | None = None, **kwargs: Any) -> str:
