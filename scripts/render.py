@@ -21,7 +21,7 @@ from scripts.style import DRY_INK, FONTS, PAGE, STROKE, TYPE
 from scripts.templates.annotations import render_annotation, render_eyeline
 from scripts.templates.environments import render_environment
 from scripts.templates.figures import render_figure
-from scripts.templates.svg_primitives import line, rect, text
+from scripts.templates.svg_primitives import circle, line, path, rect, text
 from scripts.templates.timeline import (
     HEADER_DELAY, HEADER_DURATION, SHOT_TIMING, shot_start_offset,
 )
@@ -70,6 +70,7 @@ def render_shot(shot: Shot, scene: Scene, index: int,
         shot, x, y, frame_w, frame_h,
         animated=animated,
         global_offset=0.0,  # local time, see streaming-friendly timing
+        index=index,
     )
 
 
@@ -212,6 +213,49 @@ def _shot_position(index: int) -> tuple[float, float, float, float, float, float
     return cell_w, frame_w, cell_h, frame_h, x, y
 
 
+def _shorten(value: str, limit: int) -> str:
+    value = " ".join((value or "").split())
+    if len(value) <= limit:
+        return value
+    return value[: max(0, limit - 1)].rstrip() + "…"
+
+
+def _closeup_variant_overlay(shot: Shot, variant: int) -> str:
+    """Small deterministic overlays to keep repeated close-ups distinct."""
+    ctx = f"{shot.description} {shot.caption} {shot.lens} {shot.angle}".lower()
+    parts: list[str] = []
+
+    if "sunglass" in ctx or "glasses" in ctx:
+        parts.append(rect(-62, -30, 124, 18, fill=DRY_INK["fg"], opacity=0.92))
+        parts.append(line(-62, -12, 62, -12,
+                          stroke=DRY_INK["fg"], width=STROKE["heavy"], opacity=0.9))
+    elif variant % 3 == 0:
+        parts.append(path(
+            "M -58 -20 Q 0 -52 58 -20 L 58 4 Q 0 -18 -58 4 Z",
+            fill=DRY_INK["fg"], opacity=0.22,
+        ))
+    elif variant % 3 == 1:
+        parts.append(line(-54, -26, -18, 12,
+                          stroke=DRY_INK["accent"], width=STROKE["thin"], opacity=0.7))
+        parts.append(line(54, -26, 18, 12,
+                          stroke=DRY_INK["accent"], width=STROKE["thin"], opacity=0.7))
+    else:
+        parts.append(path(
+            "M 0 -76 Q 66 -30 42 68 Q 14 86 0 78 Z",
+            fill=DRY_INK["fg"], opacity=0.16,
+        ))
+        parts.append(circle(22, -8, 4, fill="none", stroke=DRY_INK["accent"],
+                            stroke_width=STROKE["thin"]))
+
+    if "train" in ctx or "light" in ctx or "headlight" in ctx:
+        parts.append(line(-82, 18, 82, 18,
+                          stroke=DRY_INK["accent"], width=STROKE["thin"], opacity=0.45))
+        parts.append(line(-70, 28, 70, 28,
+                          stroke=DRY_INK["accent"], width=STROKE["thin"], opacity=0.28))
+
+    return f"<g class='closeup-variant closeup-variant-{variant % 6}'>{''.join(parts)}</g>"
+
+
 def _frames(scene: Scene, *, animated: bool) -> list[str]:
     shots = scene.shots[:6]
     parts: list[str] = []
@@ -222,6 +266,7 @@ def _frames(scene: Scene, *, animated: bool) -> list[str]:
             shot, x, y, frame_w, frame_h,
             animated=animated,
             global_offset=global_offset,
+            index=idx,
         ))
     return parts
 
@@ -229,7 +274,8 @@ def _frames(scene: Scene, *, animated: bool) -> list[str]:
 def _render_one_shot(shot: Shot, x: float, y: float,
                      frame_w: float, frame_h: float,
                      *, animated: bool = True,
-                     global_offset: float = 0.0) -> str:
+                     global_offset: float = 0.0,
+                     index: int = 0) -> str:
     """One frame cell: label header, frame box, content, metadata, caption.
 
     `global_offset` is the seconds-from-scene-start at which this shot's
@@ -239,16 +285,20 @@ def _render_one_shot(shot: Shot, x: float, y: float,
     parts: list[str] = []
     t = SHOT_TIMING
 
-    # Label header above frame
-    label_text = (
-        f"{shot.label} · {shot.shot_type.value.replace('_', ' ')} · "
-        f"{shot.description.upper()[:60]}"
-    )
+    # Label header above frame: two short rows so adjacent cells never collide.
+    label_top = f"{shot.label} · {shot.shot_type.value.replace('_', ' ')}"
+    label_desc = _shorten(shot.description.upper(), 42)
     parts.append(text(
-        0, -8, label_text,
+        0, -20, label_top,
         font="mono", size=TYPE["label"], fill=DRY_INK["fg_dim"], letter_spacing="0.1em",
         draw_in=t.label_dur if animated else 0.0,
         delay=global_offset + t.label_in,
+    ))
+    parts.append(text(
+        0, -8, label_desc,
+        font="mono", size=TYPE["tiny"], fill=DRY_INK["fg_dim"], letter_spacing="0.08em",
+        draw_in=t.label_dur if animated else 0.0,
+        delay=global_offset + t.label_in + 0.04,
     ))
 
     # Frame border
@@ -262,7 +312,7 @@ def _render_one_shot(shot: Shot, x: float, y: float,
     # Frame interior content
     parts.append(_frame_interior(
         shot, frame_w, frame_h,
-        animated=animated, global_offset=global_offset,
+        animated=animated, global_offset=global_offset, index=index,
     ))
 
     # Metadata strip
@@ -297,7 +347,7 @@ def _render_one_shot(shot: Shot, x: float, y: float,
 
 
 def _frame_interior(shot: Shot, frame_w: float, frame_h: float,
-                    *, animated: bool, global_offset: float) -> str:
+                    *, animated: bool, global_offset: float, index: int = 0) -> str:
     clip_id = f"clip_{shot.label.replace(' ', '_')}"
     inner: list[str] = []
     t = SHOT_TIMING
@@ -323,6 +373,7 @@ def _frame_interior(shot: Shot, frame_w: float, frame_h: float,
                 draw_in=t.env_dur if animated else 0.0,
                 delay=global_offset + t.env_in,
                 stagger=t.env_stagger,
+                variant=index,
             ))
 
     # Figures — look up silhouette in character_bible by role for visual continuity
@@ -338,7 +389,7 @@ def _frame_interior(shot: Shot, frame_w: float, frame_h: float,
             draw_in=t.figure_dur if animated else 0.0,
             delay=global_offset + t.figure_in,
             silhouette=primary_silhouette,
-        )
+        ) + _closeup_variant_overlay(shot, index)
         inner.append(
             f"<g transform='translate({frame_w * 0.5:.2f}, {frame_h * 0.5:.2f}) "
             f"scale({face_scale:.2f})'>{face_svg}</g>"

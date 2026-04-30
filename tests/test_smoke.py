@@ -265,12 +265,35 @@ def test_render_subway_visual_vocabulary():
         ],
     )
     svg = render_scene(scene, animated=False)
-    assert "class='env-subway'" in svg
-    assert "class='prop-train'" in svg
-    assert "class='prop-tracks'" in svg
+    assert "env-subway-0" in svg
+    assert "prop-train-0" in svg
+    assert "prop-tracks-0" in svg
     assert "class='prop-tunnel'" in svg
-    assert "class='prop-sparks'" in svg
-    assert "class='prop-smoke'" in svg
+    assert "prop-sparks-0" in svg
+    assert "prop-smoke-0" in svg
+
+
+def test_render_header_labels_use_two_short_rows():
+    from scripts.scene import Environment, Shot
+    long_description = (
+        "a very long description that used to collide with the next frame header "
+        "when rendered above the board"
+    )
+    scene = Scene(
+        title="Labels",
+        shots=[
+            Shot(
+                label="1A",
+                shot_type=ShotType.WIDE,
+                description=long_description,
+                environment=Environment(kind="INT"),
+            )
+        ],
+    )
+    svg = render_scene(scene, animated=False)
+    assert ">1A · WIDE</text>" in svg
+    assert "A VERY LONG DESCRIPTION THAT USED TO COLL…" in svg
+    assert long_description.upper() not in svg
 
 
 def test_render_close_up_uses_face_primitive():

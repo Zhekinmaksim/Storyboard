@@ -14,7 +14,8 @@ from scripts.templates.svg_primitives import group, line, path, rect, text
 
 def render_environment(env: Environment, frame_w: float, frame_h: float,
                        *, draw_in: float = 0.0, delay: float = 0.0,
-                       stagger: float = 0.05) -> str:
+                       stagger: float = 0.05,
+                       variant: int = 0) -> str:
     """Compose env layers in back-to-front order.
 
     Order matters: ground hatching first (under everything), then back
@@ -58,7 +59,8 @@ def render_environment(env: Environment, frame_w: float, frame_h: float,
     if env.kind == "INT":
         if env.has_subway:
             parts.append(_subway_station(frame_w, frame_h, horizon_y,
-                                         draw_in=draw_in, delay=cur_delay))
+                                         draw_in=draw_in, delay=cur_delay,
+                                         variant=variant))
             cur_delay += stagger
         if env.has_stairwell:
             parts.append(_stairwell(frame_w, frame_h, horizon_y,
@@ -95,7 +97,7 @@ def render_environment(env: Environment, frame_w: float, frame_h: float,
     # 4. Foreground props — pop above environment
     for prop in (env.props or []):
         rendered = _prop(prop, frame_w, frame_h, horizon_y,
-                         draw_in=draw_in, delay=cur_delay)
+                         draw_in=draw_in, delay=cur_delay, variant=variant)
         if rendered:
             parts.append(rendered)
             cur_delay += stagger
@@ -443,20 +445,22 @@ def _table(w: float, h: float, *, draw_in: float = 0.0, delay: float = 0.0) -> s
 
 
 def _subway_station(w: float, h: float, horizon_y: float,
-                    *, draw_in: float = 0.0, delay: float = 0.0) -> str:
+                    *, draw_in: float = 0.0, delay: float = 0.0,
+                    variant: int = 0) -> str:
     """Subway platform: tunnel mouth, tiled wall, columns, platform edge.
 
     This gives train/platform scenes a readable architecture instead of
     generic floor hatching.
     """
     parts = []
-    wall_y = horizon_y * 0.2
-    platform_y = horizon_y + (h - horizon_y) * 0.35
+    v = variant % 6
+    wall_y = horizon_y * (0.16 + 0.03 * (v % 3))
+    platform_y = horizon_y + (h - horizon_y) * (0.28 + 0.05 * (v % 2))
 
     # Tunnel mouth in back wall.
-    tunnel_x = w * 0.62
-    tunnel_w = w * 0.28
-    tunnel_h = horizon_y * 0.72
+    tunnel_x = w * (0.08 if v == 1 else 0.62 if v in (0, 4) else 0.48)
+    tunnel_w = w * (0.34 if v in (2, 5) else 0.26)
+    tunnel_h = horizon_y * (0.62 + 0.05 * (v % 3))
     parts.append(path(
         f"M {tunnel_x:.2f} {horizon_y:.2f} "
         f"L {tunnel_x:.2f} {wall_y + tunnel_h * 0.45:.2f} "
@@ -468,13 +472,15 @@ def _subway_station(w: float, h: float, horizon_y: float,
     ))
 
     # Tile seams on the back wall.
-    for i in range(1, 4):
-        y = wall_y + i * (horizon_y - wall_y) / 4
+    tile_rows = 3 + (v % 2)
+    for i in range(1, tile_rows + 1):
+        y = wall_y + i * (horizon_y - wall_y) / (tile_rows + 1)
         parts.append(line(0, y, w, y,
                           stroke=DRY_INK["fg_dim"], width=STROKE["thin"], opacity=0.28,
                           draw_in=draw_in, delay=delay + i * 0.025))
-    for i in range(1, 6):
-        x = i * w / 6
+    tile_cols = 4 + (v % 3)
+    for i in range(1, tile_cols + 1):
+        x = i * w / (tile_cols + 1)
         parts.append(line(x, wall_y, x, horizon_y,
                           stroke=DRY_INK["fg_dim"], width=STROKE["thin"], opacity=0.18,
                           draw_in=draw_in, delay=delay + i * 0.015))
@@ -491,16 +497,28 @@ def _subway_station(w: float, h: float, horizon_y: float,
                       draw_in=draw_in, delay=delay + 0.08))
 
     # Upright station columns.
-    for i, x in enumerate((w * 0.16, w * 0.42)):
+    column_sets = (
+        (w * 0.16, w * 0.42),
+        (w * 0.28, w * 0.68),
+        (w * 0.12, w * 0.52, w * 0.84),
+    )
+    for i, x in enumerate(column_sets[v % len(column_sets)]):
         parts.append(rect(x, wall_y + 8, 8, platform_y - wall_y - 8,
                           fill=DRY_INK["fg"], opacity=0.18,
                           draw_in=draw_in, delay=delay + i * 0.04))
 
-    return f"<g class='env-subway'>{''.join(parts)}</g>"
+    if v in (2, 3):
+        # Overhead beam or far platform silhouette, enough to change the read.
+        parts.append(rect(w * 0.05, wall_y + 10, w * 0.9, 12,
+                          fill=DRY_INK["fg"], opacity=0.9,
+                          draw_in=draw_in, delay=delay + 0.12))
+
+    return f"<g class='env-subway env-subway-{v}'>{''.join(parts)}</g>"
 
 
 def _prop(name: str, w: float, h: float, horizon_y: float,
-          *, draw_in: float = 0.0, delay: float = 0.0) -> str:
+          *, draw_in: float = 0.0, delay: float = 0.0,
+          variant: int = 0) -> str:
     """Render a foreground prop based on a recognised name."""
     if name == "body":
         # Horizontal body silhouette — short oblong with head circle, on ground
@@ -544,10 +562,11 @@ def _prop(name: str, w: float, h: float, horizon_y: float,
         ]
         return f"<g class='prop-cup'>{''.join(parts)}</g>"
     if name == "train":
-        tx = w * 0.05
-        ty = horizon_y * 0.24
-        tw = w * 0.9
-        th = horizon_y * 0.58
+        v = variant % 6
+        tx = w * (0.03 if v in (0, 3) else 0.38 if v in (2, 5) else 0.14)
+        ty = horizon_y * (0.18 if v in (1, 4) else 0.28)
+        tw = w * (0.92 if v in (0, 3) else 0.58 if v in (2, 5) else 0.72)
+        th = horizon_y * (0.48 if v in (1, 4) else 0.58)
         parts = [
             rect(tx, ty, tw, th, fill="none", stroke=DRY_INK["fg"],
                  stroke_width=STROKE["medium"], opacity=0.75,
@@ -555,30 +574,40 @@ def _prop(name: str, w: float, h: float, horizon_y: float,
             rect(tx, ty + th * 0.12, tw, th * 0.26, fill=DRY_INK["fg"],
                  opacity=0.12, draw_in=draw_in, delay=delay + 0.03),
         ]
-        for i in range(4):
-            wx = tx + tw * (0.08 + i * 0.22)
+        window_count = 2 if v in (2, 5) else 4
+        for i in range(window_count):
+            wx = tx + tw * (0.08 + i * (0.8 / max(window_count, 1)))
             parts.append(rect(wx, ty + th * 0.18, tw * 0.13, th * 0.18,
                               fill="none", stroke=DRY_INK["fg"],
                               stroke_width=STROKE["thin"], opacity=0.7,
                               draw_in=draw_in, delay=delay + i * 0.03))
-        parts.append(circle_glyph(tx + tw - 24, ty + th * 0.7, 5, color=DRY_INK["accent"]))
-        parts.append(circle_glyph(tx + tw - 42, ty + th * 0.7, 5, color=DRY_INK["accent"]))
-        return f"<g class='prop-train'>{''.join(parts)}</g>"
+        head_x = tx + (tw - 24 if v % 2 == 0 else 24)
+        parts.append(circle_glyph(head_x, ty + th * 0.7, 5, color=DRY_INK["accent"]))
+        parts.append(circle_glyph(head_x + (-18 if v % 2 == 0 else 18),
+                                  ty + th * 0.7, 5, color=DRY_INK["accent"]))
+        if v in (1, 4):
+            parts.append(line(head_x, ty + th * 0.72, w * 0.5, horizon_y + 40,
+                              stroke=DRY_INK["accent"], width=STROKE["thin"],
+                              opacity=0.32, draw_in=draw_in, delay=delay + 0.08))
+        return f"<g class='prop-train prop-train-{v}'>{''.join(parts)}</g>"
     if name == "tracks":
-        y1 = horizon_y + (h - horizon_y) * 0.42
-        y2 = horizon_y + (h - horizon_y) * 0.7
+        v = variant % 6
+        y1 = horizon_y + (h - horizon_y) * (0.34 + 0.03 * (v % 3))
+        y2 = horizon_y + (h - horizon_y) * (0.68 + 0.02 * (v % 2))
+        vanish_x = w * (0.2 if v in (1, 4) else 0.78 if v in (2, 5) else 0.5)
         parts = [
-            line(0, y1, w, y1, stroke=DRY_INK["fg"], width=STROKE["thin"],
+            line(0, y1, vanish_x, horizon_y + 10, stroke=DRY_INK["fg"], width=STROKE["thin"],
                  opacity=0.65, draw_in=draw_in, delay=delay),
-            line(0, y2, w, y2, stroke=DRY_INK["fg"], width=STROKE["thin"],
+            line(w, y2, vanish_x, horizon_y + 10, stroke=DRY_INK["fg"], width=STROKE["thin"],
                  opacity=0.65, draw_in=draw_in, delay=delay),
         ]
         for i in range(8):
             x = w * (i + 0.5) / 8
-            parts.append(line(x - 14, y1 + 3, x + 14, y2 - 3,
+            slant = -18 if v % 2 else 18
+            parts.append(line(x - slant, y1 + 3, x + slant, y2 - 3,
                               stroke=DRY_INK["fg_dim"], width=STROKE["thin"],
                               opacity=0.35, draw_in=draw_in, delay=delay + i * 0.015))
-        return f"<g class='prop-tracks'>{''.join(parts)}</g>"
+        return f"<g class='prop-tracks prop-tracks-{v}'>{''.join(parts)}</g>"
     if name == "tunnel":
         cx = w * 0.76
         base = horizon_y
@@ -591,8 +620,9 @@ def _prop(name: str, w: float, h: float, horizon_y: float,
         )
         return f"<g class='prop-tunnel'>{tunnel}</g>"
     if name == "sparks":
-        sx = w * 0.18
-        sy = horizon_y + (h - horizon_y) * 0.25
+        v = variant % 6
+        sx = w * (0.18 if v % 2 == 0 else 0.62)
+        sy = horizon_y + (h - horizon_y) * (0.18 + 0.06 * (v % 3))
         parts = []
         for i, (dx, dy) in enumerate(((0, 0), (15, -10), (28, 6), (44, -4), (58, 10))):
             x = sx + dx
@@ -603,10 +633,11 @@ def _prop(name: str, w: float, h: float, horizon_y: float,
             parts.append(line(x, y - 6, x, y + 6,
                               stroke=DRY_INK["accent"], width=STROKE["thin"],
                               opacity=0.65, draw_in=draw_in, delay=delay + i * 0.03))
-        return f"<g class='prop-sparks'>{''.join(parts)}</g>"
+        return f"<g class='prop-sparks prop-sparks-{v}'>{''.join(parts)}</g>"
     if name == "smoke":
-        sx = w * 0.72
-        sy = horizon_y + (h - horizon_y) * 0.22
+        v = variant % 6
+        sx = w * (0.28 if v in (1, 4) else 0.72)
+        sy = horizon_y + (h - horizon_y) * (0.2 + 0.03 * (v % 3))
         parts = []
         for i, r in enumerate((18, 28, 38)):
             parts.append(
@@ -615,7 +646,7 @@ def _prop(name: str, w: float, h: float, horizon_y: float,
                 f"stroke='{DRY_INK['fg_dim']}' stroke-width='{STROKE['thin']}' "
                 f"opacity='{0.18 + i * 0.07:.2f}'/>"
             )
-        return f"<g class='prop-smoke'>{''.join(parts)}</g>"
+        return f"<g class='prop-smoke prop-smoke-{v}'>{''.join(parts)}</g>"
     if name == "computer":
         mx = w * 0.58
         my = horizon_y + (h - horizon_y) * 0.25
