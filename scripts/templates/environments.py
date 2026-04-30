@@ -15,7 +15,8 @@ from scripts.templates.svg_primitives import group, line, path, rect, text
 def render_environment(env: Environment, frame_w: float, frame_h: float,
                        *, draw_in: float = 0.0, delay: float = 0.0,
                        stagger: float = 0.05,
-                       variant: int = 0) -> str:
+                       variant: int = 0,
+                       context: str = "") -> str:
     """Compose env layers in back-to-front order.
 
     Order matters: ground hatching first (under everything), then back
@@ -35,7 +36,7 @@ def render_environment(env: Environment, frame_w: float, frame_h: float,
             frame_w, frame_h, horizon_y,
             draw_in=draw_in, delay=delay, variant=variant,
         )
-    if env.kind == "INT" and env.has_table:
+    if env.kind == "INT" and env.has_table and _should_use_table_storyboard(context):
         return _table_storyboard_frame(
             frame_w, frame_h, horizon_y,
             draw_in=draw_in, delay=delay, variant=variant,
@@ -457,6 +458,20 @@ def _table(w: float, h: float, *, draw_in: float = 0.0, delay: float = 0.0) -> s
                       stroke=DRY_INK["fg"], width=STROKE["thin"],
                       draw_in=draw_in, delay=delay))
     return group(*parts)
+
+
+def _should_use_table_storyboard(context: str) -> bool:
+    ctx = (context or "").lower()
+    table_terms = (
+        "table", "kitchen", "phone", "breakfast", "burger", "cup", "coffee",
+        "plate", "counter", "couch", "room", "silent",
+    )
+    blockers = ("hallway", "corridor", "outside", "door", "walk down", "arrive")
+    if any(term in ctx for term in table_terms):
+        return True
+    if any(term in ctx for term in blockers):
+        return False
+    return False
 
 
 def _table_storyboard_frame(w: float, h: float, horizon_y: float,

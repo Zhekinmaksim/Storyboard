@@ -97,6 +97,8 @@ class Environment:
     has_door_frame: bool = False                  # doorway midground
     has_stairwell: bool = False                   # interior stairs (diagonal)
     has_subway: bool = False                      # subway platform / rail station
+    visual_motif: str = ""                        # repeated scene sign, e.g. red threat halo
+    motif_source: str = ""                        # why this motif was selected
     props: list[str] = field(default_factory=list)  # ['body', 'phone', 'lotus', 'cup']
     # Source provenance: {"has_neon": "prose:alley", "has_rain": "prose:downpour"}
     # Lets us tell users which features came from their text vs were
@@ -122,6 +124,8 @@ class Shot:
     angle: str = "Eye level"                      # "High (crane)", "Low"
     duration: str = "0:00 – 0:06"
     caption: str = ""                             # italic line under frame
+    is_hero_frame: bool = False                   # one strongest standalone still per board
+    visual_hook: str = ""                         # short reason for hero/share emphasis
     eye_line: EyeLine | None = None
     figures: list[Figure] = field(default_factory=list)
     environment: Environment = field(default_factory=Environment)
@@ -177,6 +181,8 @@ def _shot_from_dict(data: dict[str, Any]) -> Shot:
         has_door_frame=bool(env_data.get("has_door_frame", False)),
         has_stairwell=bool(env_data.get("has_stairwell", False)),
         has_subway=bool(env_data.get("has_subway", False)),
+        visual_motif=str(env_data.get("visual_motif", "")),
+        motif_source=str(env_data.get("motif_source", "")),
         props=list(env_data.get("props", [])),
         inferred_sources=dict(env_data.get("inferred_sources", {})),
     )
@@ -200,6 +206,8 @@ def _shot_from_dict(data: dict[str, Any]) -> Shot:
         angle=data.get("angle", "Eye level"),
         duration=data.get("duration", "0:00 – 0:06"),
         caption=data.get("caption", ""),
+        is_hero_frame=bool(data.get("is_hero_frame", False)),
+        visual_hook=str(data.get("visual_hook", "")),
         eye_line=eye_line,
         figures=figures,
         environment=env,

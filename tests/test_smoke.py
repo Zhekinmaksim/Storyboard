@@ -315,6 +315,26 @@ def test_render_table_six_boards_are_distinct():
     assert "prop-phone table-phone" in svg
 
 
+def test_quality_gate_marks_one_hero_and_motif():
+    scene = stub_scene(
+        "Two siblings argue across a kitchen table. A phone rings. "
+        "The room falls silent."
+    )
+    heroes = [shot for shot in scene.shots if shot.is_hero_frame]
+    assert len(heroes) == 1
+    assert heroes[0].visual_hook
+    assert all(shot.environment.visual_motif for shot in scene.shots)
+
+
+def test_mixed_interior_does_not_force_every_shot_to_table_board():
+    scene = stub_scene(
+        "Two hitmen walk down a cheap apartment hallway. They stop outside a door. "
+        "Inside, young men freeze around a messy breakfast table. A phone rings."
+    )
+    svg = render_scene(scene, animated=False)
+    assert 0 < svg.count("table-board-") < 6
+
+
 def test_render_header_labels_use_two_short_rows():
     from scripts.scene import Environment, Shot
     long_description = (
@@ -375,6 +395,27 @@ def test_render_insert_close_up_without_figures_is_not_empty():
     svg = render_scene(scene, animated=False)
     assert "insert-closeup insert-phone" in svg
     assert "data-shot-label='1A'" in svg
+
+
+def test_render_caption_is_wrapped_and_truncated():
+    from scripts.scene import Environment, Shot
+    long_caption = (
+        "This caption is intentionally far too long and used to run into "
+        "the neighboring storyboard frame caption."
+    )
+    scene = Scene(
+        title="Caption Test",
+        shots=[Shot(
+            label="1A",
+            shot_type=ShotType.WIDE,
+            description="room",
+            caption=long_caption,
+            environment=Environment(kind="INT"),
+        )],
+    )
+    svg = render_scene(scene, animated=False)
+    assert long_caption not in svg
+    assert "neighboring storyboard frame caption" not in svg
 
 
 # =================== Iterate ===================

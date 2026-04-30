@@ -51,7 +51,9 @@ Schema:
       "movement": "Static",
       "angle": "Eye level",
       "duration": "0:00 – 0:05",
-      "caption": "short italic caption",
+      "caption": "short italic caption, max 9 words",
+      "is_hero_frame": false,
+      "visual_hook": "",
       "eye_line": null,
       "figures": [
         {
@@ -71,6 +73,8 @@ Schema:
         "has_table": false,
         "has_stairwell": false,
         "has_subway": false,
+        "visual_motif": "",
+        "motif_source": "",
         "props": []
       },
       "annotations": []
@@ -84,6 +88,10 @@ Use normalized figure positions: x 0.15-0.85, y 0.35-0.82.
 Use scale 0.45-1.15 for wide/medium shots and 1.6-2.4 for close-ups.
 Use concise fields: no long prose.
 Dialogue scenes should include CLOSE_UP or OTS with eye_line.
+Exactly one shot must be marked is_hero_frame=true.
+The hero frame must contain the strongest silhouette, threat, reveal, or visual metaphor.
+It must be readable as a standalone still.
+Captions must be cinematic, short, and memorable. Avoid generic prose and keep each caption under 9 words.
 Return only the JSON object."""
 
 
@@ -126,8 +134,9 @@ def parse_prose(prose: str, *, use_cache: bool = True) -> Scene:
             system=effective_system,
             use_cache=use_cache,
             temperature=0.2,
-            max_tokens=1800,
-            retries=1,
+            max_tokens=1600,
+            timeout=10,
+            retries=0,
             response_format={"type": "json_object"},
             reasoning={"effort": "none", "exclude": True},
         )
@@ -148,7 +157,8 @@ def parse_prose(prose: str, *, use_cache: bool = True) -> Scene:
                 system=effective_system,
                 use_cache=False,
                 temperature=0.1,
-                max_tokens=1800,
+                max_tokens=1600,
+                timeout=8,
                 retries=0,
                 response_format={"type": "json_object"},
                 reasoning={"effort": "none", "exclude": True},
@@ -172,6 +182,7 @@ def _parse_and_validate(raw: str) -> Scene:
     for idx, shot in enumerate(scene.shots):
         shot.label = f"1{chr(ord('A') + idx)}"
     _infer_atmospheric_flags(scene)
+    _quality_gate(scene)
     return scene
 
 
@@ -246,11 +257,13 @@ def _infer_atmospheric_flags(scene) -> None:
         env = shot.environment
         ctx = (scene.location + " " + env.description + " " + shot.description + " " +
                (shot.caption or "")).lower()
+        local_ctx = (env.description + " " + shot.description + " " +
+                     (shot.caption or "")).lower()
 
         # Helper: given a flag name + matched keyword tuple, record source
-        def _record(flag_name: str, keyword_set):
+        def _record(flag_name: str, keyword_set, text: str = ctx):
             for kw in keyword_set:
-                if kw in ctx:
+                if kw in text:
                     env.inferred_sources[flag_name] = f"prose:{kw}"
                     return True
             return False
@@ -270,15 +283,15 @@ def _infer_atmospheric_flags(scene) -> None:
             if not env.has_shadow_cone and _record("has_shadow_cone", _SHADOW_CONE_TERMS):
                 env.has_shadow_cone = True
         else:  # INT
-            if not env.has_window_grid and _record("has_window_grid", _WINDOW_TERMS):
+            if not env.has_window_grid and _record("has_window_grid", _WINDOW_TERMS, local_ctx):
                 env.has_window_grid = True
-            if not env.has_table and _record("has_table", _TABLE_TERMS):
+            if not env.has_table and _record("has_table", _TABLE_TERMS, local_ctx):
                 env.has_table = True
-            if not env.has_door_frame and _record("has_door_frame", _DOOR_TERMS):
+            if not env.has_door_frame and _record("has_door_frame", _DOOR_TERMS, local_ctx):
                 env.has_door_frame = True
-            if not env.has_stairwell and _record("has_stairwell", _STAIRWELL_TERMS):
+            if not env.has_stairwell and _record("has_stairwell", _STAIRWELL_TERMS, local_ctx):
                 env.has_stairwell = True
-            if not env.has_subway and _record("has_subway", _SUBWAY_TERMS):
+            if not env.has_subway and _record("has_subway", _SUBWAY_TERMS, local_ctx):
                 env.has_subway = True
 
         # Props — also tag source
@@ -319,8 +332,6 @@ def _infer_atmospheric_flags(scene) -> None:
 
     int_has_window = any(s.environment.has_window_grid for s in scene.shots
                          if s.environment.kind == "INT")
-    int_has_table = any(s.environment.has_table for s in scene.shots
-                        if s.environment.kind == "INT")
     int_has_stairwell = any(s.environment.has_stairwell for s in scene.shots
                             if s.environment.kind == "INT")
     int_has_subway = any(s.environment.has_subway for s in scene.shots
@@ -337,9 +348,112 @@ def _infer_atmospheric_flags(scene) -> None:
                 env.has_puddle = True
         else:
             env.has_window_grid = env.has_window_grid or int_has_window
-            env.has_table = env.has_table or int_has_table
             env.has_stairwell = env.has_stairwell or int_has_stairwell
             env.has_subway = env.has_subway or int_has_subway
+
+
+def _quality_gate(scene: Scene) -> None:
+    """Deterministic pass for shareable boards: hero, motif, captions, coverage."""
+    _assign_visual_motif(scene)
+    _assign_single_hero_frame(scene)
+    _enforce_shot_diversity(scene)
+    _tighten_captions(scene)
+
+
+def _assign_visual_motif(scene: Scene) -> None:
+    text = " ".join(
+        [scene.title, scene.location, scene.notes]
+        + [s.description + " " + (s.caption or "") + " " + s.environment.description
+           for s in scene.shots]
+    ).lower()
+    if any(term in text for term in ("subway", "train", "platform", "tracks", "tunnel")):
+        motif = "track line / tunnel light"
+        source = "deterministic:subway"
+    elif any(term in text for term in ("stair", "landing", "above")):
+        motif = "red threat halo"
+        source = "deterministic:stairwell"
+    elif any(term in text for term in ("kitchen", "table", "phone", "burger", "breakfast")):
+        motif = "table edge / red phone mark"
+        source = "deterministic:table"
+    elif any(term in text for term in ("alley", "rain", "noir", "detective")):
+        motif = "red neon reflection"
+        source = "deterministic:noir"
+    else:
+        motif = "red focus mark"
+        source = "deterministic:generic"
+    for shot in scene.shots:
+        if not shot.environment.visual_motif:
+            shot.environment.visual_motif = motif
+            shot.environment.motif_source = source
+
+
+def _assign_single_hero_frame(scene: Scene) -> None:
+    for shot in scene.shots:
+        shot.is_hero_frame = False
+    if not scene.shots:
+        return
+    hero_idx = len(scene.shots) - 1
+    for i, shot in enumerate(scene.shots):
+        ctx = f"{shot.description} {shot.caption} {shot.shot_type.value} {shot.angle}".lower()
+        if any(term in ctx for term in (
+            "reveal", "killer", "threat", "body", "gun", "weapon", "silhouette",
+            "empty", "alone", "above", "explodes", "chaos",
+        )):
+            hero_idx = i
+    hero = scene.shots[hero_idx]
+    hero.is_hero_frame = True
+    if not hero.visual_hook:
+        hero.visual_hook = "standalone reveal / strongest visual beat"
+
+
+def _enforce_shot_diversity(scene: Scene) -> None:
+    if len(scene.shots) < 6:
+        return
+    from scripts.scene import ShotType
+    shot_types = [ShotType.WIDE, ShotType.MEDIUM, ShotType.CLOSE_UP,
+                  ShotType.OTS, ShotType.ECU, ShotType.WIDE]
+    lenses = ["24mm", "35mm", "85mm", "50mm", "100mm", "28mm"]
+    moves = ["Static", "Slow dolly in", "Static", "Handheld drift", "Push in", "Pull back"]
+    angles = ["Eye level", "Slight low", "Eye level", "Low", "Top down", "Slight high"]
+    if len({s.shot_type for s in scene.shots}) < 4:
+        for shot, shot_type in zip(scene.shots, shot_types):
+            shot.shot_type = shot_type
+    if len({(s.angle or "").lower() for s in scene.shots}) < 3:
+        for shot, angle in zip(scene.shots, angles):
+            shot.angle = angle
+    for shot, lens, move in zip(scene.shots, lenses, moves):
+        if not shot.lens or shot.lens == "35mm":
+            shot.lens = lens
+        if not shot.movement or shot.movement == "Static":
+            shot.movement = move
+
+
+def _tighten_captions(scene: Scene) -> None:
+    generic = {"walks", "looks", "sees", "stands", "enters", "moves", "goes"}
+    for idx, shot in enumerate(scene.shots):
+        words = [w.strip() for w in (shot.caption or shot.description).split() if w.strip()]
+        if not words:
+            shot.caption = _fallback_caption(idx)
+            continue
+        low = {w.lower().strip(".,;:!?\"'") for w in words}
+        if len(words) > 9:
+            words = words[:8] + ["..."]
+        caption = " ".join(words)
+        if len(words) <= 3 or low.intersection(generic):
+            caption = _fallback_caption(idx)
+        shot.caption = caption
+
+
+def _fallback_caption(idx: int) -> str:
+    beats = [
+        "The room gives itself away.",
+        "Nobody moves first.",
+        "The silence picks a side.",
+        "One detail changes everything.",
+        "The threat enters the frame.",
+        "The aftermath holds.",
+    ]
+    return beats[idx % len(beats)]
 
 
 _CODEBLOCK_RE = re.compile(r"^```(?:json)?\s*(.*?)\s*```\s*$", re.DOTALL)
@@ -422,7 +536,7 @@ def stub_scene(prose: str) -> Scene:
             "annotations": [],
         }
         shots.append(shot)
-    return Scene.from_dict({
+    scene = Scene.from_dict({
         "title": title,
         "scene_number": "01",
         "location": location,
@@ -430,6 +544,8 @@ def stub_scene(prose: str) -> Scene:
         "notes": f"Parse fallback. Original prose: {prose[:200]}",
         "shots": shots,
     })
+    _quality_gate(scene)
+    return scene
 
 
 __all__ = ["parse_prose", "stub_scene", "ParseError", "SYSTEM_PROMPT"]

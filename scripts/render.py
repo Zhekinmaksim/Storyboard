@@ -220,6 +220,39 @@ def _shorten(value: str, limit: int) -> str:
     return value[: max(0, limit - 1)].rstrip() + "…"
 
 
+def _caption_lines(value: str, *, line_chars: int = 44, max_lines: int = 2) -> list[str]:
+    words = " ".join((value or "").split()).split()
+    if not words:
+        return []
+    lines: list[str] = []
+    current = ""
+    for word in words:
+        candidate = f"{current} {word}".strip()
+        if len(candidate) <= line_chars:
+            current = candidate
+            continue
+        if current:
+            lines.append(current)
+        current = word
+        if len(lines) == max_lines:
+            break
+    if current and len(lines) < max_lines:
+        lines.append(current)
+    if len(lines) == max_lines and len(" ".join(words)) > len(" ".join(lines)):
+        lines[-1] = _shorten(lines[-1], max(8, line_chars - 1))
+    return lines
+
+
+def _uses_table_storyboard(shot: Shot) -> bool:
+    if not getattr(shot.environment, "has_table", False):
+        return False
+    ctx = f"{shot.description} {shot.caption} {shot.shot_type.value}".lower()
+    return any(term in ctx for term in (
+        "table", "kitchen", "phone", "breakfast", "burger", "cup", "coffee",
+        "plate", "counter", "couch", "room", "silent",
+    ))
+
+
 def _closeup_variant_overlay(shot: Shot, variant: int) -> str:
     """Small deterministic overlays to keep repeated close-ups distinct."""
     ctx = f"{shot.description} {shot.caption} {shot.lens} {shot.angle}".lower()
@@ -354,6 +387,62 @@ def _insert_closeup(shot: Shot, frame_w: float, frame_h: float, variant: int) ->
              stroke=DRY_INK["fg"], width=STROKE["thin"], opacity=0.3),
     ])
     return f"<g class='insert-closeup insert-generic'>{''.join(parts)}</g>"
+
+
+def _hero_frame_overlay(shot: Shot, frame_w: float, frame_h: float, index: int) -> str:
+    if not getattr(shot, "is_hero_frame", False):
+        return ""
+    motif = (getattr(shot.environment, "visual_motif", "") or "").lower()
+    parts: list[str] = [
+        rect(0, 0, frame_w, frame_h,
+             stroke=DRY_INK["accent"], stroke_width=STROKE["emphasis"],
+             opacity=0.92),
+        text(frame_w - 8, 14, "HERO FRAME",
+             font="mono", size=TYPE["tiny"], fill=DRY_INK["accent"],
+             letter_spacing="0.12em", anchor="end"),
+    ]
+    if "halo" in motif or "threat" in motif:
+        parts.append(path(
+            f"M {frame_w * 0.18:.2f} {frame_h * 0.86:.2f} "
+            f"Q {frame_w * 0.50:.2f} {frame_h * 0.18:.2f} "
+            f"{frame_w * 0.84:.2f} {frame_h * 0.86:.2f}",
+            fill="none", stroke=DRY_INK["accent"],
+            stroke_width=STROKE["medium"], opacity=0.48,
+        ))
+    elif "table" in motif or "phone" in motif:
+        parts.append(circle(frame_w * 0.52, frame_h * 0.54, 26,
+                            fill="none", stroke=DRY_INK["accent"],
+                            stroke_width=STROKE["medium"]))
+    elif "track" in motif or "tunnel" in motif:
+        parts.append(line(frame_w * 0.08, frame_h * 0.86, frame_w * 0.92, frame_h * 0.30,
+                          stroke=DRY_INK["accent"], width=STROKE["medium"], opacity=0.48))
+    else:
+        parts.append(line(frame_w * 0.18, frame_h * 0.72, frame_w * 0.82, frame_h * 0.72,
+                          stroke=DRY_INK["accent"], width=STROKE["medium"], opacity=0.55))
+    return f"<g class='hero-frame hero-frame-{index}'>{''.join(parts)}</g>"
+
+
+def _motif_overlay(shot: Shot, frame_w: float, frame_h: float, index: int) -> str:
+    motif = (getattr(shot.environment, "visual_motif", "") or "").lower()
+    if not motif:
+        return ""
+    # One red semantic mark per non-hero frame; hero gets the larger overlay.
+    if getattr(shot, "is_hero_frame", False):
+        return ""
+    x = frame_w * (0.18 + (index % 3) * 0.28)
+    y = frame_h * (0.24 + (index // 3) * 0.16)
+    if "table" in motif or "phone" in motif:
+        mark = circle(x, y, 5, fill=DRY_INK["accent"])
+    elif "halo" in motif or "threat" in motif:
+        mark = circle(x, y, 12, fill="none", stroke=DRY_INK["accent"],
+                      stroke_width=STROKE["thin"])
+    elif "track" in motif or "tunnel" in motif:
+        mark = line(frame_w * 0.18, frame_h * 0.82, frame_w * 0.82, frame_h * 0.82,
+                    stroke=DRY_INK["accent"], width=STROKE["thin"], opacity=0.45)
+    else:
+        mark = line(frame_w * 0.16, frame_h * 0.74, frame_w * 0.84, frame_h * 0.54,
+                    stroke=DRY_INK["accent"], width=STROKE["thin"], opacity=0.42)
+    return f"<g class='visual-motif visual-motif-{index}'>{mark}</g>"
 
 
 def _shot_design_overlay(shot: Shot, frame_w: float, frame_h: float, variant: int) -> str:
@@ -547,9 +636,10 @@ def _render_one_shot(shot: Shot, x: float, y: float,
     ))
 
     # Frame border
+    stroke_width = STROKE["emphasis"] if getattr(shot, "is_hero_frame", False) else STROKE["border"]
     parts.append(rect(
         0, 0, frame_w, frame_h,
-        stroke=DRY_INK["fg"], stroke_width=STROKE["border"],
+        stroke=DRY_INK["fg"], stroke_width=stroke_width,
         draw_in=t.border_dur if animated else 0.0,
         delay=global_offset + t.border_in,
     ))
@@ -568,12 +658,13 @@ def _render_one_shot(shot: Shot, x: float, y: float,
 
     # Italic caption
     if shot.caption:
-        parts.append(text(
-            0, frame_h + 64, shot.caption,
-            font="serif", size=TYPE["subtitle"], style="italic",
-            draw_in=t.caption_dur if animated else 0.0,
-            delay=global_offset + t.caption_in,
-        ))
+        for line_idx, line_text in enumerate(_caption_lines(shot.caption)):
+            parts.append(text(
+                0, frame_h + 60 + line_idx * 15, line_text,
+                font="serif", size=TYPE["caption"], style="italic",
+                draw_in=t.caption_dur if animated else 0.0,
+                delay=global_offset + t.caption_in + line_idx * 0.04,
+            ))
 
     # Full-cell click target for the web director UI. Empty SVG space does
     # not receive pointer events unless we provide an explicit hit area.
@@ -619,8 +710,10 @@ def _frame_interior(shot: Shot, frame_w: float, frame_h: float,
                 delay=global_offset + t.env_in,
                 stagger=t.env_stagger,
                 variant=index,
+                context=f"{shot.description} {shot.caption} {shot.shot_type.value}",
             ))
             inner.append(_shot_design_overlay(shot, frame_w, frame_h, index))
+            inner.append(_motif_overlay(shot, frame_w, frame_h, index))
 
     # Figures — look up silhouette in character_bible by role for visual continuity
     bible_silhouettes = _load_bible_silhouettes()
@@ -643,9 +736,9 @@ def _frame_interior(shot: Shot, frame_w: float, frame_h: float,
     elif is_closeup:
         inner.append(_insert_closeup(shot, frame_w, frame_h, index))
     else:
-        # Table scenes use a shot-specific composition template with built-in
-        # silhouettes, including insert and empty-room beats.
-        if not getattr(shot.environment, "has_table", False):
+        # Table template scenes use built-in silhouettes, including insert
+        # and empty-room beats. Other shots still render Kimi figures.
+        if not _uses_table_storyboard(shot):
             for fig in shot.figures:
                 sil = bible_silhouettes.get(fig.role.lower(), fig.state or "")
                 inner.append(render_figure(
@@ -667,6 +760,7 @@ def _frame_interior(shot: Shot, frame_w: float, frame_h: float,
             draw_in=t.annotation_dur if animated else 0.0,
             delay=global_offset + t.annotation_in,
         ))
+    inner.append(_hero_frame_overlay(shot, frame_w, frame_h, index))
 
     return (
         f"<defs><clipPath id='{clip_id}'>"
