@@ -106,6 +106,13 @@ class DirectorMemory:
         path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
         return path
 
+    def to_json(self) -> str:
+        return json.dumps(
+            {"rules": [r.to_dict() for r in self.rules]},
+            indent=2,
+            ensure_ascii=False,
+        )
+
     def add_rule(self, rule: DirectorRule) -> None:
         self.rules.append(rule)
         self.save()

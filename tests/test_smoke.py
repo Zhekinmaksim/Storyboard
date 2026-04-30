@@ -681,6 +681,23 @@ def test_director_memory_round_trip(tmp_path, monkeypatch):
     assert reloaded.rules[0].applies_to == ["suspense", "reveal"]
 
 
+def test_director_memory_to_json_exposes_rules(tmp_path, monkeypatch):
+    """The web inspect endpoint serializes memory via to_json."""
+    monkeypatch.setenv("STORYBOARD_OUTPUT_DIR", str(tmp_path))
+    from scripts.director_memory import DirectorMemory, DirectorRule
+    memory = DirectorMemory()
+    memory.add_rule(DirectorRule(
+        id="rule_test_1",
+        preference="prefer low-angle silhouettes",
+        applies_to=["suspense"],
+        source_revision={"scene": "01", "frame": "1B", "note": "more Hitchcock"},
+    ))
+
+    payload = json.loads(DirectorMemory.load().to_json())
+    assert payload["rules"][0]["preference"] == "prefer low-angle silhouettes"
+    assert payload["rules"][0]["source_revision"]["frame"] == "1B"
+
+
 def test_director_memory_hint_matches_tags(tmp_path, monkeypatch):
     """When prose contains a tag word, the hint surfaces the rule."""
     monkeypatch.setenv("STORYBOARD_OUTPUT_DIR", str(tmp_path))
