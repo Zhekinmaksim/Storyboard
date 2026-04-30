@@ -1,10 +1,11 @@
 # Deploy hermes-story.art
 
-Hybrid: Vercel hosts the static frontend, Fly.io runs the API.
+Current production setup: Fly.io runs the API at `api.hermes-story.art`.
+The static frontend can be hosted on Vercel or any static host.
 
 ```
-hermes-story.art          (Vercel) → web/index.html + app.js + style.css
-api.hermes-story.art      (Fly.io) → scripts/web_server.py
+hermes-story.art          (static host) → web/index.html + app.js + style.css
+api.hermes-story.art      (Fly.io)      → scripts/web_server.py
 ```
 
 The whole thing takes ~15 minutes if you have both accounts and the
@@ -15,9 +16,9 @@ domain DNS panel open.
 ## 0. Prereqs
 
 - A registered domain `hermes-story.art`
-- Accounts on [Vercel](https://vercel.com) and [Fly.io](https://fly.io)
+- Account on [Fly.io](https://fly.io)
+- Optional static host account for the frontend
 - `flyctl` installed: `brew install flyctl` or `curl -L https://fly.io/install.sh | sh`
-- `vercel` CLI: `npm i -g vercel` (or use the web UI; CLI is faster)
 - An `OPENROUTER_API_KEY` from openrouter.ai with credits
 
 ---
@@ -31,8 +32,8 @@ From the project root (where `fly.toml` lives):
 flyctl auth login
 
 # Pick an app name — must match `app = ` in fly.toml.
-# Default is "storyboard-api"; change in fly.toml if it's taken.
-flyctl launch --no-deploy --copy-config --name storyboard-api
+# Current production app:
+flyctl launch --no-deploy --copy-config --name storyboard-api-billowing-shell-4189
 
 # Set the API key as a secret (never commit it!)
 flyctl secrets set OPENROUTER_API_KEY=sk-or-...
@@ -44,13 +45,13 @@ flyctl deploy
 After deploy, you should see:
 
 ```
-https://storyboard-api.fly.dev/  → "storyboard · API" page
+https://storyboard-api-billowing-shell-4189.fly.dev/  → "storyboard · API" page
 ```
 
 Test the API directly:
 
 ```bash
-curl https://storyboard-api.fly.dev/api/health
+curl https://storyboard-api-billowing-shell-4189.fly.dev/api/health
 # {"status":"ok","uptime_seconds":..., ...}
 ```
 
@@ -83,19 +84,23 @@ curl https://api.hermes-story.art/api/health
 
 ---
 
-## 2. Deploy the frontend to Vercel
+## 2. Deploy the frontend
+
+The frontend is static: `web/index.html`, `web/app.js`, and
+`web/style.css`. It can be deployed to Vercel or any static host. No
+build step is required.
+
+### Option A — Vercel
 
 The `vercel.json` in the project root tells Vercel to publish the
-`web/` folder as static. No build step.
-
-### Option A — CLI (faster)
+`web/` folder as static.
 
 ```bash
 vercel        # first run: create a project, link this folder
 vercel --prod # deploys web/ to the production URL
 ```
 
-### Option B — Web UI
+Web UI:
 
 1. Go to vercel.com → Add New → Project
 2. Import the `Zhekinmaksim/storyboard` repo
@@ -104,6 +109,11 @@ vercel --prod # deploys web/ to the production URL
 5. Build command: leave blank
 6. Output directory: `web`
 7. Deploy
+
+### Option B — Other static host
+
+Upload the `web/` directory as static files. The frontend calls
+`https://api.hermes-story.art` by default.
 
 ### Attach the apex domain
 
@@ -139,7 +149,7 @@ download link.
 
 ### Vercel preview deployments for PRs
 
-Already on by default. Each PR gets its own URL like
+If using Vercel, preview deployments are on by default. Each PR gets its own URL like
 `storyboard-git-fix-xyz.vercel.app`.
 
 ### Cache the heavy demo runs
@@ -163,18 +173,17 @@ This way, the demo prompts are free forever.
 ### Monitor usage
 
 ```bash
-flyctl logs -a storyboard-api          # tail logs
-flyctl status -a storyboard-api        # machine status
+flyctl logs -a storyboard-api-billowing-shell-4189          # tail logs
+flyctl status -a storyboard-api-billowing-shell-4189        # machine status
 ```
 
 OpenRouter dashboard at openrouter.ai/credits shows API spend.
 
-### Rate limiting (later)
+### Rate limiting
 
-You picked "no limits + monitor risk". If a bot does start hitting
-the API, set `STORYBOARD_RATE_LIMIT=5` and add the basic IP throttle
-in `web_server.py` — the helper `check_rate_limit` is wired up but
-not currently called. Re-deploy.
+The API has a sliding per-IP hourly limit. Default:
+`STORYBOARD_RATE_LIMIT_PER_HOUR=6`. Adjust this Fly env var/secret and
+re-deploy if hackathon traffic changes.
 
 ---
 
@@ -202,7 +211,7 @@ Means 30 jobs running concurrently. Either bump `STORYBOARD_MAX_JOBS`
 or scale up to a bigger Fly machine:
 
 ```bash
-flyctl scale memory 1024 -a storyboard-api
+flyctl scale memory 1024 -a storyboard-api-billowing-shell-4189
 ```
 
 ---
@@ -214,8 +223,8 @@ auto_stop_machines = "stop" and min_machines_running = 0, the API
 sleeps when idle and wakes on first request (~3s cold start).
 Realistic hackathon traffic: $0.
 
-**Vercel** — free tier covers static hosting forever for this project.
-$0.
+**Static hosting** — Vercel or another static host is effectively $0
+for this frontend.
 
 **OpenRouter / Kimi K2.5** — ~$0.005 per generation. Cache makes the
 gallery demos free. Realistic hackathon: $1-10 total.

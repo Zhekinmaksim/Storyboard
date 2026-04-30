@@ -57,6 +57,21 @@ All notable changes to `storyboard` are documented here. Format follows
 - **Dry Ink renderer**: pure Python SVG emitter with cream/warm ink/
   accent red palette, Newsreader serif + Geist Mono fonts, fixed
   stroke scale (0.4 / 0.5 / 0.8 / 1.0 / 1.5 / 2.0 / 2.5 / 3.0).
+- **Shareability quality gate**: after parse, local deterministic logic
+  assigns exactly one hero frame, a repeated scene visual motif, shorter
+  thumbnail-safe captions, and coverage/angle diversity patches so
+  arbitrary prompts do not collapse into six similar frames.
+- **Hero frame + visual motif renderer**: hero frames get a stronger
+  border and red intent mark; boards repeat one motif such as table
+  edge / red phone mark, track line / tunnel light, red threat halo, or
+  red neon reflection.
+- **Insert close-up templates**: ECU/CLOSE_UP shots without visible
+  figures render concrete phone, weapon, body/detail, or focus inserts
+  instead of empty frames.
+- **Specialized table/kitchen compositions**: kitchen and table beats
+  use six distinct storyboard compositions while mixed interiors
+  (hallways, doors, outside rooms) no longer force every frame into the
+  same table template.
 - **Six-shot 3×2 page layout** with header (title, director, scene
   info), per-frame metadata strip (LENS / MOVE / ANGLE / DURATION),
   italic captions, and footer with coverage chain.
@@ -77,11 +92,11 @@ All notable changes to `storyboard` are documented here. Format follows
 - **Response cache**: Kimi calls keyed on payload sha256, cached at
   `~/.cache/storyboard/`. Bypass with `--no-cache`.
 - **Stub fallback**: if Kimi fails to produce valid Scene JSON twice,
-  emit a stub single-shot Scene the user can edit by hand.
+  emit a six-shot deterministic Scene the user can edit by hand.
 - **CLI** with subcommands: `full` (with `--stream` and `--skip-enrich`
   flags), `parse`, `render`, `critique`, `iterate`, `revise`
   (with `--no-memory` flag), `view`, `bible`, `memory`, `packet`.
-- **Smoke tests** (33 deterministic, no Kimi calls): scene round-trip,
+- **Smoke tests** (50 deterministic, no Kimi calls): scene round-trip,
   render with/without animation, single-shot render, iterate,
   critique guards, enrich validation, silhouette parsing, director
   memory round-trip + tag matching + recency fallback, packet

@@ -20,6 +20,12 @@ proposes targeted revisions — with the flagged frames pulsing on
 canvas where the change applies. You approve or edit before the board
 is finalised.
 
+Every generated board also passes a deterministic shareability gate:
+one shot is marked as the **hero frame**, a scene-wide visual motif is
+repeated across the six frames, captions are tightened for thumbnail
+readability, and sparse insert shots get concrete phone/weapon/detail
+drawings instead of empty boxes.
+
 No diffusion. No AI slop. Just structure, drawn live.
 
 ![live drawing animation](examples/pocs/live-drawing.gif)
@@ -58,6 +64,9 @@ bolted on:
   *plan the camera for*, *сделай раскадровку*.
 - **Three-role Kimi loop** — parse, env enrich, multimodal critique —
   not a single LLM call dressed up.
+- **Shareable storyboard grammar** — every board gets exactly one
+  hero frame, one repeated visual motif, short captions, and a diversity
+  pass that prevents six near-identical shots.
 - **Human approval gate** between auto-critique and finalise; the
   pipeline halts after one revision round and waits for the user.
 - **Targeted revisions, not full regeneration** — `storyboard revise
@@ -200,6 +209,8 @@ because film grammar is genre-agnostic.
   *"A honeybee approaches a sunflower. She lands on a petal…"*
 - Non-English prose — Kimi K2.5 is multilingual; figures, environments,
   and shot metadata render the same way.
+- Thumbnail/share use cases — the renderer marks a hero frame and
+  keeps captions short so the board still reads when posted small.
 
 **Where rendering quality varies:**
 - **Non-template environments** (spaceship corridors, swamps,
@@ -212,10 +223,12 @@ because film grammar is genre-agnostic.
   bespoke ones.
 - **Abstract or stream-of-consciousness texts** —
   *"Love is the movement of time toward hope"* — get parsed into shots,
-  but without concrete people, places, or actions the result will be
-  thin: figures on empty backgrounds, repeated framings.
+  but without concrete people, places, or actions the result can still
+  be thin. The quality gate adds a hero frame and motif, but it cannot
+  invent real story beats that are absent from the prompt.
 - **Very short fragments** under ~30 characters — Kimi will still
-  produce 6 shots, but they tend to repeat the same beat.
+  produce 6 shots, but they tend to repeat the same beat. The diversity
+  validator patches coverage where possible.
 
 **Strict limits:**
 - 5..2000 character range
@@ -445,6 +458,11 @@ status. Anything Kimi returns that doesn't match an enum raises
 back. Two failures → fall back to a stub scene the user can edit by
 hand. Malformed JSON is treated the same way.
 
+**Storyboard quality gate.** After parse, a deterministic enhancer
+assigns one `is_hero_frame`, one `visual_motif`, trims captions, and
+patches weak coverage diversity. This is not trusted model output; it
+is local Python logic that keeps boards readable and less repetitive.
+
 **Critique patches, not rewrites.** Kimi's vision review can only emit
 revisions over a whitelist of seven fields:
 `angle, lens, movement, duration, caption, eye_line.direction,
@@ -498,8 +516,9 @@ hallucinations don't reach the user's downloaded artifact.
 - The critique can hallucinate. Every revision's `shot_label` is
   cross-checked against the Scene; invalid labels drop with a stderr
   warning. The whitelist of revisable fields is finite.
-- The renderer does not yet vary figures by silhouette tag — the bible
-  influences parse, not render. Planned for v0.2.
+- The renderer varies figures by silhouette tag and role hints, but it
+  remains schematic. It is designed for clear blocking and shareable
+  visual intent, not photoreal character design.
 - One page, six shots, in v0.1. Multi-page boards are v0.2.
 - SMIL is officially deprecated by Chrome (still works, never removed).
   Demo recording uses Firefox for guaranteed playback.
