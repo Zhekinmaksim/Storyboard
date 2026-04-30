@@ -119,6 +119,29 @@ def test_scene_accepts_common_kimi_enum_aliases():
     assert shot.eye_line.direction == EyeLineDirection.CAMERA_LEFT
 
 
+def test_scene_tolerates_null_numeric_fields_from_kimi():
+    scene = Scene.from_dict({
+        "title": "X",
+        "shots": [{
+            "label": "1A",
+            "shot_type": "WIDE",
+            "description": "figure in room",
+            "figures": [{
+                "role": "subject",
+                "position": None,
+                "scale": None,
+            }],
+            "environment": {
+                "kind": "INT",
+                "horizon_y": None,
+            },
+        }],
+    })
+    assert scene.shots[0].figures[0].position == (0.5, 0.7)
+    assert scene.shots[0].figures[0].scale == 1.0
+    assert scene.shots[0].environment.horizon_y == 0.55
+
+
 def test_stub_scene_produces_six_shots():
     scene = stub_scene("A detective enters a rain-soaked alley at night. A phone rings.")
     assert len(scene.shots) == 6

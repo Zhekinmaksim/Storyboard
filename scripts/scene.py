@@ -164,7 +164,7 @@ def _shot_from_dict(data: dict[str, Any]) -> Shot:
     env = Environment(
         kind=env_data.get("kind", "EXT"),
         description=env_data.get("description", ""),
-        horizon_y=float(env_data.get("horizon_y", 0.55)),
+        horizon_y=_float_or(env_data.get("horizon_y"), 0.55),
         has_rain=bool(env_data.get("has_rain", False)),
         has_torchlight=bool(env_data.get("has_torchlight", False)),
         has_neon=bool(env_data.get("has_neon", False)),
@@ -218,17 +218,32 @@ def _eye_line_from_dict(data: Any) -> EyeLine:
 
 
 def _figure_from_dict(data: dict[str, Any]) -> Figure:
-    pos = data.get("position", [0.5, 0.7])
-    if isinstance(pos, list):
-        pos = tuple(pos)
+    pos = _position_or(data.get("position"), (0.5, 0.7))
     return Figure(
         role=data.get("role", "figure"),
         pose=_coerce_pose(data.get("pose", "STANDING")),
         facing=_coerce_facing(data.get("facing", "FRONT")),
         position=pos,
-        scale=float(data.get("scale", 1.0)),
+        scale=_float_or(data.get("scale"), 1.0),
         state=data.get("state"),
     )
+
+
+def _float_or(value: Any, default: float) -> float:
+    if value is None:
+        return default
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _position_or(value: Any, default: tuple[float, float]) -> tuple[float, float]:
+    if not isinstance(value, (list, tuple)) or len(value) != 2:
+        return default
+    x = _float_or(value[0], default[0])
+    y = _float_or(value[1], default[1])
+    return (x, y)
 
 
 def _canon(value: Any) -> str:

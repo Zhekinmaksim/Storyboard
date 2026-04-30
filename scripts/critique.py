@@ -195,6 +195,8 @@ def _read_field(shot, field: str):
         else:
             return None
         obj = val
+    if hasattr(obj, "value"):
+        return obj.value
     return obj
 
 
