@@ -256,6 +256,106 @@ def _closeup_variant_overlay(shot: Shot, variant: int) -> str:
     return f"<g class='closeup-variant closeup-variant-{variant % 6}'>{''.join(parts)}</g>"
 
 
+def _insert_closeup(shot: Shot, frame_w: float, frame_h: float, variant: int) -> str:
+    """Draw a readable insert when Kimi emits ECU/CU without a figure."""
+    ctx = " ".join((
+        shot.description,
+        shot.caption,
+        shot.environment.description,
+        " ".join(shot.environment.props or []),
+    )).lower()
+    parts: list[str] = []
+
+    if "phone" in ctx or "call" in ctx:
+        cx = frame_w * 0.5
+        cy = frame_h * 0.52
+        phone_w = frame_w * 0.22
+        phone_h = frame_h * 0.48
+        parts.extend([
+            rect(frame_w * 0.10, frame_h * 0.18, frame_w * 0.80, frame_h * 0.62,
+                 fill=DRY_INK["fg"], opacity=0.06),
+            line(frame_w * 0.12, frame_h * 0.74, frame_w * 0.88, frame_h * 0.74,
+                 stroke=DRY_INK["fg"], width=STROKE["thin"], opacity=0.34),
+            rect(cx - phone_w / 2, cy - phone_h / 2, phone_w, phone_h,
+                 fill=DRY_INK["bg"], stroke=DRY_INK["fg"],
+                 stroke_width=STROKE["medium"]),
+            rect(cx - phone_w * 0.30, cy - phone_h * 0.26,
+                 phone_w * 0.60, phone_h * 0.36,
+                 fill="none", stroke=DRY_INK["fg_dim"],
+                 stroke_width=STROKE["thin"], opacity=0.75),
+            circle(cx, cy + phone_h * 0.32, 5,
+                   fill="none", stroke=DRY_INK["accent"],
+                   stroke_width=STROKE["thin"]),
+        ])
+        for i, r in enumerate((frame_w * 0.16, frame_w * 0.22, frame_w * 0.28)):
+            parts.append(path(
+                f"M {cx - r:.2f} {cy - r * 0.32:.2f} "
+                f"Q {cx:.2f} {cy - r * 0.88:.2f} {cx + r:.2f} {cy - r * 0.32:.2f}",
+                fill="none", stroke=DRY_INK["accent"], stroke_width=STROKE["thin"],
+                opacity=0.46 - i * 0.10,
+            ))
+            parts.append(path(
+                f"M {cx - r:.2f} {cy + r * 0.32:.2f} "
+                f"Q {cx:.2f} {cy + r * 0.88:.2f} {cx + r:.2f} {cy + r * 0.32:.2f}",
+                fill="none", stroke=DRY_INK["accent"], stroke_width=STROKE["thin"],
+                opacity=0.38 - i * 0.08,
+            ))
+        return f"<g class='insert-closeup insert-phone'>{''.join(parts)}</g>"
+
+    if any(term in ctx for term in ("gun", "weapon", "pistol", "muzzle")):
+        parts.extend([
+            path(
+                f"M {frame_w * 0.18:.2f} {frame_h * 0.60:.2f} "
+                f"L {frame_w * 0.62:.2f} {frame_h * 0.45:.2f} "
+                f"L {frame_w * 0.74:.2f} {frame_h * 0.52:.2f} "
+                f"L {frame_w * 0.38:.2f} {frame_h * 0.70:.2f} Z",
+                fill=DRY_INK["fg"], opacity=0.9,
+            ),
+            line(frame_w * 0.70, frame_h * 0.48, frame_w * 0.92, frame_h * 0.40,
+                 stroke=DRY_INK["accent"], width=STROKE["medium"], opacity=0.7),
+            circle(frame_w * 0.88, frame_h * 0.41, 7,
+                   fill="none", stroke=DRY_INK["accent"],
+                   stroke_width=STROKE["thin"]),
+        ])
+        return f"<g class='insert-closeup insert-weapon'>{''.join(parts)}</g>"
+
+    if any(term in ctx for term in ("body", "hand", "wrist", "blood", "knot")):
+        parts.extend([
+            line(frame_w * 0.14, frame_h * 0.66, frame_w * 0.86, frame_h * 0.66,
+                 stroke=DRY_INK["fg"], width=STROKE["thin"], opacity=0.32),
+            path(
+                f"M {frame_w * 0.22:.2f} {frame_h * 0.56:.2f} "
+                f"C {frame_w * 0.34:.2f} {frame_h * 0.42:.2f} "
+                f"{frame_w * 0.50:.2f} {frame_h * 0.44:.2f} "
+                f"{frame_w * 0.62:.2f} {frame_h * 0.58:.2f}",
+                fill="none", stroke=DRY_INK["fg"], stroke_width=STROKE["heavy"],
+                opacity=0.9,
+            ),
+            circle(frame_w * 0.50, frame_h * 0.52, 10,
+                   fill="none", stroke=DRY_INK["accent"],
+                   stroke_width=STROKE["thin"]),
+            line(frame_w * 0.46, frame_h * 0.48, frame_w * 0.56, frame_h * 0.57,
+                 stroke=DRY_INK["accent"], width=STROKE["thin"], opacity=0.7),
+        ])
+        return f"<g class='insert-closeup insert-detail'>{''.join(parts)}</g>"
+
+    focus_x = frame_w * (0.42 + (variant % 3) * 0.08)
+    focus_y = frame_h * 0.50
+    parts.extend([
+        rect(frame_w * 0.12, frame_h * 0.22, frame_w * 0.76, frame_h * 0.48,
+             fill=DRY_INK["fg"], opacity=0.06),
+        circle(focus_x, focus_y, 42,
+               fill="none", stroke=DRY_INK["fg"],
+               stroke_width=STROKE["medium"]),
+        circle(focus_x, focus_y, 7,
+               fill="none", stroke=DRY_INK["accent"],
+               stroke_width=STROKE["thin"]),
+        line(frame_w * 0.18, frame_h * 0.72, frame_w * 0.82, frame_h * 0.72,
+             stroke=DRY_INK["fg"], width=STROKE["thin"], opacity=0.3),
+    ])
+    return f"<g class='insert-closeup insert-generic'>{''.join(parts)}</g>"
+
+
 def _shot_design_overlay(shot: Shot, frame_w: float, frame_h: float, variant: int) -> str:
     """Deterministic storyboard grammar that changes composition per shot."""
     ctx = " ".join((
@@ -540,15 +640,20 @@ def _frame_interior(shot: Shot, frame_w: float, frame_h: float,
             f"<g transform='translate({frame_w * 0.5:.2f}, {frame_h * 0.5:.2f}) "
             f"scale({face_scale:.2f})'>{face_svg}</g>"
         )
+    elif is_closeup:
+        inner.append(_insert_closeup(shot, frame_w, frame_h, index))
     else:
-        for fig in shot.figures:
-            sil = bible_silhouettes.get(fig.role.lower(), fig.state or "")
-            inner.append(render_figure(
-                fig, frame_w, frame_h,
-                draw_in=t.figure_dur if animated else 0.0,
-                delay=global_offset + t.figure_in,
-                silhouette=sil,
-            ))
+        # Table scenes use a shot-specific composition template with built-in
+        # silhouettes, including insert and empty-room beats.
+        if not getattr(shot.environment, "has_table", False):
+            for fig in shot.figures:
+                sil = bible_silhouettes.get(fig.role.lower(), fig.state or "")
+                inner.append(render_figure(
+                    fig, frame_w, frame_h,
+                    draw_in=t.figure_dur if animated else 0.0,
+                    delay=global_offset + t.figure_in,
+                    silhouette=sil,
+                ))
 
     if shot.eye_line:
         inner.append(render_eyeline(

@@ -35,6 +35,12 @@ def render_environment(env: Environment, frame_w: float, frame_h: float,
             frame_w, frame_h, horizon_y,
             draw_in=draw_in, delay=delay, variant=variant,
         )
+    if env.kind == "INT" and env.has_table:
+        return _table_storyboard_frame(
+            frame_w, frame_h, horizon_y,
+            draw_in=draw_in, delay=delay, variant=variant,
+            props=env.props,
+        )
 
     # 1. Ground hatching — always
     parts.append(_ground_hatching(
@@ -451,6 +457,266 @@ def _table(w: float, h: float, *, draw_in: float = 0.0, delay: float = 0.0) -> s
                       stroke=DRY_INK["fg"], width=STROKE["thin"],
                       draw_in=draw_in, delay=delay))
     return group(*parts)
+
+
+def _table_storyboard_frame(w: float, h: float, horizon_y: float,
+                            *, draw_in: float = 0.0, delay: float = 0.0,
+                            variant: int = 0, props: list[str] | None = None) -> str:
+    """Six distinct kitchen/table compositions.
+
+    Table scenes often carry small dramatic beats. These boards make the
+    prop/relationship readable even when Kimi emits sparse figure data.
+    """
+    v = variant % 6
+    has_phone = "phone" in (props or [])
+    parts: list[str] = []
+
+    if v == 0:
+        # Wide establishing: both sides of the table and the prop between them.
+        parts.extend(_kitchen_wall(w, h, horizon_y, window_side="right",
+                                   draw_in=draw_in, delay=delay))
+        parts.append(_table_top(w * 0.18, h * 0.62, w * 0.58, perspective=0.10,
+                                draw_in=draw_in, delay=delay + 0.05))
+        parts.append(_table_person(w * 0.30, h * 0.64, scale=0.9,
+                                   draw_in=draw_in, delay=delay + 0.08))
+        parts.append(_table_person(w * 0.75, h * 0.69, scale=0.72,
+                                   draw_in=draw_in, delay=delay + 0.10))
+        parts.append(_table_phone(w * 0.52, h * 0.63, scale=0.9 if has_phone else 0.65,
+                                  draw_in=draw_in, delay=delay + 0.12))
+        parts.append(path(
+            f"M {w * 0.18:.2f} {h * 0.57:.2f} Q {w * 0.50:.2f} {h * 0.36:.2f} "
+            f"{w * 0.92:.2f} {h * 0.58:.2f}",
+            fill="none", stroke=DRY_INK["accent"], stroke_width=STROKE["thin"],
+            opacity=0.32, draw_in=draw_in, delay=delay + 0.14,
+        ))
+
+    elif v == 1:
+        # Medium confrontation: one sibling dominates foreground, one recedes.
+        parts.extend(_kitchen_wall(w, h, horizon_y, window_side="center",
+                                   draw_in=draw_in, delay=delay))
+        parts.append(_table_top(w * 0.18, h * 0.58, w * 0.50, perspective=0.03,
+                                draw_in=draw_in, delay=delay + 0.04))
+        parts.append(path(
+            f"M {w * 0.14:.2f} {h:.2f} L {w * 0.20:.2f} {h * 0.24:.2f} "
+            f"L {w * 0.25:.2f} {h:.2f} Z",
+            fill=DRY_INK["fg"], opacity=0.45,
+            draw_in=draw_in, delay=delay + 0.07,
+        ))
+        parts.append(_table_person(w * 0.46, h * 0.64, scale=0.78,
+                                   draw_in=draw_in, delay=delay + 0.10))
+        parts.append(path(
+            f"M {w * 0.80:.2f} {h:.2f} L {w * 0.84:.2f} {h * 0.16:.2f} "
+            f"L {w * 0.90:.2f} {h:.2f} Z",
+            fill=DRY_INK["fg"], opacity=0.45,
+            draw_in=draw_in, delay=delay + 0.12,
+        ))
+        parts.append(line(w * 0.50, h * 0.40, w * 0.50, h * 0.82,
+                          stroke=DRY_INK["accent"], width=STROKE["thin"],
+                          opacity=0.45, draw_in=draw_in, delay=delay + 0.14))
+
+    elif v == 2:
+        # Isolating close-up read: face/attention geometry, not the same table again.
+        cx = w * 0.50
+        cy = h * 0.48
+        parts.append(path(
+            f"M {cx - 58:.2f} {cy - 14:.2f} "
+            f"Q {cx:.2f} {cy - 76:.2f} {cx + 58:.2f} {cy - 14:.2f} "
+            f"Q {cx + 70:.2f} {cy + 80:.2f} {cx:.2f} {cy + 92:.2f} "
+            f"Q {cx - 70:.2f} {cy + 80:.2f} {cx - 58:.2f} {cy - 14:.2f} Z",
+            fill="none", stroke=DRY_INK["fg"], stroke_width=STROKE["medium"],
+            draw_in=draw_in, delay=delay,
+        ))
+        parts.append(path(
+            f"M {cx - 56:.2f} {cy - 18:.2f} "
+            f"Q {cx:.2f} {cy - 48:.2f} {cx + 56:.2f} {cy - 18:.2f} "
+            f"L {cx + 56:.2f} {cy + 8:.2f} L {cx - 56:.2f} {cy + 8:.2f} Z",
+            fill=DRY_INK["fg"], opacity=0.88,
+            draw_in=draw_in, delay=delay + 0.04,
+        ))
+        parts.append(path(
+            f"M {cx:.2f} {cy + 8:.2f} L {cx:.2f} {cy + 78:.2f}",
+            fill="none", stroke=DRY_INK["accent"], stroke_width=STROKE["thin"],
+            opacity=0.58, draw_in=draw_in, delay=delay + 0.08,
+        ))
+        parts.append(circle_glyph(cx, cy + 8, 4, color=DRY_INK["accent"]))
+        parts.append(circle_glyph(cx + 22, cy - 4, 3, color=DRY_INK["fg_dim"]))
+
+    elif v == 3:
+        # Insert: the phone is the frame, with vibration/action lines.
+        parts.append(_table_insert_surface(w, h, draw_in=draw_in, delay=delay))
+        parts.append(_table_phone(w * 0.50, h * 0.52, scale=3.0,
+                                  draw_in=draw_in, delay=delay + 0.04))
+        parts.extend(_phone_vibration(w * 0.50, h * 0.52, 64,
+                                      draw_in=draw_in, delay=delay + 0.08))
+        parts.append(line(w * 0.16, h * 0.78, w * 0.84, h * 0.78,
+                          stroke=DRY_INK["fg"], width=STROKE["thin"],
+                          opacity=0.42, draw_in=draw_in, delay=delay + 0.1))
+
+    elif v == 4:
+        # Two-shot standoff with the object held in the middle.
+        parts.extend(_kitchen_wall(w, h, horizon_y, window_side="right",
+                                   draw_in=draw_in, delay=delay))
+        parts.append(_table_top(w * 0.18, h * 0.61, w * 0.62, perspective=0.04,
+                                draw_in=draw_in, delay=delay + 0.04))
+        parts.append(_table_person(w * 0.34, h * 0.63, scale=0.82,
+                                   draw_in=draw_in, delay=delay + 0.08))
+        parts.append(_table_person(w * 0.72, h * 0.70, scale=0.66,
+                                   draw_in=draw_in, delay=delay + 0.10))
+        parts.append(_table_phone(w * 0.58, h * 0.65, scale=0.95,
+                                  draw_in=draw_in, delay=delay + 0.12))
+        parts.append(line(w * 0.34, h * 0.50, w * 0.58, h * 0.64,
+                          stroke=DRY_INK["accent"], width=STROKE["thin"],
+                          opacity=0.4, draw_in=draw_in, delay=delay + 0.14))
+
+    else:
+        # Empty kitchen aftermath: readable negative space, not an empty frame.
+        parts.extend(_kitchen_wall(w, h, horizon_y, window_side="right",
+                                   draw_in=draw_in, delay=delay))
+        parts.append(_table_top(w * 0.10, h * 0.52, w * 0.68, perspective=-0.02,
+                                draw_in=draw_in, delay=delay + 0.04))
+        parts.append(_table_phone(w * 0.82, h * 0.67, scale=0.9,
+                                  draw_in=draw_in, delay=delay + 0.08))
+        parts.append(path(
+            f"M {w * 0.18:.2f} {h * 0.18:.2f} L {w * 0.18:.2f} {h * 0.86:.2f}",
+            fill="none", stroke=DRY_INK["fg"], stroke_width=STROKE["medium"],
+            opacity=0.34, draw_in=draw_in, delay=delay + 0.1,
+        ))
+        parts.append(path(
+            f"M {w * 0.80:.2f} {h * 0.18:.2f} L {w * 0.80:.2f} {h * 0.86:.2f}",
+            fill="none", stroke=DRY_INK["fg"], stroke_width=STROKE["medium"],
+            opacity=0.34, draw_in=draw_in, delay=delay + 0.12,
+        ))
+
+    return f"<g class='env-table env-table-{v} table-board-{v}'>{''.join(parts)}</g>"
+
+
+def _kitchen_wall(w: float, h: float, horizon_y: float, *,
+                  window_side: str, draw_in: float, delay: float) -> list[str]:
+    parts = [
+        line(0, horizon_y, w, horizon_y,
+             stroke=DRY_INK["fg"], width=STROKE["thin"], opacity=0.55,
+             draw_in=draw_in, delay=delay),
+        line(0, horizon_y + (h - horizon_y) * 0.30, w, horizon_y + (h - horizon_y) * 0.30,
+             stroke=DRY_INK["fg_dim"], width=STROKE["thin"], opacity=0.30,
+             draw_in=draw_in, delay=delay + 0.02),
+    ]
+    if window_side == "center":
+        wx = w * 0.62
+    else:
+        wx = w * 0.68
+    wy = h * 0.13
+    ww = w * 0.28
+    wh = h * 0.24
+    parts.append(rect(wx, wy, ww, wh, fill="none", stroke=DRY_INK["fg"],
+                      stroke_width=STROKE["thin"], opacity=0.65,
+                      draw_in=draw_in, delay=delay + 0.04))
+    parts.append(line(wx + ww / 3, wy, wx + ww / 3, wy + wh,
+                      stroke=DRY_INK["fg"], width=STROKE["thin"], opacity=0.55,
+                      draw_in=draw_in, delay=delay + 0.05))
+    parts.append(line(wx + ww * 2 / 3, wy, wx + ww * 2 / 3, wy + wh,
+                      stroke=DRY_INK["fg"], width=STROKE["thin"], opacity=0.55,
+                      draw_in=draw_in, delay=delay + 0.06))
+    parts.append(line(wx, wy + wh / 2, wx + ww, wy + wh / 2,
+                      stroke=DRY_INK["fg"], width=STROKE["thin"], opacity=0.55,
+                      draw_in=draw_in, delay=delay + 0.07))
+    return parts
+
+
+def _table_top(x: float, y: float, tw: float, *,
+               perspective: float, draw_in: float, delay: float) -> str:
+    depth = 34
+    skew = tw * perspective
+    parts = [
+        path(
+            f"M {x:.2f} {y:.2f} L {x + tw:.2f} {y:.2f} "
+            f"L {x + tw + skew:.2f} {y + depth:.2f} "
+            f"L {x - skew:.2f} {y + depth:.2f} Z",
+            fill=DRY_INK["fg"], opacity=0.16,
+            draw_in=draw_in, delay=delay,
+        ),
+        line(x, y, x + tw, y, stroke=DRY_INK["fg"],
+             width=STROKE["heavy"], opacity=0.9,
+             draw_in=draw_in, delay=delay + 0.02),
+        line(x - skew, y + depth, x + tw + skew, y + depth,
+             stroke=DRY_INK["fg"], width=STROKE["thin"], opacity=0.55,
+             draw_in=draw_in, delay=delay + 0.04),
+        line(x + 10, y + depth, x + 10, y + depth + 24,
+             stroke=DRY_INK["fg"], width=STROKE["thin"], opacity=0.62,
+             draw_in=draw_in, delay=delay + 0.05),
+        line(x + tw - 10, y + depth, x + tw - 10, y + depth + 24,
+             stroke=DRY_INK["fg"], width=STROKE["thin"], opacity=0.62,
+             draw_in=draw_in, delay=delay + 0.06),
+    ]
+    return f"<g class='table-top'>{''.join(parts)}</g>"
+
+
+def _table_insert_surface(w: float, h: float, *,
+                          draw_in: float, delay: float) -> str:
+    parts = [
+        rect(w * 0.08, h * 0.16, w * 0.84, h * 0.62,
+             fill=DRY_INK["fg"], opacity=0.06,
+             draw_in=draw_in, delay=delay),
+        line(w * 0.10, h * 0.28, w * 0.90, h * 0.28,
+             stroke=DRY_INK["fg"], width=STROKE["thin"], opacity=0.28,
+             draw_in=draw_in, delay=delay + 0.02),
+        line(w * 0.10, h * 0.70, w * 0.90, h * 0.70,
+             stroke=DRY_INK["fg"], width=STROKE["thin"], opacity=0.20,
+             draw_in=draw_in, delay=delay + 0.04),
+    ]
+    return f"<g class='table-insert-surface'>{''.join(parts)}</g>"
+
+
+def _table_phone(cx: float, cy: float, *, scale: float,
+                 draw_in: float, delay: float) -> str:
+    pw = 12 * scale
+    ph = 28 * scale
+    parts = [
+        rect(cx - pw / 2, cy - ph / 2, pw, ph,
+             fill=DRY_INK["bg"], stroke=DRY_INK["fg"],
+             stroke_width=STROKE["thin"], opacity=0.95,
+             draw_in=draw_in, delay=delay),
+        circle_glyph(cx, cy + ph * 0.30, max(1.6, 2.0 * scale), color=DRY_INK["accent"]),
+        line(cx - pw * 0.26, cy - ph * 0.22, cx + pw * 0.26, cy - ph * 0.22,
+             stroke=DRY_INK["fg_dim"], width=STROKE["thin"], opacity=0.5,
+             draw_in=draw_in, delay=delay + 0.03),
+    ]
+    return f"<g class='prop-phone table-phone'>{''.join(parts)}</g>"
+
+
+def _phone_vibration(cx: float, cy: float, radius: float,
+                     *, draw_in: float, delay: float) -> list[str]:
+    parts = []
+    for i, r in enumerate((radius, radius + 16, radius + 32)):
+        parts.append(path(
+            f"M {cx - r * 0.72:.2f} {cy - r * 0.18:.2f} "
+            f"Q {cx:.2f} {cy - r * 0.70:.2f} {cx + r * 0.72:.2f} {cy - r * 0.18:.2f}",
+            fill="none", stroke=DRY_INK["accent"], stroke_width=STROKE["thin"],
+            opacity=0.46 - i * 0.10, draw_in=draw_in, delay=delay + i * 0.04,
+        ))
+        parts.append(path(
+            f"M {cx - r * 0.72:.2f} {cy + r * 0.18:.2f} "
+            f"Q {cx:.2f} {cy + r * 0.70:.2f} {cx + r * 0.72:.2f} {cy + r * 0.18:.2f}",
+            fill="none", stroke=DRY_INK["accent"], stroke_width=STROKE["thin"],
+            opacity=0.38 - i * 0.08, draw_in=draw_in, delay=delay + i * 0.04,
+        ))
+    return parts
+
+
+def _table_person(x: float, y: float, *, scale: float,
+                  draw_in: float, delay: float) -> str:
+    h = 52 * scale
+    parts = [
+        path(
+            f"M {x - 7 * scale:.2f} {y - h * 0.64:.2f} "
+            f"L {x - 13 * scale:.2f} {y:.2f} "
+            f"L {x + 13 * scale:.2f} {y:.2f} "
+            f"L {x + 7 * scale:.2f} {y - h * 0.64:.2f} Z",
+            fill=DRY_INK["fg"], opacity=0.92,
+            draw_in=draw_in, delay=delay,
+        ),
+        circle_glyph(x, y - h * 0.76, 4 * scale, color=DRY_INK["fg"]),
+    ]
+    return f"<g class='table-person'>{''.join(parts)}</g>"
 
 
 def _subway_station(w: float, h: float, horizon_y: float,

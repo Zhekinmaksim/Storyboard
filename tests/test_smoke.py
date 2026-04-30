@@ -293,6 +293,28 @@ def test_render_subway_six_boards_are_distinct():
         assert f"subway-board-{idx}" in svg
 
 
+def test_render_table_six_boards_are_distinct():
+    from scripts.scene import Environment, Shot
+    scene = Scene(
+        title="Kitchen Sequence",
+        location="INT KITCHEN · NOON",
+        shots=[
+            Shot(
+                label=f"1{c}",
+                shot_type=ShotType.WIDE,
+                description="two siblings across kitchen table, phone between them",
+                environment=Environment(kind="INT", has_table=True, props=["phone"]),
+            )
+            for c in "ABCDEF"
+        ],
+    )
+    svg = render_scene(scene, animated=False)
+    for idx in range(6):
+        assert f"table-board-{idx}" in svg
+    assert "insert-closeup" not in svg
+    assert "prop-phone table-phone" in svg
+
+
 def test_render_header_labels_use_two_short_rows():
     from scripts.scene import Environment, Shot
     long_description = (
@@ -336,6 +358,23 @@ def test_render_close_up_uses_face_primitive():
     svg = render_scene(scene)
     # Face primitive emits <ellipse> for the head
     assert "<ellipse" in svg
+
+
+def test_render_insert_close_up_without_figures_is_not_empty():
+    from scripts.scene import Environment, Shot
+    scene = Scene(
+        title="Insert Test",
+        shots=[Shot(
+            label="1A",
+            shot_type=ShotType.ECU,
+            description="phone vibrating on table",
+            figures=[],
+            environment=Environment(kind="INT", has_table=True, props=["phone"]),
+        )],
+    )
+    svg = render_scene(scene, animated=False)
+    assert "insert-closeup insert-phone" in svg
+    assert "data-shot-label='1A'" in svg
 
 
 # =================== Iterate ===================
