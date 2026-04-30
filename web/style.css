@@ -513,6 +513,9 @@ section {
   color: var(--fg-dim);
   min-height: 380px;
 }
+.board-empty[hidden] {
+  display: none !important;
+}
 .board-empty-mark {
   font-size: 56px; color: var(--fg-faint); line-height: 1; margin-bottom: 16px;
   font-family: var(--serif);
