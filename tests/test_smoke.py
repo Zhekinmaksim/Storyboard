@@ -267,13 +267,30 @@ def test_render_subway_visual_vocabulary():
     )
     svg = render_scene(scene, animated=False)
     assert "env-subway-0" in svg
-    assert "prop-train-0" in svg
-    assert "prop-tracks-0" in svg
-    assert "class='prop-tunnel'" in svg
-    assert "prop-sparks-0" in svg
-    assert "prop-smoke-0" in svg
+    assert "subway-board-0" in svg
+    assert "PLATFORM" in svg
     assert "subway-design-0" in svg
     assert "shot-design-0" in svg
+
+
+def test_render_subway_six_boards_are_distinct():
+    from scripts.scene import Environment, Shot
+    scene = Scene(
+        title="Subway Sequence",
+        location="INT SUBWAY STATION · NIGHT",
+        shots=[
+            Shot(
+                label=f"1{c}",
+                shot_type=ShotType.WIDE,
+                description="subway train platform action",
+                environment=Environment(kind="INT", has_subway=True),
+            )
+            for c in "ABCDEF"
+        ],
+    )
+    svg = render_scene(scene, animated=False)
+    for idx in range(6):
+        assert f"subway-board-{idx}" in svg
 
 
 def test_render_header_labels_use_two_short_rows():

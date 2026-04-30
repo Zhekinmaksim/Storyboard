@@ -27,6 +27,15 @@ def render_environment(env: Environment, frame_w: float, frame_h: float,
     horizon_y = env.horizon_y * frame_h
     cur_delay = delay
 
+    # Specialised shot boards for subway/train scenes. These are intentionally
+    # complete compositions, not just background layers, so repeated shots do
+    # not look like the same platform with a few props moved around.
+    if env.kind == "INT" and env.has_subway:
+        return _subway_storyboard_frame(
+            frame_w, frame_h, horizon_y,
+            draw_in=draw_in, delay=delay, variant=variant,
+        )
+
     # 1. Ground hatching — always
     parts.append(_ground_hatching(
         frame_w, frame_h, horizon_y,
@@ -514,6 +523,256 @@ def _subway_station(w: float, h: float, horizon_y: float,
                           draw_in=draw_in, delay=delay + 0.12))
 
     return f"<g class='env-subway env-subway-{v}'>{''.join(parts)}</g>"
+
+
+def _subway_storyboard_frame(w: float, h: float, horizon_y: float,
+                             *, draw_in: float = 0.0, delay: float = 0.0,
+                             variant: int = 0) -> str:
+    """Six distinct subway storyboard compositions.
+
+    This deliberately draws the whole shot language: establishing station,
+    agent reveal, low tracking run, over-shoulder gunfire, gap leap, and
+    aftermath/train doors. It makes arbitrary subway prompts read as a film
+    sequence rather than six copies of the same set.
+    """
+    v = variant % 6
+    parts: list[str] = []
+
+    if v == 0:
+        parts.extend(_subway_tiles(w, h, horizon_y, rows=4, cols=6,
+                                   draw_in=draw_in, delay=delay))
+        parts.append(_subway_tunnel(w * 0.64, horizon_y, w * 0.30, horizon_y * 0.72,
+                                    draw_in=draw_in, delay=delay + 0.04))
+        parts.append(rect(w * 0.08, horizon_y * 0.25, w * 0.28, 18,
+                          fill="none", stroke=DRY_INK["fg"], stroke_width=STROKE["thin"],
+                          opacity=0.8, draw_in=draw_in, delay=delay + 0.06))
+        parts.append(text(w * 0.1, horizon_y * 0.36, "PLATFORM",
+                          font="mono", size=7, fill=DRY_INK["fg_dim"],
+                          letter_spacing="0.12em"))
+        parts.extend(_subway_platform_edges(w, h, horizon_y, depth=0.25,
+                                            draw_in=draw_in, delay=delay + 0.08))
+        parts.extend(_subway_columns(w, horizon_y, h, (0.16, 0.42),
+                                     draw_in=draw_in, delay=delay + 0.1))
+
+    elif v == 1:
+        parts.append(rect(0, horizon_y * 0.18, w, horizon_y * 0.58,
+                          fill=DRY_INK["fg"], opacity=0.08,
+                          draw_in=draw_in, delay=delay))
+        parts.append(_subway_tunnel(w * 0.12, horizon_y, w * 0.42, horizon_y * 0.85,
+                                    draw_in=draw_in, delay=delay + 0.02))
+        parts.extend(_subway_platform_edges(w, h, horizon_y, depth=0.18,
+                                            draw_in=draw_in, delay=delay + 0.06))
+        # Three approaching agents as the dominant read.
+        for i, x in enumerate((w * 0.58, w * 0.70, w * 0.82)):
+            scale = 1.0 + i * 0.08
+            parts.append(_subway_person(x, horizon_y + (h - horizon_y) * 0.50,
+                                        scale=scale, draw_in=draw_in,
+                                        delay=delay + 0.1 + i * 0.04))
+        parts.append(rect(w * 0.72, horizon_y * 0.2, 18, 58,
+                          fill="none", stroke=DRY_INK["accent"],
+                          stroke_width=STROKE["thin"], opacity=0.75,
+                          draw_in=draw_in, delay=delay + 0.16))
+        parts.append(circle_glyph(w * 0.74, horizon_y * 0.34, 5, color=DRY_INK["accent"]))
+
+    elif v == 2:
+        # Low tracking: rails dominate the foreground, station is compressed.
+        vanish_x = w * 0.62
+        vanish_y = horizon_y * 0.48
+        parts.append(rect(0, 0, w, horizon_y * 0.22,
+                          fill=DRY_INK["fg"], opacity=0.12,
+                          draw_in=draw_in, delay=delay))
+        for i in range(7):
+            x1 = i * w / 6
+            parts.append(line(x1, h, vanish_x, vanish_y,
+                              stroke=DRY_INK["fg"], width=STROKE["thin"],
+                              opacity=0.38, draw_in=draw_in, delay=delay + i * 0.02))
+        parts.append(path(
+            f"M 0 {h:.2f} L {w * 0.42:.2f} {vanish_y:.2f} "
+            f"L {w * 0.58:.2f} {vanish_y:.2f} L {w:.2f} {h:.2f} Z",
+            fill=DRY_INK["fg"], opacity=0.14,
+            draw_in=draw_in, delay=delay + 0.05,
+        ))
+        for i in range(6):
+            y = h * (0.28 + i * 0.09)
+            parts.append(line(w * 0.08, y, w * 0.42, y - 10,
+                              stroke=DRY_INK["fg_dim"], width=STROKE["thin"],
+                              opacity=0.35, draw_in=draw_in, delay=delay + i * 0.015))
+        parts.append(_subway_train(w * 0.62, horizon_y * 0.16, w * 0.34, horizon_y * 0.58,
+                                   headlights=True, draw_in=draw_in, delay=delay + 0.08))
+
+    elif v == 3:
+        # OTS gunfire: foreground shoulder + framed target across platform.
+        parts.extend(_subway_tiles(w, h, horizon_y, rows=3, cols=4,
+                                   draw_in=draw_in, delay=delay))
+        parts.append(rect(w * 0.08, horizon_y * 0.20, w * 0.72, horizon_y * 0.48,
+                          fill="none", stroke=DRY_INK["fg"], stroke_width=STROKE["thin"],
+                          opacity=0.75, draw_in=draw_in, delay=delay + 0.04))
+        parts.append(path(
+            f"M {w:.2f} {h:.2f} L {w * 0.76:.2f} {h:.2f} "
+            f"Q {w * 0.84:.2f} {h * 0.55:.2f} {w:.2f} {h * 0.40:.2f} Z",
+            fill=DRY_INK["fg"], opacity=0.88,
+            draw_in=draw_in, delay=delay + 0.06,
+        ))
+        parts.append(line(w * 0.72, h * 0.54, w * 0.28, h * 0.54,
+                          stroke=DRY_INK["accent"], width=STROKE["medium"],
+                          opacity=0.7, draw_in=draw_in, delay=delay + 0.08))
+        parts.extend(_subway_sparks(w * 0.28, h * 0.58, draw_in=draw_in, delay=delay + 0.1))
+        parts.extend(_subway_platform_edges(w, h, horizon_y, depth=0.2,
+                                            draw_in=draw_in, delay=delay + 0.12))
+
+    elif v == 4:
+        # Gap leap: black void between two platforms with a clear jump arc.
+        parts.append(rect(0, horizon_y * 0.1, w, horizon_y * 0.58,
+                          fill="none", stroke=DRY_INK["fg"],
+                          stroke_width=STROKE["thin"], opacity=0.5,
+                          draw_in=draw_in, delay=delay))
+        parts.append(rect(w * 0.28, h * 0.62, w * 0.44, h * 0.28,
+                          fill=DRY_INK["fg"], opacity=0.92,
+                          draw_in=draw_in, delay=delay + 0.04))
+        parts.append(line(0, h * 0.60, w * 0.28, h * 0.62,
+                          stroke=DRY_INK["fg"], width=STROKE["heavy"],
+                          opacity=0.85, draw_in=draw_in, delay=delay + 0.06))
+        parts.append(line(w * 0.72, h * 0.62, w, h * 0.58,
+                          stroke=DRY_INK["fg"], width=STROKE["heavy"],
+                          opacity=0.85, draw_in=draw_in, delay=delay + 0.06))
+        parts.append(path(
+            f"M {w * 0.10:.2f} {h * 0.66:.2f} Q {w * 0.50:.2f} {h * 0.18:.2f} "
+            f"{w * 0.90:.2f} {h * 0.62:.2f}",
+            fill="none", stroke=DRY_INK["accent"], stroke_width=STROKE["thin"],
+            opacity=0.75, draw_in=draw_in, delay=delay + 0.08,
+        ))
+        parts.append(_subway_train(w * 0.60, horizon_y * 0.16, w * 0.34, horizon_y * 0.58,
+                                   headlights=True, draw_in=draw_in, delay=delay + 0.1))
+
+    else:
+        # Aftermath: side train doors and smoke, slower final beat.
+        parts.extend(_subway_tiles(w, h, horizon_y, rows=3, cols=5,
+                                   draw_in=draw_in, delay=delay))
+        parts.append(_subway_train(w * 0.42, horizon_y * 0.12, w * 0.50, horizon_y * 0.72,
+                                   headlights=False, doors=True,
+                                   draw_in=draw_in, delay=delay + 0.04))
+        parts.extend(_subway_platform_edges(w, h, horizon_y, depth=0.22,
+                                            draw_in=draw_in, delay=delay + 0.08))
+        parts.extend(_subway_smoke(w * 0.62, h * 0.58, draw_in=draw_in, delay=delay + 0.1))
+        parts.extend(_subway_columns(w, horizon_y, h, (0.14, 0.86),
+                                     draw_in=draw_in, delay=delay + 0.12))
+
+    return f"<g class='env-subway env-subway-{v} subway-board-{v}'>{''.join(parts)}</g>"
+
+
+def _subway_tiles(w: float, h: float, horizon_y: float, *, rows: int, cols: int,
+                  draw_in: float, delay: float) -> list[str]:
+    parts = []
+    for i in range(1, rows + 1):
+        y = horizon_y * (0.15 + i * 0.15)
+        parts.append(line(0, y, w, y,
+                          stroke=DRY_INK["fg_dim"], width=STROKE["thin"], opacity=0.28,
+                          draw_in=draw_in, delay=delay + i * 0.015))
+    for i in range(1, cols + 1):
+        x = i * w / (cols + 1)
+        parts.append(line(x, horizon_y * 0.12, x, horizon_y * 0.95,
+                          stroke=DRY_INK["fg_dim"], width=STROKE["thin"], opacity=0.2,
+                          draw_in=draw_in, delay=delay + i * 0.01))
+    return parts
+
+
+def _subway_platform_edges(w: float, h: float, horizon_y: float, *,
+                           depth: float, draw_in: float, delay: float) -> list[str]:
+    y0 = horizon_y + (h - horizon_y) * depth
+    return [
+        line(0, y0, w, y0, stroke=DRY_INK["fg"], width=STROKE["medium"],
+             opacity=0.78, draw_in=draw_in, delay=delay),
+        line(0, y0 + 18, w, y0 + 18, stroke=DRY_INK["fg"], width=STROKE["thin"],
+             opacity=0.65, draw_in=draw_in, delay=delay + 0.02),
+        line(0, y0 + 34, w, y0 + 34, stroke=DRY_INK["fg"], width=STROKE["thin"],
+             opacity=0.45, draw_in=draw_in, delay=delay + 0.04),
+    ]
+
+
+def _subway_columns(w: float, horizon_y: float, h: float, xs: tuple[float, ...],
+                    *, draw_in: float, delay: float) -> list[str]:
+    return [
+        rect(w * frac, horizon_y * 0.16, 8, h * 0.72,
+             fill=DRY_INK["fg"], opacity=0.88,
+             draw_in=draw_in, delay=delay + idx * 0.03)
+        for idx, frac in enumerate(xs)
+    ]
+
+
+def _subway_tunnel(x: float, base_y: float, tw: float, th: float,
+                   *, draw_in: float, delay: float) -> str:
+    return path(
+        f"M {x:.2f} {base_y:.2f} L {x:.2f} {base_y - th * 0.55:.2f} "
+        f"Q {x + tw * 0.5:.2f} {base_y - th:.2f} {x + tw:.2f} {base_y - th * 0.55:.2f} "
+        f"L {x + tw:.2f} {base_y:.2f} Z",
+        fill=DRY_INK["fg"], opacity=0.9,
+        draw_in=draw_in, delay=delay,
+    )
+
+
+def _subway_train(x: float, y: float, tw: float, th: float, *,
+                  headlights: bool, draw_in: float, delay: float,
+                  doors: bool = False) -> str:
+    parts = [
+        rect(x, y, tw, th, fill=DRY_INK["fg"], opacity=0.86,
+             draw_in=draw_in, delay=delay),
+        rect(x + tw * 0.05, y + th * 0.12, tw * 0.9, th * 0.22,
+             fill=DRY_INK["bg"], opacity=0.22,
+             draw_in=draw_in, delay=delay + 0.02),
+    ]
+    if doors:
+        parts.extend([
+            rect(x + tw * 0.18, y + th * 0.18, tw * 0.18, th * 0.62,
+                 fill=DRY_INK["bg"], opacity=0.2, draw_in=draw_in, delay=delay + 0.04),
+            rect(x + tw * 0.42, y + th * 0.18, tw * 0.18, th * 0.62,
+                 fill=DRY_INK["bg"], opacity=0.16, draw_in=draw_in, delay=delay + 0.06),
+        ])
+    if headlights:
+        parts.append(circle_glyph(x + tw * 0.82, y + th * 0.64, 5, color=DRY_INK["accent"]))
+        parts.append(circle_glyph(x + tw * 0.92, y + th * 0.64, 5, color=DRY_INK["accent"]))
+        parts.append(line(x + tw * 0.86, y + th * 0.66, x + tw * 0.15, y + th * 1.25,
+                          stroke=DRY_INK["accent"], width=STROKE["thin"], opacity=0.32,
+                          draw_in=draw_in, delay=delay + 0.08))
+    return f"<g class='prop-train'>{''.join(parts)}</g>"
+
+
+def _subway_person(x: float, y: float, *, scale: float,
+                   draw_in: float, delay: float) -> str:
+    h = 42 * scale
+    return path(
+        f"M {x - 5 * scale:.2f} {y - h * 0.72:.2f} "
+        f"L {x - 11 * scale:.2f} {y:.2f} "
+        f"L {x + 11 * scale:.2f} {y:.2f} "
+        f"L {x + 5 * scale:.2f} {y - h * 0.72:.2f} Z",
+        fill=DRY_INK["fg"], opacity=0.94,
+        draw_in=draw_in, delay=delay,
+    ) + circle_glyph(x, y - h * 0.82, 4 * scale, color=DRY_INK["fg"])
+
+
+def _subway_sparks(x: float, y: float, *, draw_in: float, delay: float) -> list[str]:
+    parts = []
+    for i, (dx, dy) in enumerate(((0, 0), (16, -8), (31, 7), (48, -3))):
+        sx = x + dx
+        sy = y + dy
+        parts.append(line(sx - 7, sy, sx + 7, sy,
+                          stroke=DRY_INK["accent"], width=STROKE["medium"],
+                          opacity=0.85, draw_in=draw_in, delay=delay + i * 0.025))
+        parts.append(line(sx, sy - 7, sx, sy + 7,
+                          stroke=DRY_INK["accent"], width=STROKE["thin"],
+                          opacity=0.55, draw_in=draw_in, delay=delay + i * 0.025))
+    return parts
+
+
+def _subway_smoke(x: float, y: float, *, draw_in: float, delay: float) -> list[str]:
+    parts = []
+    for i, r in enumerate((18, 28, 38)):
+        parts.append(
+            f"<ellipse cx='{x + i * 20:.2f}' cy='{y - i * 10:.2f}' "
+            f"rx='{r:.2f}' ry='{r * 0.42:.2f}' fill='none' "
+            f"stroke='{DRY_INK['fg_dim']}' stroke-width='{STROKE['thin']}' "
+            f"opacity='{0.18 + i * 0.07:.2f}'/>"
+        )
+    return parts
 
 
 def _prop(name: str, w: float, h: float, horizon_y: float,
