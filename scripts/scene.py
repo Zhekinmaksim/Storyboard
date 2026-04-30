@@ -261,6 +261,15 @@ def _coerce_shot_type(value: Any) -> ShotType:
         "LOW": "LOW_ANGLE",
         "HIGH": "HIGH_ANGLE",
         "TWO": "TWO_SHOT",
+        "LONG_LENS": "CLOSE_UP",
+        "TELEPHOTO": "CLOSE_UP",
+        "INSERT": "ECU",
+        "DETAIL": "ECU",
+        "DETAIL_SHOT": "ECU",
+        "ESTABLISHING": "WIDE",
+        "ESTABLISHING_SHOT": "WIDE",
+        "TRACKING": "MEDIUM",
+        "TRACKING_SHOT": "MEDIUM",
     }
     return ShotType(aliases.get(_canon(value), _canon(value)))
 

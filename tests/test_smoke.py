@@ -119,6 +119,20 @@ def test_scene_accepts_common_kimi_enum_aliases():
     assert shot.eye_line.direction == EyeLineDirection.CAMERA_LEFT
 
 
+def test_scene_accepts_cinematic_shot_type_aliases():
+    scene = Scene.from_dict({
+        "title": "X",
+        "shots": [
+            {"label": "1A", "shot_type": "LONG_LENS", "description": "compressed face"},
+            {"label": "1B", "shot_type": "INSERT", "description": "clock hand"},
+            {"label": "1C", "shot_type": "ESTABLISHING", "description": "empty station"},
+        ],
+    })
+    assert scene.shots[0].shot_type == ShotType.CLOSE_UP
+    assert scene.shots[1].shot_type == ShotType.ECU
+    assert scene.shots[2].shot_type == ShotType.WIDE
+
+
 def test_scene_tolerates_null_numeric_fields_from_kimi():
     scene = Scene.from_dict({
         "title": "X",
