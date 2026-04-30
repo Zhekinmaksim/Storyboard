@@ -256,6 +256,151 @@ def _closeup_variant_overlay(shot: Shot, variant: int) -> str:
     return f"<g class='closeup-variant closeup-variant-{variant % 6}'>{''.join(parts)}</g>"
 
 
+def _shot_design_overlay(shot: Shot, frame_w: float, frame_h: float, variant: int) -> str:
+    """Deterministic storyboard grammar that changes composition per shot."""
+    ctx = " ".join((
+        shot.description,
+        shot.caption,
+        shot.movement,
+        shot.angle,
+        shot.shot_type.value,
+        shot.environment.description,
+    )).lower()
+    v = variant % 6
+    parts: list[str] = []
+    accent = DRY_INK["accent"]
+
+    if getattr(shot.environment, "has_subway", False):
+        parts.append(_subway_shot_overlay(frame_w, frame_h, v))
+
+    if shot.shot_type == ShotType.OTS or "over shoulder" in ctx or "shoulder" in ctx:
+        parts.append(path(
+            f"M 0 {frame_h:.2f} L 0 {frame_h * 0.28:.2f} "
+            f"Q {frame_w * 0.16:.2f} {frame_h * 0.52:.2f} "
+            f"{frame_w * 0.28:.2f} {frame_h:.2f} Z",
+            fill=DRY_INK["fg"], opacity=0.92,
+        ))
+        parts.append(line(frame_w * 0.22, frame_h * 0.5,
+                          frame_w * 0.9, frame_h * 0.42,
+                          stroke=accent, width=STROKE["medium"], opacity=0.55))
+
+    if "low" in ctx:
+        for x in (frame_w * 0.18, frame_w * 0.82):
+            parts.append(path(
+                f"M {x - 10:.2f} {frame_h:.2f} L {x - 3:.2f} {frame_h * 0.18:.2f} "
+                f"L {x + 3:.2f} {frame_h * 0.18:.2f} L {x + 14:.2f} {frame_h:.2f} Z",
+                fill=DRY_INK["fg"], opacity=0.55,
+            ))
+
+    if "high" in ctx or "crane" in ctx:
+        for i in range(6):
+            y = frame_h * (0.18 + i * 0.11)
+            parts.append(line(frame_w * 0.08, y, frame_w * 0.92, y + 18,
+                              stroke=DRY_INK["fg_dim"], width=STROKE["thin"], opacity=0.35))
+        for i in range(5):
+            x = frame_w * (0.12 + i * 0.18)
+            parts.append(line(x, frame_h * 0.12, x - 36, frame_h * 0.86,
+                              stroke=DRY_INK["fg_dim"], width=STROKE["thin"], opacity=0.28))
+
+    if any(term in ctx for term in ("run", "tracking", "chase", "pursuit", "flight")):
+        for i in range(5):
+            y = frame_h * (0.24 + i * 0.11)
+            parts.append(line(frame_w * 0.08, y, frame_w * 0.34, y - 8,
+                              stroke=DRY_INK["fg_dim"], width=STROKE["thin"], opacity=0.32))
+            parts.append(line(frame_w * 0.66, y + 4, frame_w * 0.94, y - 2,
+                              stroke=DRY_INK["fg_dim"], width=STROKE["thin"], opacity=0.26))
+
+    if any(term in ctx for term in ("leap", "jump", "gap", "across")):
+        parts.append(path(
+            f"M {frame_w * 0.08:.2f} {frame_h * 0.82:.2f} "
+            f"Q {frame_w * 0.50:.2f} {frame_h * 0.22:.2f} "
+            f"{frame_w * 0.92:.2f} {frame_h * 0.76:.2f}",
+            fill="none", stroke=accent, stroke_width=STROKE["thin"], opacity=0.65,
+        ))
+        parts.append(rect(frame_w * 0.28, frame_h * 0.76, frame_w * 0.44, frame_h * 0.16,
+                          fill=DRY_INK["fg"], opacity=0.82))
+
+    if any(term in ctx for term in ("bullet", "muzzle", "gunfire", "spark")):
+        for i in range(4):
+            x = frame_w * (0.18 + i * 0.08)
+            y = frame_h * (0.56 + (i % 2) * 0.06)
+            parts.append(line(x - 8, y, x + 8, y,
+                              stroke=accent, width=STROKE["medium"], opacity=0.8))
+            parts.append(line(x, y - 8, x, y + 8,
+                              stroke=accent, width=STROKE["thin"], opacity=0.5))
+
+    return f"<g class='shot-design shot-design-{v}'>{''.join(parts)}</g>"
+
+
+def _subway_shot_overlay(frame_w: float, frame_h: float, variant: int) -> str:
+    parts: list[str] = []
+    v = variant % 6
+
+    if v == 0:
+        parts.append(rect(frame_w * 0.08, frame_h * 0.12, frame_w * 0.28, 18,
+                          fill="none", stroke=DRY_INK["fg"], stroke_width=STROKE["thin"],
+                          opacity=0.85))
+        parts.append(text(frame_w * 0.1, frame_h * 0.25, "PLATFORM",
+                          font="mono", size=TYPE["tiny"], fill=DRY_INK["fg_dim"],
+                          letter_spacing="0.12em"))
+        for i in range(3):
+            x = frame_w * (0.14 + i * 0.18)
+            parts.append(line(x, frame_h * 0.12, x, frame_h * 0.34,
+                              stroke=DRY_INK["fg"], width=STROKE["thin"], opacity=0.45))
+
+    elif v == 1:
+        parts.append(rect(frame_w * 0.68, frame_h * 0.12, 18, 52,
+                          fill="none", stroke=DRY_INK["accent"],
+                          stroke_width=STROKE["thin"], opacity=0.7))
+        parts.append(circle(frame_w * 0.70, frame_h * 0.22, 5,
+                            fill=DRY_INK["accent"]))
+        parts.append(line(frame_w * 0.12, frame_h * 0.62,
+                          frame_w * 0.88, frame_h * 0.55,
+                          stroke=DRY_INK["accent"], width=STROKE["thin"], opacity=0.35))
+
+    elif v == 2:
+        parts.append(path(
+            f"M 0 {frame_h:.2f} L {frame_w * 0.44:.2f} {frame_h * 0.52:.2f} "
+            f"L {frame_w * 0.56:.2f} {frame_h * 0.52:.2f} L {frame_w:.2f} {frame_h:.2f} Z",
+            fill=DRY_INK["fg"], opacity=0.18,
+        ))
+        for i in range(4):
+            x = frame_w * (0.18 + i * 0.18)
+            parts.append(line(x, frame_h, frame_w * 0.5, frame_h * 0.54,
+                              stroke=DRY_INK["fg"], width=STROKE["thin"], opacity=0.45))
+
+    elif v == 3:
+        parts.append(rect(frame_w * 0.08, frame_h * 0.16, frame_w * 0.74, frame_h * 0.35,
+                          fill="none", stroke=DRY_INK["fg"],
+                          stroke_width=STROKE["thin"], opacity=0.75))
+        parts.append(path(
+            f"M {frame_w:.2f} {frame_h:.2f} L {frame_w * 0.78:.2f} {frame_h:.2f} "
+            f"Q {frame_w * 0.86:.2f} {frame_h * 0.54:.2f} "
+            f"{frame_w:.2f} {frame_h * 0.42:.2f} Z",
+            fill=DRY_INK["fg"], opacity=0.88,
+        ))
+
+    elif v == 4:
+        parts.append(rect(frame_w * 0.30, frame_h * 0.70, frame_w * 0.42, frame_h * 0.22,
+                          fill=DRY_INK["fg"], opacity=0.9))
+        parts.append(line(frame_w * 0.08, frame_h * 0.68,
+                          frame_w * 0.30, frame_h * 0.70,
+                          stroke=DRY_INK["fg"], width=STROKE["medium"], opacity=0.85))
+        parts.append(line(frame_w * 0.72, frame_h * 0.70,
+                          frame_w * 0.94, frame_h * 0.67,
+                          stroke=DRY_INK["fg"], width=STROKE["medium"], opacity=0.85))
+
+    else:
+        parts.append(rect(frame_w * 0.58, frame_h * 0.16, frame_w * 0.28, frame_h * 0.55,
+                          fill=DRY_INK["fg"], opacity=0.88))
+        parts.append(rect(frame_w * 0.61, frame_h * 0.20, frame_w * 0.09, frame_h * 0.45,
+                          fill=DRY_INK["bg"], opacity=0.22))
+        parts.append(rect(frame_w * 0.73, frame_h * 0.20, frame_w * 0.09, frame_h * 0.45,
+                          fill=DRY_INK["bg"], opacity=0.22))
+
+    return f"<g class='subway-design subway-design-{v}'>{''.join(parts)}</g>"
+
+
 def _frames(scene: Scene, *, animated: bool) -> list[str]:
     shots = scene.shots[:6]
     parts: list[str] = []
@@ -375,6 +520,7 @@ def _frame_interior(shot: Shot, frame_w: float, frame_h: float,
                 stagger=t.env_stagger,
                 variant=index,
             ))
+            inner.append(_shot_design_overlay(shot, frame_w, frame_h, index))
 
     # Figures — look up silhouette in character_bible by role for visual continuity
     bible_silhouettes = _load_bible_silhouettes()

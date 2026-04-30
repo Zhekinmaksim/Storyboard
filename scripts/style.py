@@ -55,7 +55,7 @@ PAGE = {
     "height": 900,
     "margin_x": 40,
     "margin_y": 40,
-    "header_h": 80,
+    "header_h": 100,
     "footer_h": 40,
     "gutter_x": 24,
     "gutter_y": 60,        # extra room for caption + metadata under each frame

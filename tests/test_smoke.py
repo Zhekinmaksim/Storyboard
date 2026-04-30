@@ -20,6 +20,7 @@ from scripts.iterate import apply_revisions
 from scripts.kimi_client import KimiError, extract_text
 from scripts.parse import stub_scene
 from scripts.render import render_scene
+from scripts.style import PAGE
 from scripts.scene import (
     EyeLine, EyeLineDirection, Facing,
     Figure, Scene, ShotType,
@@ -271,6 +272,8 @@ def test_render_subway_visual_vocabulary():
     assert "class='prop-tunnel'" in svg
     assert "prop-sparks-0" in svg
     assert "prop-smoke-0" in svg
+    assert "subway-design-0" in svg
+    assert "shot-design-0" in svg
 
 
 def test_render_header_labels_use_two_short_rows():
@@ -294,6 +297,10 @@ def test_render_header_labels_use_two_short_rows():
     assert ">1A · WIDE</text>" in svg
     assert "A VERY LONG DESCRIPTION THAT USED TO COLL…" in svg
     assert long_description.upper() not in svg
+
+
+def test_header_band_keeps_frame_labels_below_rule():
+    assert PAGE["header_h"] > 80
 
 
 def test_render_close_up_uses_face_primitive():
