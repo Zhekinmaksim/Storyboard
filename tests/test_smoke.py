@@ -408,6 +408,8 @@ def test_render_shot_returns_group():
     scene = Scene(title="x", shots=[shot])
     g = render_shot(shot, scene, 0)
     assert g.startswith("<g data-shot-label='1A'")
+    assert "class='shot-hitbox'" in g
+    assert "pointer-events='all'" in g
     assert "</g>" in g
 
 

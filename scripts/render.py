@@ -280,6 +280,14 @@ def _render_one_shot(shot: Shot, x: float, y: float,
             delay=global_offset + t.caption_in,
         ))
 
+    # Full-cell click target for the web director UI. Empty SVG space does
+    # not receive pointer events unless we provide an explicit hit area.
+    parts.append(
+        f"<rect class='shot-hitbox' x='-8' y='-24' "
+        f"width='{frame_w + 16:.2f}' height='{frame_h + 112:.2f}' "
+        "fill='transparent' stroke='none' pointer-events='all'/>"
+    )
+
     return (
         f"<g data-shot-label='{shot.label}' data-shot-type='{shot.shot_type.value}' "
         f"transform='translate({x:.2f}, {y:.2f})'>"
