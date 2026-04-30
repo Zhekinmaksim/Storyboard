@@ -156,6 +156,20 @@ def test_scene_tolerates_null_numeric_fields_from_kimi():
     assert scene.shots[0].environment.horizon_y == 0.55
 
 
+def test_scene_preserves_subway_environment_flag():
+    scene = Scene.from_dict({
+        "title": "Subway",
+        "shots": [{
+            "label": "1A",
+            "shot_type": "WIDE",
+            "description": "subway platform",
+            "environment": {"kind": "INT", "has_subway": True},
+        }],
+    })
+    rebuilt = Scene.from_dict(json.loads(scene.to_json()))
+    assert rebuilt.shots[0].environment.has_subway is True
+
+
 def test_stub_scene_produces_six_shots():
     scene = stub_scene("A detective enters a rain-soaked alley at night. A phone rings.")
     assert len(scene.shots) == 6
@@ -229,6 +243,34 @@ def test_render_handles_six_shots():
     svg = render_scene(scene)
     for c in "ABCDEF":
         assert f"data-shot-label='1{c}'" in svg
+
+
+def test_render_subway_visual_vocabulary():
+    from scripts.scene import Environment, Shot
+    scene = Scene(
+        title="Subway Pursuit",
+        location="INT SUBWAY STATION · NIGHT",
+        shots=[
+            Shot(
+                label="1A",
+                shot_type=ShotType.WIDE,
+                description="train roars through tunnel as bullets spark",
+                figures=[Figure(role="runner")],
+                environment=Environment(
+                    kind="INT",
+                    has_subway=True,
+                    props=["train", "tracks", "tunnel", "sparks", "smoke"],
+                ),
+            )
+        ],
+    )
+    svg = render_scene(scene, animated=False)
+    assert "class='env-subway'" in svg
+    assert "class='prop-train'" in svg
+    assert "class='prop-tracks'" in svg
+    assert "class='prop-tunnel'" in svg
+    assert "class='prop-sparks'" in svg
+    assert "class='prop-smoke'" in svg
 
 
 def test_render_close_up_uses_face_primitive():

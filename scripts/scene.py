@@ -96,6 +96,7 @@ class Environment:
     has_table: bool = False                       # foreground table (interior)
     has_door_frame: bool = False                  # doorway midground
     has_stairwell: bool = False                   # interior stairs (diagonal)
+    has_subway: bool = False                      # subway platform / rail station
     props: list[str] = field(default_factory=list)  # ['body', 'phone', 'lotus', 'cup']
     # Source provenance: {"has_neon": "prose:alley", "has_rain": "prose:downpour"}
     # Lets us tell users which features came from their text vs were
@@ -175,6 +176,7 @@ def _shot_from_dict(data: dict[str, Any]) -> Shot:
         has_table=bool(env_data.get("has_table", False)),
         has_door_frame=bool(env_data.get("has_door_frame", False)),
         has_stairwell=bool(env_data.get("has_stairwell", False)),
+        has_subway=bool(env_data.get("has_subway", False)),
         props=list(env_data.get("props", [])),
         inferred_sources=dict(env_data.get("inferred_sources", {})),
     )

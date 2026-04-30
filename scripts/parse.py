@@ -70,6 +70,7 @@ Schema:
         "has_rain": false,
         "has_table": false,
         "has_stairwell": false,
+        "has_subway": false,
         "props": []
       },
       "annotations": []
@@ -191,10 +192,21 @@ _TABLE_TERMS = ("table", "desk", "counter", "kitchen")
 _DOOR_TERMS = ("door", "doorway", "entrance", "threshold")
 _STAIRWELL_TERMS = ("stairwell", "stairs", "stairway", "staircase", "landing",
                     "flights", "spiral", "steps")
+_SUBWAY_TERMS = (
+    "subway", "metro", "underground", "train station", "station platform",
+    "platform", "tracks", "rail", "rails", "tunnel",
+)
 _PROP_BODY = ("body", "corpse", "victim", "dead")
 _PROP_PHONE = ("phone", "calls", "calling", "dispatch")
 _PROP_KNIFE = ("knife", "weapon", "gun", "pistol")
 _PROP_CUP = ("cup", "mug", "coffee", "tea", "glass")
+_PROP_TRAIN = ("train", "subway car", "carriage", "headlights", "roars")
+_PROP_TRACKS = ("track", "tracks", "rail", "rails", "gap", "platform")
+_PROP_TUNNEL = ("tunnel", "underground")
+_PROP_SPARKS = ("bullet", "bullets", "gunfire", "ricochet", "spark", "sparks")
+_PROP_SMOKE = ("smoke", "steam", "fog", "mist")
+_PROP_COMPUTER = ("computer", "monitor", "screen", "terminal", "laptop")
+_PROP_CAR = ("car", "taxi", "vehicle", "motorcycle", "truck")
 
 
 def _has_any(text: str, terms) -> bool:
@@ -232,7 +244,7 @@ def _infer_atmospheric_flags(scene) -> None:
 
     for shot in scene.shots:
         env = shot.environment
-        ctx = (env.description + " " + shot.description + " " +
+        ctx = (scene.location + " " + env.description + " " + shot.description + " " +
                (shot.caption or "")).lower()
 
         # Helper: given a flag name + matched keyword tuple, record source
@@ -266,6 +278,8 @@ def _infer_atmospheric_flags(scene) -> None:
                 env.has_door_frame = True
             if not env.has_stairwell and _record("has_stairwell", _STAIRWELL_TERMS):
                 env.has_stairwell = True
+            if not env.has_subway and _record("has_subway", _SUBWAY_TERMS):
+                env.has_subway = True
 
         # Props — also tag source
         existing = set(env.props or [])
@@ -274,6 +288,13 @@ def _infer_atmospheric_flags(scene) -> None:
             ("phone", _PROP_PHONE),
             ("weapon", _PROP_KNIFE),
             ("cup", _PROP_CUP),
+            ("train", _PROP_TRAIN),
+            ("tracks", _PROP_TRACKS),
+            ("tunnel", _PROP_TUNNEL),
+            ("sparks", _PROP_SPARKS),
+            ("smoke", _PROP_SMOKE),
+            ("computer", _PROP_COMPUTER),
+            ("car", _PROP_CAR),
         ]
         for prop_name, terms in prop_to_terms:
             if prop_name not in existing:
@@ -302,6 +323,8 @@ def _infer_atmospheric_flags(scene) -> None:
                         if s.environment.kind == "INT")
     int_has_stairwell = any(s.environment.has_stairwell for s in scene.shots
                             if s.environment.kind == "INT")
+    int_has_subway = any(s.environment.has_subway for s in scene.shots
+                         if s.environment.kind == "INT")
 
     for shot in scene.shots:
         env = shot.environment
@@ -316,6 +339,7 @@ def _infer_atmospheric_flags(scene) -> None:
             env.has_window_grid = env.has_window_grid or int_has_window
             env.has_table = env.has_table or int_has_table
             env.has_stairwell = env.has_stairwell or int_has_stairwell
+            env.has_subway = env.has_subway or int_has_subway
 
 
 _CODEBLOCK_RE = re.compile(r"^```(?:json)?\s*(.*?)\s*```\s*$", re.DOTALL)

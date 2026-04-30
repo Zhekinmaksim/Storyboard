@@ -56,6 +56,10 @@ def render_environment(env: Environment, frame_w: float, frame_h: float,
 
     # 2b. Interior architecture
     if env.kind == "INT":
+        if env.has_subway:
+            parts.append(_subway_station(frame_w, frame_h, horizon_y,
+                                         draw_in=draw_in, delay=cur_delay))
+            cur_delay += stagger
         if env.has_stairwell:
             parts.append(_stairwell(frame_w, frame_h, horizon_y,
                                     draw_in=draw_in, delay=cur_delay))
@@ -438,6 +442,63 @@ def _table(w: float, h: float, *, draw_in: float = 0.0, delay: float = 0.0) -> s
     return group(*parts)
 
 
+def _subway_station(w: float, h: float, horizon_y: float,
+                    *, draw_in: float = 0.0, delay: float = 0.0) -> str:
+    """Subway platform: tunnel mouth, tiled wall, columns, platform edge.
+
+    This gives train/platform scenes a readable architecture instead of
+    generic floor hatching.
+    """
+    parts = []
+    wall_y = horizon_y * 0.2
+    platform_y = horizon_y + (h - horizon_y) * 0.35
+
+    # Tunnel mouth in back wall.
+    tunnel_x = w * 0.62
+    tunnel_w = w * 0.28
+    tunnel_h = horizon_y * 0.72
+    parts.append(path(
+        f"M {tunnel_x:.2f} {horizon_y:.2f} "
+        f"L {tunnel_x:.2f} {wall_y + tunnel_h * 0.45:.2f} "
+        f"Q {tunnel_x + tunnel_w * 0.5:.2f} {wall_y:.2f} "
+        f"{tunnel_x + tunnel_w:.2f} {wall_y + tunnel_h * 0.45:.2f} "
+        f"L {tunnel_x + tunnel_w:.2f} {horizon_y:.2f} Z",
+        fill=DRY_INK["fg"], opacity=0.88,
+        draw_in=draw_in, delay=delay,
+    ))
+
+    # Tile seams on the back wall.
+    for i in range(1, 4):
+        y = wall_y + i * (horizon_y - wall_y) / 4
+        parts.append(line(0, y, w, y,
+                          stroke=DRY_INK["fg_dim"], width=STROKE["thin"], opacity=0.28,
+                          draw_in=draw_in, delay=delay + i * 0.025))
+    for i in range(1, 6):
+        x = i * w / 6
+        parts.append(line(x, wall_y, x, horizon_y,
+                          stroke=DRY_INK["fg_dim"], width=STROKE["thin"], opacity=0.18,
+                          draw_in=draw_in, delay=delay + i * 0.015))
+
+    # Platform edge and rails.
+    parts.append(line(0, platform_y, w, platform_y,
+                      stroke=DRY_INK["fg"], width=STROKE["medium"], opacity=0.75,
+                      draw_in=draw_in, delay=delay + 0.04))
+    parts.append(line(0, platform_y + 18, w, platform_y + 18,
+                      stroke=DRY_INK["fg"], width=STROKE["thin"], opacity=0.7,
+                      draw_in=draw_in, delay=delay + 0.06))
+    parts.append(line(0, platform_y + 34, w, platform_y + 34,
+                      stroke=DRY_INK["fg"], width=STROKE["thin"], opacity=0.55,
+                      draw_in=draw_in, delay=delay + 0.08))
+
+    # Upright station columns.
+    for i, x in enumerate((w * 0.16, w * 0.42)):
+        parts.append(rect(x, wall_y + 8, 8, platform_y - wall_y - 8,
+                          fill=DRY_INK["fg"], opacity=0.18,
+                          draw_in=draw_in, delay=delay + i * 0.04))
+
+    return f"<g class='env-subway'>{''.join(parts)}</g>"
+
+
 def _prop(name: str, w: float, h: float, horizon_y: float,
           *, draw_in: float = 0.0, delay: float = 0.0) -> str:
     """Render a foreground prop based on a recognised name."""
@@ -456,7 +517,7 @@ def _prop(name: str, w: float, h: float, horizon_y: float,
             size=7, fill=DRY_INK["fg_dim"], letter_spacing="0.15em",
             anchor="start",
         ))
-        return group(*parts)
+        return f"<g class='prop-body'>{''.join(parts)}</g>"
     if name == "phone":
         px = w * 0.78
         py = horizon_y + (h - horizon_y) * 0.45
@@ -481,7 +542,106 @@ def _prop(name: str, w: float, h: float, horizon_y: float,
                  stroke=DRY_INK["fg_dim"], stroke_width=0.5, fill="none",
                  draw_in=draw_in, delay=delay + 0.05),
         ]
-        return group(*parts)
+        return f"<g class='prop-cup'>{''.join(parts)}</g>"
+    if name == "train":
+        tx = w * 0.05
+        ty = horizon_y * 0.24
+        tw = w * 0.9
+        th = horizon_y * 0.58
+        parts = [
+            rect(tx, ty, tw, th, fill="none", stroke=DRY_INK["fg"],
+                 stroke_width=STROKE["medium"], opacity=0.75,
+                 draw_in=draw_in, delay=delay),
+            rect(tx, ty + th * 0.12, tw, th * 0.26, fill=DRY_INK["fg"],
+                 opacity=0.12, draw_in=draw_in, delay=delay + 0.03),
+        ]
+        for i in range(4):
+            wx = tx + tw * (0.08 + i * 0.22)
+            parts.append(rect(wx, ty + th * 0.18, tw * 0.13, th * 0.18,
+                              fill="none", stroke=DRY_INK["fg"],
+                              stroke_width=STROKE["thin"], opacity=0.7,
+                              draw_in=draw_in, delay=delay + i * 0.03))
+        parts.append(circle_glyph(tx + tw - 24, ty + th * 0.7, 5, color=DRY_INK["accent"]))
+        parts.append(circle_glyph(tx + tw - 42, ty + th * 0.7, 5, color=DRY_INK["accent"]))
+        return f"<g class='prop-train'>{''.join(parts)}</g>"
+    if name == "tracks":
+        y1 = horizon_y + (h - horizon_y) * 0.42
+        y2 = horizon_y + (h - horizon_y) * 0.7
+        parts = [
+            line(0, y1, w, y1, stroke=DRY_INK["fg"], width=STROKE["thin"],
+                 opacity=0.65, draw_in=draw_in, delay=delay),
+            line(0, y2, w, y2, stroke=DRY_INK["fg"], width=STROKE["thin"],
+                 opacity=0.65, draw_in=draw_in, delay=delay),
+        ]
+        for i in range(8):
+            x = w * (i + 0.5) / 8
+            parts.append(line(x - 14, y1 + 3, x + 14, y2 - 3,
+                              stroke=DRY_INK["fg_dim"], width=STROKE["thin"],
+                              opacity=0.35, draw_in=draw_in, delay=delay + i * 0.015))
+        return f"<g class='prop-tracks'>{''.join(parts)}</g>"
+    if name == "tunnel":
+        cx = w * 0.76
+        base = horizon_y
+        tunnel = path(
+            f"M {cx - 58:.2f} {base:.2f} L {cx - 58:.2f} {base - 46:.2f} "
+            f"Q {cx:.2f} {base - 92:.2f} {cx + 58:.2f} {base - 46:.2f} "
+            f"L {cx + 58:.2f} {base:.2f} Z",
+            fill="none", stroke=DRY_INK["fg"], stroke_width=STROKE["medium"],
+            opacity=0.65, draw_in=draw_in, delay=delay,
+        )
+        return f"<g class='prop-tunnel'>{tunnel}</g>"
+    if name == "sparks":
+        sx = w * 0.18
+        sy = horizon_y + (h - horizon_y) * 0.25
+        parts = []
+        for i, (dx, dy) in enumerate(((0, 0), (15, -10), (28, 6), (44, -4), (58, 10))):
+            x = sx + dx
+            y = sy + dy
+            parts.append(line(x - 6, y, x + 6, y,
+                              stroke=DRY_INK["accent"], width=STROKE["medium"],
+                              opacity=0.85, draw_in=draw_in, delay=delay + i * 0.03))
+            parts.append(line(x, y - 6, x, y + 6,
+                              stroke=DRY_INK["accent"], width=STROKE["thin"],
+                              opacity=0.65, draw_in=draw_in, delay=delay + i * 0.03))
+        return f"<g class='prop-sparks'>{''.join(parts)}</g>"
+    if name == "smoke":
+        sx = w * 0.72
+        sy = horizon_y + (h - horizon_y) * 0.22
+        parts = []
+        for i, r in enumerate((18, 28, 38)):
+            parts.append(
+                f"<ellipse cx='{sx + i * 20:.2f}' cy='{sy - i * 10:.2f}' "
+                f"rx='{r:.2f}' ry='{r * 0.42:.2f}' fill='none' "
+                f"stroke='{DRY_INK['fg_dim']}' stroke-width='{STROKE['thin']}' "
+                f"opacity='{0.18 + i * 0.07:.2f}'/>"
+            )
+        return f"<g class='prop-smoke'>{''.join(parts)}</g>"
+    if name == "computer":
+        mx = w * 0.58
+        my = horizon_y + (h - horizon_y) * 0.25
+        computer = group(
+            rect(mx, my, 52, 30, fill="none", stroke=DRY_INK["fg"],
+                 stroke_width=STROKE["thin"], draw_in=draw_in, delay=delay),
+            line(mx + 26, my + 30, mx + 26, my + 42,
+                 stroke=DRY_INK["fg"], width=STROKE["thin"], draw_in=draw_in, delay=delay),
+            line(mx + 12, my + 42, mx + 40, my + 42,
+                 stroke=DRY_INK["fg"], width=STROKE["thin"], draw_in=draw_in, delay=delay),
+        )
+        return f"<g class='prop-computer'>{computer}</g>"
+    if name == "car":
+        cx = w * 0.36
+        cy = horizon_y + (h - horizon_y) * 0.45
+        parts = [
+            path(
+                f"M {cx - 54:.2f} {cy:.2f} L {cx - 28:.2f} {cy - 22:.2f} "
+                f"L {cx + 24:.2f} {cy - 22:.2f} L {cx + 54:.2f} {cy:.2f} Z",
+                fill="none", stroke=DRY_INK["fg"], stroke_width=STROKE["medium"],
+                draw_in=draw_in, delay=delay,
+            ),
+            circle_glyph(cx - 32, cy + 4, 5, color=DRY_INK["fg"]),
+            circle_glyph(cx + 32, cy + 4, 5, color=DRY_INK["fg"]),
+        ]
+        return f"<g class='prop-car'>{''.join(parts)}</g>"
     return ""
 
 
