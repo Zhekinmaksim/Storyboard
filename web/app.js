@@ -44,6 +44,7 @@ let currentJob = null;
 let currentEventSource = null;
 let svgRoot = null;
 let selectedFrame = null;
+let currentJobComplete = false;
 
 // =================== Cinema intro: remove bars after they finish =====
 
@@ -195,6 +196,7 @@ async function generate() {
   }
 
   resetBoard();
+  currentJobComplete = false;
   generateBtn.disabled = true;
   setStatus('starting…', 'is-running', 'hermes-agent · running');
 
@@ -258,6 +260,9 @@ function listenForEvents(jobId) {
   es.addEventListener('status', (e) => {
     try {
       const d = JSON.parse(e.data);
+      if (currentJobComplete && ['critique', 'no_revisions', 'critique_skipped'].includes(d.stage)) {
+        return;
+      }
       setStatus(d.message || d.stage, 'is-running');
     } catch {}
   });
@@ -294,7 +299,11 @@ function listenForEvents(jobId) {
     const d = JSON.parse(e.data);
     if (!svgRoot) return;
     replaceShotOnBoard(svgRoot, d.label, d.svg);
-    setStatus(`re-rendered ${d.label}`, 'is-running');
+    if (currentJobComplete) {
+      setStatus(`done · critique updated ${d.label}`, 'is-done', 'hermes-agent · awaiting director');
+    } else {
+      setStatus(`re-rendered ${d.label}`, 'is-running');
+    }
   });
 
   es.addEventListener('revision', (e) => {
@@ -309,6 +318,7 @@ function listenForEvents(jobId) {
   });
 
   es.addEventListener('done', () => {
+    currentJobComplete = true;
     setStatus('done · click any frame to direct it', 'is-done', 'hermes-agent · awaiting director');
     generateBtn.disabled = false;
     revisePanel.hidden = false;

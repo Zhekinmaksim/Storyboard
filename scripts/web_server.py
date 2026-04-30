@@ -200,6 +200,88 @@ def validate_prose(prose: str) -> tuple[bool, str]:
     return True, ""
 
 
+def _snapshot_output_artifacts(job: Job, scene: Any, out: Path) -> None:
+    """Refresh files that downloads/inspect/gallery read from the job dir."""
+    try:
+        from scripts.render import render_scene
+
+        patches_count = 0
+        rev_path = out / "revisions.json"
+        if rev_path.exists():
+            try:
+                rev_data = json.loads(rev_path.read_text(encoding="utf-8"))
+                if isinstance(rev_data, dict):
+                    patches_count = len(rev_data.get("revisions", []))
+                elif isinstance(rev_data, list):
+                    patches_count = len(rev_data)
+            except json.JSONDecodeError:
+                patches_count = 0
+
+        memory_active = False
+        try:
+            from scripts.director_memory import DirectorMemory
+            mem = DirectorMemory.load(base_dir=out)
+            memory_active = bool(getattr(mem, "rules", []))
+        except Exception:
+            memory_active = False
+
+        (out / "board.svg").write_text(
+            render_scene(scene, patches_applied=patches_count, memory_active=memory_active),
+            encoding="utf-8",
+        )
+        (out / "board.animated.svg").write_text(
+            render_scene(
+                scene,
+                animated=True,
+                patches_applied=patches_count,
+                memory_active=memory_active,
+            ),
+            encoding="utf-8",
+        )
+    except Exception as exc:
+        print(f"[web] board snapshot skipped: {exc}", file=sys.stderr)
+
+    try:
+        from scripts.character_bible import CharacterBible
+        bible = CharacterBible.load(base_dir=out)
+        (out / "character_bible.json").write_text(
+            bible.to_json() if hasattr(bible, "to_json")
+            else json.dumps({"entries": {role: e.to_dict()
+                                         for role, e in bible.entries.items()}},
+                            indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+    except Exception as exc:
+        print(f"[web] bible snapshot skipped: {exc}", file=sys.stderr)
+
+    try:
+        from scripts.director_memory import DirectorMemory
+        mem = DirectorMemory.load(base_dir=out)
+        (out / "director_memory.json").write_text(
+            mem.to_json() if hasattr(mem, "to_json")
+            else json.dumps({"rules": [r.to_dict() for r in mem.rules]},
+                            indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+    except Exception as exc:
+        print(f"[web] memory snapshot skipped: {exc}", file=sys.stderr)
+
+
+def _share_job_to_gallery(job: Job) -> None:
+    if not job.share_to_gallery or job.output_dir is None:
+        return
+    try:
+        from scripts.gallery_store import add_entry
+        add_entry(
+            job_id=job.job_id,
+            title=job.scene_title,
+            prose=job.prose,
+            output_dir=job.output_dir,
+        )
+    except Exception as exc:
+        print(f"[web] gallery add failed: {exc}", file=sys.stderr)
+
+
 # =================== Pipeline thread ===================
 
 def run_pipeline(job: Job) -> None:
@@ -291,8 +373,9 @@ def run_pipeline(job: Job) -> None:
         (out / "board.animated.svg").write_text(
             render_scene(scene, animated=True), encoding="utf-8"
         )
+        _snapshot_output_artifacts(job, scene, out)
 
-        # 6. PNG export + critique
+        # 6. PNG export for gallery/share cards. This is local and quick.
         from scripts.png_export import PNGExportError, svg_to_png
         png_ok = False
         _t0 = time.time()
@@ -303,8 +386,27 @@ def run_pipeline(job: Job) -> None:
         except PNGExportError as exc:
             job.push("status", {"stage": "png_skipped", "message": str(exc)})
 
-        if png_ok:
-            job.push("status", {"stage": "critique", "message": "Kimi K2.5 reviewing the board…"})
+        # 7. Production packet is local; do it before `done` so downloads
+        # are useful immediately. Vision critique continues after `done`.
+        _t0 = time.time()
+        try:
+            from scripts.packet import export_packet
+            export_packet(scene, out)
+            job.trace_step("export packet", "local", int((time.time() - _t0) * 1000),
+                           note="shotlist.csv, camera notes, dialogue, continuity")
+            job.push("status", {"stage": "packet", "message": "Production packet exported."})
+        except Exception as exc:
+            job.push("status", {"stage": "packet_skipped", "message": str(exc)})
+
+        _snapshot_output_artifacts(job, scene, out)
+        _share_job_to_gallery(job)
+
+        job.push("done", {"job_id": job.job_id})
+        job.state = "DONE"
+
+        # 8. Background PNG critique. This preserves the Kimi vision role,
+        # but the user can already click frames, download, and share.
+        if png_ok and os.environ.get("STORYBOARD_ENABLE_CRITIQUE", "1") == "1":
             _t0 = time.time()
             try:
                 from scripts.critique import critique_board, revisions_to_json
@@ -347,108 +449,17 @@ def run_pipeline(job: Job) -> None:
                         })
                         time.sleep(0.4)
                     scene = revised_scene  # downstream stages use revised
+                    (out / "scene.json").write_text(scene.to_json(), encoding="utf-8")
+                    try:
+                        from scripts.packet import export_packet
+                        export_packet(scene, out)
+                    except Exception as exc:
+                        print(f"[web] packet refresh after critique skipped: {exc}", file=sys.stderr)
                 else:
-                    job.push("status", {
-                        "stage": "no_revisions",
-                        "message": "No film-grammar issues flagged.",
-                    })
+                    print("[web] critique found no revisions", file=sys.stderr)
+                _snapshot_output_artifacts(job, scene, out)
             except Exception as exc:
-                job.push("status", {"stage": "critique_skipped", "message": str(exc)})
-
-        # 7. Production packet
-        _t0 = time.time()
-        try:
-            from scripts.packet import export_packet
-            export_packet(scene, out)
-            job.trace_step("export packet", "local", int((time.time() - _t0) * 1000),
-                           note="shotlist.csv, camera notes, dialogue, continuity")
-            job.push("status", {"stage": "packet", "message": "Production packet exported."})
-        except Exception as exc:
-            job.push("status", {"stage": "packet_skipped", "message": str(exc)})
-
-        # 8. Re-render final board.svg with the critique badge embedded.
-        # Patches count comes from revisions.json if it exists; memory
-        # is "active" if director_memory.json has any rules persisted.
-        try:
-            patches_count = 0
-            rev_path = out / "revisions.json"
-            if rev_path.exists():
-                try:
-                    rev_data = json.loads(rev_path.read_text(encoding="utf-8"))
-                    if isinstance(rev_data, dict):
-                        patches_count = len(rev_data.get("revisions", []))
-                    elif isinstance(rev_data, list):
-                        patches_count = len(rev_data)
-                except json.JSONDecodeError:
-                    patches_count = 0
-
-            memory_active = False
-            try:
-                from scripts.director_memory import DirectorMemory
-                mem = DirectorMemory.load(base_dir=out)
-                memory_active = bool(getattr(mem, "rules", []))
-            except Exception:
-                memory_active = False
-
-            (out / "board.svg").write_text(
-                render_scene(scene,
-                             patches_applied=patches_count,
-                             memory_active=memory_active),
-                encoding="utf-8",
-            )
-            (out / "board.animated.svg").write_text(
-                render_scene(scene, animated=True,
-                             patches_applied=patches_count,
-                             memory_active=memory_active),
-                encoding="utf-8",
-            )
-        except Exception as exc:
-            print(f"[web] final board re-render skipped: {exc}", file=sys.stderr)
-
-        # 9. Final guarantee: bible + memory snapshotted into output_dir
-        # so that bundle.zip honestly contains every artefact the website
-        # promises. Per-job isolation means these files were already
-        # written here by the steps above; this is a defensive double-write.
-        try:
-            from scripts.character_bible import CharacterBible
-            bible = CharacterBible.load(base_dir=out)
-            (out / "character_bible.json").write_text(
-                bible.to_json() if hasattr(bible, "to_json")
-                else json.dumps({"entries": {role: e.to_dict()
-                                             for role, e in bible.entries.items()}},
-                                indent=2, ensure_ascii=False),
-                encoding="utf-8",
-            )
-        except Exception as exc:
-            print(f"[web] bible snapshot skipped: {exc}", file=sys.stderr)
-
-        try:
-            from scripts.director_memory import DirectorMemory
-            mem = DirectorMemory.load(base_dir=out)
-            (out / "director_memory.json").write_text(
-                mem.to_json() if hasattr(mem, "to_json")
-                else json.dumps({"rules": [r.to_dict() for r in mem.rules]},
-                                indent=2, ensure_ascii=False),
-                encoding="utf-8",
-            )
-        except Exception as exc:
-            print(f"[web] memory snapshot skipped: {exc}", file=sys.stderr)
-
-        job.push("done", {"job_id": job.job_id})
-        job.state = "DONE"
-
-        # If user opted in, mirror to public gallery (best-effort).
-        if job.share_to_gallery and job.output_dir is not None:
-            try:
-                from scripts.gallery_store import add_entry
-                add_entry(
-                    job_id=job.job_id,
-                    title=job.scene_title,
-                    prose=job.prose,
-                    output_dir=job.output_dir,
-                )
-            except Exception as exc:
-                print(f"[web] gallery add failed: {exc}", file=sys.stderr)
+                print(f"[web] background critique skipped: {exc}", file=sys.stderr)
 
     except Exception as exc:
         job.state = "ERROR"

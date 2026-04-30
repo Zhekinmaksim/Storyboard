@@ -24,7 +24,7 @@ from typing import Any
 import httpx
 
 OPENROUTER_BASE = "https://openrouter.ai/api/v1/chat/completions"
-KIMI_MODEL = os.environ.get("STORYBOARD_KIMI_MODEL", "moonshotai/kimi-k2.5:nitro")
+KIMI_MODEL = os.environ.get("STORYBOARD_KIMI_MODEL", "moonshotai/kimi-k2.5")
 
 CACHE_DIR = Path(os.environ.get("STORYBOARD_CACHE_DIR", str(Path.home() / ".cache" / "storyboard")))
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
@@ -93,7 +93,7 @@ def kimi_call(
         "messages": messages,
         "temperature": temperature,
         "max_tokens": max_tokens,
-        "provider": provider or {"sort": "throughput", "allow_fallbacks": True},
+        "provider": provider or _default_provider(response_format=response_format),
     }
     if response_format is not None:
         payload["response_format"] = response_format
@@ -187,6 +187,13 @@ def _response_has_text(response: dict[str, Any]) -> bool:
 def _short_response(response: dict[str, Any], limit: int = 500) -> str:
     text = json.dumps(response, ensure_ascii=False, default=str)
     return text if len(text) <= limit else text[:limit] + "…"
+
+
+def _default_provider(*, response_format: dict[str, Any] | None = None) -> dict[str, Any]:
+    provider: dict[str, Any] = {"sort": "latency", "allow_fallbacks": True}
+    if response_format is not None:
+        provider["require_parameters"] = True
+    return provider
 
 
 def kimi_text(prompt: str, system: str | None = None, **kwargs: Any) -> str:
