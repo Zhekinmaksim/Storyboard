@@ -1,15 +1,16 @@
 # Storyboard API — Fly.io image.
 #
-# Single Python process, system librsvg for PNG export, no node, no
-# build step. Image weighs ~150MB, cold start ~3 seconds.
+# Single Python process, system librsvg for PNG export and ImageMagick
+# for animated GIF export, no node, no build step.
 
 FROM python:3.12-slim
 
-# librsvg2-bin gives us rsvg-convert for SVG → PNG (needed by the
-# multimodal critique step). curl is just for healthchecks.
+# librsvg2-bin gives us rsvg-convert for SVG → PNG. imagemagick provides
+# convert for board.gif assembly. curl is just for healthchecks.
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
         librsvg2-bin \
+        imagemagick \
         curl \
  && rm -rf /var/lib/apt/lists/*
 
